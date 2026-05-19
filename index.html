@@ -25,7 +25,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
   }
   *{box-sizing:border-box;margin:0;padding:0}
   html{scroll-behavior:smooth}
-  body{background:var(--paper);color:var(--ink);line-height:1.65;-webkit-font-smoothing:antialiased}
+  body{background:var(--paper);color:var(--ink);line-height:1.65;-webkit-font-smoothing:antialiased;word-break:keep-all}
   .wrap{max-width:980px;margin:0 auto;padding:0 clamp(20px,5vw,40px)}
   a{color:inherit}
   section{padding-block:clamp(56px,9vw,104px);border-bottom:1px solid var(--line)}
@@ -72,6 +72,18 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
   .story-card .t span{color:var(--accent)}
   .story-card p{font-size:15px;color:var(--muted);margin-top:12px;line-height:1.7}
 
+  /* 작동 방식 — 3스텝 */
+  .flow{display:grid;grid-template-columns:repeat(3,1fr);gap:22px;margin-top:44px}
+  @media(max-width:760px){.flow{grid-template-columns:1fr}}
+  .flow-step{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:34px;position:relative}
+  .flow-step .n{display:inline-flex;align-items:center;justify-content:center;width:34px;height:34px;
+    border-radius:999px;background:var(--accent);color:#fff;font-weight:800;font-size:15px;margin-bottom:16px}
+  .flow-step .t{font-size:19px;font-weight:800;letter-spacing:-.01em}
+  .flow-step p{font-size:15px;color:var(--muted);margin-top:11px;line-height:1.7}
+  .flow-core{border-color:var(--accent);box-shadow:0 0 0 1px var(--accent)}
+  .flow-core .tag{position:absolute;top:-11px;left:34px;background:var(--accent);color:#fff;
+    font-size:11.5px;font-weight:700;letter-spacing:.06em;padding:4px 11px;border-radius:999px}
+
   /* 설문 전환 섹션 */
   .survey{border-bottom:0;background:var(--ink);color:var(--paper)}
   .survey .wrap{text-align:center}
@@ -113,7 +125,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     <div>
       <div class="kicker">작은 가게 · 손님 한마디를 비공개로</div>
       <h1>별점이 되기 전에,<br><em>진짜 한마디.</em></h1>
-      <p class="sub">공개 리뷰엔 억지 칭찬만 남고, 진짜 불만은 말없이 사라집니다. Voxpop은 손님이 보복 걱정 없이 남기는 비공개 한마디를 사장님의 운영 신호로 바꿉니다.</p>
+      <p class="sub">공개 리뷰엔 억지 칭찬만 남고, 진짜 불만은 말없이 사라집니다. Voxpop은 손님이 보복 걱정 없이 남긴 비공개 한마디에서 욕설·개인정보만 걸러내고 분석해, 사장님이 바로 쓸 운영 신호로 전달합니다.</p>
       <div class="cta-row">
         <a class="btn btn-primary btn-lg" href="https://forms.gle/EdxrRyxmDfvdZULz9" target="_blank" rel="noopener">1분 설문에 참여하기 →</a>
         <a class="btn btn-ghost" href="#about">서비스 더 알아보기</a>
@@ -136,8 +148,8 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 <section id="about">
   <div class="wrap">
     <div class="kicker">Voxpop이란</div>
-    <h2>억지 칭찬과 공개 악평 사이,<br>사라진 진짜 피드백을 되살립니다</h2>
-    <p class="lead">Voxpop은 기능이 아니라 약속입니다 — 손님은 노출 공포 없이, 사장님은 악평 공포 없이. 그 사이의 진짜 한마디를 안전하게 잇습니다.</p>
+    <h2>그냥 받아두는 게 아니라,<br>걸러내고 분석해 전달합니다</h2>
+    <p class="lead">Voxpop의 핵심은 익명 한마디를 모으는 게 아니라, 욕설·개인정보를 정화하고 무엇이 급한지 분석해 사장님이 오늘 바로 쓸 신호로 정리해 전달하는 데 있습니다.</p>
     <div class="story">
       <div class="story-card">
         <div class="t">손님에게는 <span>안전한 익명</span></div>
@@ -148,12 +160,38 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         <p>네이버·배민에 1점이 박히기 전, 고칠 수 있는 불편을 비공개로 회수합니다. 욕설·개인정보는 정화하되 긴급 신호는 보존.</p>
       </div>
       <div class="story-card">
-        <div class="t">마케팅이 아니라 <span>운영 신호</span></div>
-        <p>이벤트로 받은 칭찬 말고, 오늘 바로 고칠 거리. 흩어진 한마디를 매장 운영에 쓰는 신호로 정리합니다.</p>
+        <div class="t">받기만 안 함 · <span>정화하고 분석</span></div>
+        <p>들어온 한마디에서 욕설·개인정보를 걸러내고, 무엇이 급한 불편인지 추려냅니다. 흩어진 말이 아니라 정리된 신호로.</p>
       </div>
       <div class="story-card">
-        <div class="t">지금은 <span>준비 단계</span></div>
-        <p>아직 만드는 중이에요. 가격도 기능도 정하기 전 — 무엇이 진짜 필요한지 사장님께 먼저 여쭙습니다.</p>
+        <div class="t">그래서 <span>전달까지</span></div>
+        <p>정화·분석한 결과를 사장님께 운영 신호로 전달합니다. 이벤트 칭찬 말고, 오늘 바로 고칠 거리만. 아직 만드는 중 — 가격·기능 정하기 전 사장님께 먼저 여쭙습니다.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 2-b. 어떻게 작동하나 -->
+<section id="how">
+  <div class="wrap">
+    <div class="kicker">어떻게 작동하나</div>
+    <h2>한마디가 신호가 되기까지, 세 단계</h2>
+    <div class="flow">
+      <div class="flow-step">
+        <div class="n">1</div>
+        <div class="t">손님이 익명으로 남김</div>
+        <p>매장에 둔 링크·QR로 한마디를 남깁니다. 이름도 연락처도 없이, 사장님에게만 닿는 비공개.</p>
+      </div>
+      <div class="flow-step flow-core">
+        <span class="tag">핵심</span>
+        <div class="n">2</div>
+        <div class="t">정화하고 분석</div>
+        <p>욕설·개인정보를 자동으로 걸러내고, 무엇이 급한 불편인지 가려냅니다. 받기만 하는 게 아니라 여기가 핵심.</p>
+      </div>
+      <div class="flow-step">
+        <div class="n">3</div>
+        <div class="t">사장님께 신호로 전달</div>
+        <p>정리된 결과를 사장님이 오늘 바로 쓸 운영 신호로 전달합니다. 공개 별점이 박히기 전에.</p>
       </div>
     </div>
   </div>
@@ -178,7 +216,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 <footer>
   <div class="wrap">
     © 2026 Voxpop · 별점이 되기 전에, 진짜 한마디 · 아직 준비 중인 서비스입니다<br>
-    문의 <a href="mailto:tototal5542@gmail.com">tototal5542@gmail.com</a> · 설문 링크는 게시 후 연결됩니다
+    문의 <a href="mailto:tototal5542@gmail.com">tototal5542@gmail.com</a> · 1인이 만드는 중인 서비스라, 사장님 한마디로 방향을 정합니다
   </div>
 </footer>
 
