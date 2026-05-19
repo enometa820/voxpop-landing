@@ -95,6 +95,26 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
   .survey .who{display:flex;gap:18px;justify-content:center;flex-wrap:wrap;margin-top:30px;font-size:13px;color:#9aa0ad}
   .survey .who span{border:1px solid rgba(255,255,255,.18);border-radius:999px;padding:7px 15px}
 
+  .cta-note{font-size:13px;color:var(--muted);margin-top:15px}
+
+  /* 통점 */
+  .pain{display:grid;grid-template-columns:1fr 1fr;gap:22px;margin-top:40px}
+  @media(max-width:760px){.pain{grid-template-columns:1fr}}
+  .pain-item{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:30px}
+  .pain-item .t{font-size:18px;font-weight:800;letter-spacing:-.01em}
+  .pain-item p{font-size:15px;color:var(--muted);margin-top:10px;line-height:1.7}
+
+  /* 공개 리뷰 vs Voxpop 대비 */
+  .versus{display:grid;grid-template-columns:1fr 1fr;gap:22px;margin-top:40px}
+  @media(max-width:760px){.versus{grid-template-columns:1fr}}
+  .vs-col{border:1px solid var(--line);border-radius:var(--r);padding:30px 30px 14px}
+  .vs-now{background:transparent}
+  .vs-vox{background:var(--card);border-color:var(--accent);box-shadow:0 0 0 1px var(--accent)}
+  .vs-col h3{font-size:17px;font-weight:800;margin-bottom:6px}
+  .vs-vox h3{color:var(--accent)}
+  .vs-col ul{list-style:none}
+  .vs-col li{font-size:15px;color:var(--muted);padding:13px 0;border-top:1px solid var(--line);line-height:1.6}
+
   footer{padding:38px 0;text-align:center;font-size:12.5px;color:var(--muted);line-height:1.9}
   footer a{color:var(--accent);text-decoration:none}
 </style>
@@ -119,18 +139,17 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
   </div>
 </nav>
 
-<!-- 1. HERO — 서비스 한 줄 + 설문 전환 -->
+<!-- 1. HERO — 사장님 통점 직격 + 단일 CTA -->
 <section id="top">
   <div class="wrap hero">
     <div>
-      <div class="kicker">작은 가게 · 손님 한마디를 비공개로</div>
-      <h1>별점이 되기 전에,<br><em>진짜 한마디.</em></h1>
-      <p class="sub">공개 리뷰엔 억지 칭찬만 남고, 진짜 불만은 말없이 사라집니다. Voxpop은 손님이 보복 걱정 없이 남긴 비공개 한마디에서 욕설·개인정보만 걸러내고 분석해, 사장님이 바로 쓸 운영 신호로 전달합니다.</p>
+      <div class="kicker">작은 가게 사장님께</div>
+      <h1>별점이 박히고 나면,<br><em>이미 늦습니다.</em></h1>
+      <p class="sub">조용히 다시 안 오는 손님. 어디가 불편했는지 사장님은 끝내 모릅니다. 공개 리뷰엔 좋은 말만 남고, 진짜 문제는 별점이 떨어진 뒤에야 보입니다.</p>
       <div class="cta-row">
-        <a class="btn btn-primary btn-lg" href="https://forms.gle/EdxrRyxmDfvdZULz9" target="_blank" rel="noopener">1분 설문에 참여하기 →</a>
-        <a class="btn btn-ghost" href="#about">서비스 더 알아보기</a>
+        <a class="btn btn-primary btn-lg" href="https://forms.gle/EdxrRyxmDfvdZULz9" target="_blank" rel="noopener">1분 설문에 답하기 →</a>
       </div>
-      <p class="hero-note">아직 만드는 중입니다. 사장님 한마디로 방향을 정합니다.</p>
+      <p class="cta-note">1분 · 무기명 · 이름·연락처 안 받아요</p>
     </div>
     <div class="hero-art">
       <svg viewBox="0 0 280 280" aria-label="봉인된 한마디">
@@ -144,79 +163,107 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
   </div>
 </section>
 
-<!-- 2. 서비스 소개 (서사, 기능 나열 아님) -->
-<section id="about">
+<!-- 2. 통점 — 지금은 어떻게 아시나요 (솔루션 언급 전) -->
+<section id="pain">
   <div class="wrap">
-    <div class="kicker">Voxpop이란</div>
-    <h2>그냥 받아두는 게 아니라,<br>걸러내고 분석해 전달합니다</h2>
-    <p class="lead">Voxpop의 핵심은 익명 한마디를 모으는 게 아니라, 욕설·개인정보를 정화하고 무엇이 급한지 분석해 사장님이 오늘 바로 쓸 신호로 정리해 전달하는 데 있습니다.</p>
-    <div class="story">
-      <div class="story-card">
-        <div class="t">손님에게는 <span>안전한 익명</span></div>
-        <p>이름도 연락처도 남기지 않습니다. 공개 리뷰가 아니라 사장님에게만 닿는 비공개 한마디. 보복 걱정 없이 솔직하게.</p>
+    <div class="kicker">지금은 어떻게 아시나요</div>
+    <h2>손님이 왜 떠났는지,<br>대부분 못 듣고 지나갑니다</h2>
+    <div class="pain">
+      <div class="pain-item">
+        <div class="t">별점 떨어진 뒤에야 안다</div>
+        <p>네이버·배달앱에 낮은 평점이 박히고 나서야 뭔가 잘못됐다는 걸 압니다. 그땐 이미 손님도 점수도 돌아오지 않습니다.</p>
       </div>
-      <div class="story-card">
-        <div class="t">사장님에게는 <span>터지기 전 신호</span></div>
-        <p>네이버·배민에 1점이 박히기 전, 고칠 수 있는 불편을 비공개로 회수합니다. 욕설·개인정보는 정화하되 긴급 신호는 보존.</p>
+      <div class="pain-item">
+        <div class="t">불편한 손님은 말을 안 한다</div>
+        <p>그 자리에서 따지는 손님은 드뭅니다. 대부분은 아무 말 없이 그냥 다시 오지 않습니다. 사장님은 이유를 영영 모릅니다.</p>
       </div>
-      <div class="story-card">
-        <div class="t">받기만 안 함 · <span>정화하고 분석</span></div>
-        <p>들어온 한마디에서 욕설·개인정보를 걸러내고, 무엇이 급한 불편인지 추려냅니다. 흩어진 말이 아니라 정리된 신호로.</p>
+      <div class="pain-item">
+        <div class="t">공개 리뷰엔 진심이 안 남는다</div>
+        <p>보복이 무서워, 혹은 굳이 싶어 진짜 불만은 안 씁니다. 남는 건 이벤트로 받은 칭찬과, 가끔 터지는 악평뿐.</p>
       </div>
-      <div class="story-card">
-        <div class="t">그래서 <span>전달까지</span></div>
-        <p>정화·분석한 결과를 사장님께 운영 신호로 전달합니다. 이벤트 칭찬 말고, 오늘 바로 고칠 거리만. 아직 만드는 중 — 가격·기능 정하기 전 사장님께 먼저 여쭙습니다.</p>
+      <div class="pain-item">
+        <div class="t">전해 듣는 말은 이미 흐리다</div>
+        <p>직원을 거쳐 오는 불만은 누그러지고 늦습니다. 정작 고칠 수 있었던 작은 신호는 그 사이 사라집니다.</p>
       </div>
     </div>
   </div>
 </section>
 
-<!-- 2-b. 어떻게 작동하나 -->
+<!-- 3. 해법 + 작동 3스텝 -->
 <section id="how">
   <div class="wrap">
-    <div class="kicker">어떻게 작동하나</div>
-    <h2>한마디가 신호가 되기까지, 세 단계</h2>
+    <div class="kicker">그래서 Voxpop은</div>
+    <h2>받아두는 게 아니라,<br>걸러내고 분석해 전달합니다</h2>
+    <p class="lead">손님이 무기명으로 남긴 한마디에서 욕설·개인정보를 걸러내고, 무엇이 급한지 가려, 사장님이 오늘 바로 쓸 운영 신호로 정리해 전합니다. 받기만 하는 도구가 아닙니다.</p>
     <div class="flow">
       <div class="flow-step">
         <div class="n">1</div>
-        <div class="t">손님이 익명으로 남김</div>
+        <div class="t">손님이 무기명으로 남김</div>
         <p>매장에 둔 링크·QR로 한마디를 남깁니다. 이름도 연락처도 없이, 사장님에게만 닿는 비공개.</p>
       </div>
       <div class="flow-step flow-core">
         <span class="tag">핵심</span>
         <div class="n">2</div>
-        <div class="t">정화하고 분석</div>
-        <p>욕설·개인정보를 자동으로 걸러내고, 무엇이 급한 불편인지 가려냅니다. 받기만 하는 게 아니라 여기가 핵심.</p>
+        <div class="t">걸러내고 분석</div>
+        <p>욕설·개인정보를 걸러내고, 무엇이 급한 불편인지 가려냅니다. 받기만 하는 게 아니라 여기가 핵심입니다.</p>
       </div>
       <div class="flow-step">
         <div class="n">3</div>
         <div class="t">사장님께 신호로 전달</div>
-        <p>정리된 결과를 사장님이 오늘 바로 쓸 운영 신호로 전달합니다. 공개 별점이 박히기 전에.</p>
+        <p>정리된 결과를 사장님이 오늘 바로 쓸 운영 신호로 전합니다. 공개 별점이 박히기 전에.</p>
       </div>
     </div>
   </div>
 </section>
 
-<!-- 3. 설문 전환 (핵심 목표) -->
+<!-- 4. 공개 리뷰 vs Voxpop 대비 -->
+<section id="versus">
+  <div class="wrap">
+    <div class="kicker">무엇이 다른가</div>
+    <h2>공개 리뷰가 못 하는 일</h2>
+    <div class="versus">
+      <div class="vs-col vs-now">
+        <h3>공개 리뷰·별점</h3>
+        <ul>
+          <li>모두에게 보입니다 — 손님도 사장님도 통제 못 합니다</li>
+          <li>보복이 무서워 진짜 불만은 안 남습니다</li>
+          <li>점수가 떨어진 뒤에야 문제를 압니다</li>
+          <li>좋은 말·악평이 섞여 무엇이 급한지 안 보입니다</li>
+        </ul>
+      </div>
+      <div class="vs-col vs-vox">
+        <h3>Voxpop</h3>
+        <ul>
+          <li>사장님만 봅니다 — 공개되지 않는 비공개 한마디</li>
+          <li>무기명이라 부담 없이 솔직하게 남깁니다</li>
+          <li>별점이 박히기 전, 고칠 수 있을 때 듣습니다</li>
+          <li>욕설·개인정보를 걸러 급한 신호만 추려 전합니다</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 5. 설문 전환 (단일 목표) -->
 <section id="survey" class="survey">
   <div class="wrap">
-    <div class="kicker">1분이면 됩니다</div>
-    <h2>당신의 한마디가<br>Voxpop의 방향을 정합니다</h2>
-    <p>가게를 운영하는 사장님, 혹은 손님으로서 — 공개 리뷰 대신 비공개로 한마디를 남길 수 있다면 어떨지 들려주세요. 이름 없이, 1분이면 됩니다. 서비스 준비 목적으로만 씁니다.</p>
+    <div class="kicker">사장님께 먼저 묻습니다</div>
+    <h2>무엇을 만들지,<br>사장님 한마디가 정합니다</h2>
+    <p>아직 만드는 중이라 가격도 기능도 정하지 않았습니다. 무엇이 진짜 필요한지 사장님께 먼저 여쭙습니다. 무기명, 1분, 서비스 준비 목적으로만 씁니다.</p>
     <div class="cta-row">
-      <a class="btn btn-primary btn-lg" href="https://forms.gle/EdxrRyxmDfvdZULz9" target="_blank" rel="noopener">설문 참여하기 →</a>
-      <a class="btn btn-ghost" href="mailto:tototal5542@gmail.com?subject=Voxpop%20%EC%9D%98%EA%B2%AC" style="color:var(--paper);border-color:rgba(255,255,255,.4)">이메일로 의견 보내기</a>
+      <a class="btn btn-primary btn-lg" href="https://forms.gle/EdxrRyxmDfvdZULz9" target="_blank" rel="noopener">1분 설문에 답하기 →</a>
     </div>
+    <p class="cta-note" style="color:#9aa0ad">가게 손님이세요? 같은 설문에서 손님 항목으로, 똑같이 1분이면 됩니다.</p>
     <div class="who">
-      <span>매장 사장님</span><span>매장 손님</span><span>익명 · 1분 · 검증용</span>
+      <span>무기명</span><span>1분</span><span>이름·연락처 안 받음</span>
     </div>
   </div>
 </section>
 
 <footer>
   <div class="wrap">
-    © 2026 Voxpop · 별점이 되기 전에, 진짜 한마디 · 아직 준비 중인 서비스입니다<br>
-    문의 <a href="mailto:tototal5542@gmail.com">tototal5542@gmail.com</a> · 1인이 만드는 중인 서비스라, 사장님 한마디로 방향을 정합니다
+    © 2026 Voxpop · 별점이 박히기 전에, 진짜 한마디 · 아직 만드는 중인 서비스입니다<br>
+    문의 <a href="mailto:tototal5542@gmail.com">tototal5542@gmail.com</a>
   </div>
 </footer>
 
