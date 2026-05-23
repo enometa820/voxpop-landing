@@ -1,0 +1,304 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>voxpop — 한마디 남기기</title>
+<meta name="description" content="익명으로 한마디 남깁니다. 사장님께만 전달됩니다." />
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
+<style>
+  :root {
+    --ink: #1f2430;
+    --paper: #f6f3ec;
+    --muted: #6b7180;
+    --line: #d9d4c7;
+    --accent: #2f6f6b;
+    --acl: #38807b;
+    --alert: #b0683a;
+    --card: #fffdf8;
+    --s2: #f1ede2;
+    --canvas: #ece8dc;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body {
+    font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+    background: var(--canvas);
+    color: var(--ink);
+    line-height: 1.65;
+    word-break: keep-all;
+    -webkit-font-smoothing: antialiased;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+  }
+  .card {
+    background: var(--paper);
+    border-radius: 12px;
+    padding: 36px 28px;
+    width: 100%;
+    max-width: 420px;
+    box-shadow: 0 2px 16px rgba(31, 36, 48, 0.08);
+  }
+  .mark {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 48px;
+    height: 48px;
+    background: var(--accent);
+    border-radius: 50%;
+    color: var(--paper);
+    font-weight: 700;
+    font-size: 22px;
+    margin-bottom: 16px;
+    letter-spacing: -0.04em;
+  }
+  h1 {
+    font-size: 22px;
+    font-weight: 700;
+    margin: 0 0 8px;
+    letter-spacing: -0.01em;
+  }
+  .sub {
+    color: var(--muted);
+    font-size: 14px;
+    margin-bottom: 28px;
+  }
+  .store-label {
+    font-size: 13px;
+    color: var(--accent);
+    font-weight: 600;
+    margin-bottom: 4px;
+  }
+  textarea {
+    width: 100%;
+    min-height: 140px;
+    padding: 14px 16px;
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    background: var(--card);
+    font-family: inherit;
+    font-size: 15px;
+    line-height: 1.6;
+    color: var(--ink);
+    resize: vertical;
+  }
+  textarea:focus {
+    outline: 2px solid var(--accent);
+    outline-offset: 0;
+    border-color: var(--accent);
+  }
+  .counter {
+    text-align: right;
+    font-size: 12px;
+    color: var(--muted);
+    margin-top: 6px;
+  }
+  .counter.over { color: var(--alert); font-weight: 600; }
+  .btn {
+    width: 100%;
+    padding: 14px 16px;
+    background: var(--accent);
+    color: var(--paper);
+    border: none;
+    border-radius: 8px;
+    font-family: inherit;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    margin-top: 16px;
+    transition: background 0.15s;
+  }
+  .btn:hover:not(:disabled) { background: var(--acl); }
+  .btn:disabled { background: var(--muted); cursor: not-allowed; opacity: 0.6; }
+  .privacy {
+    margin-top: 20px;
+    padding: 14px 16px;
+    background: var(--s2);
+    border-radius: 8px;
+    font-size: 12px;
+    color: var(--muted);
+    line-height: 1.6;
+  }
+  .privacy b { color: var(--ink); font-weight: 600; }
+  .error {
+    margin-top: 12px;
+    padding: 10px 14px;
+    background: var(--alert);
+    color: var(--paper);
+    border-radius: 6px;
+    font-size: 13px;
+  }
+  .done {
+    text-align: center;
+    padding: 24px 12px;
+  }
+  .done h2 {
+    font-size: 20px;
+    margin: 12px 0 8px;
+    color: var(--accent);
+  }
+  .done p {
+    color: var(--muted);
+    font-size: 14px;
+    margin: 0;
+  }
+  .invalid h1 { color: var(--alert); }
+  footer {
+    margin-top: 28px;
+    text-align: center;
+    font-size: 11px;
+    color: var(--muted);
+  }
+  footer a { color: var(--accent); text-decoration: none; }
+</style>
+</head>
+<body>
+<div class="card" id="card">
+
+  <!-- 로딩 -->
+  <div id="loading">
+    <div class="mark">v</div>
+    <h1>잠시만 기다려주세요</h1>
+    <p class="sub">매장 정보 확인 중입니다.</p>
+  </div>
+
+  <!-- 정상 폼 (loaded 후 표시) -->
+  <div id="form" style="display:none">
+    <div class="mark">v</div>
+    <div class="store-label" id="store-name"></div>
+    <h1>익명 한마디 남기기</h1>
+    <p class="sub">사장님께만 전달됩니다. 이름, 연락처는 받지 않아요.</p>
+
+    <textarea id="content" placeholder="좋았던 점, 아쉬웠던 점, 바라는 점 무엇이든 좋아요." maxlength="500"></textarea>
+    <div class="counter" id="counter">0 / 500</div>
+
+    <button class="btn" id="submit-btn" disabled>전달하기</button>
+
+    <div class="privacy">
+      <b>익명 보장</b><br>
+      이름, 이메일, 전화번호를 받지 않습니다. 입력한 내용에 욕설이나 개인정보가 있으면 자동으로 가립니다. 사장님이 보는 화면에도 정화된 본문만 표시됩니다.
+    </div>
+
+    <div id="error" style="display:none"></div>
+  </div>
+
+  <!-- 완료 화면 (제출 후) -->
+  <div id="done" class="done" style="display:none">
+    <div class="mark">v</div>
+    <h2>한마디 감사합니다</h2>
+    <p>사장님께 전달했습니다. 더 나은 가게가 되도록 도와주셨어요.</p>
+  </div>
+
+  <!-- 잘못된 매장 -->
+  <div id="invalid" class="invalid" style="display:none">
+    <div class="mark">v</div>
+    <h1>잘못된 링크</h1>
+    <p class="sub">매장 정보를 찾을 수 없습니다. QR 코드를 다시 확인해주세요.</p>
+  </div>
+
+  <footer>
+    <a href="../">voxpop 소개</a>
+  </footer>
+</div>
+
+<script type="module">
+  import {
+    fetchStoreBySlug,
+    insertFeedback,
+    getDeviceKey,
+    hashDeviceKey,
+  } from '../lib/supabase-client.js';
+  import { processFeedback } from '../lib/voc-engine.js';
+
+  const $ = (sel) => document.querySelector(sel);
+
+  function showSection(id) {
+    ['loading', 'form', 'done', 'invalid'].forEach((s) => {
+      $(`#${s}`).style.display = (s === id) ? '' : 'none';
+    });
+  }
+
+  function showError(message) {
+    const el = $('#error');
+    el.className = 'error';
+    el.textContent = message;
+    el.style.display = '';
+  }
+
+  async function main() {
+    const params = new URLSearchParams(location.search);
+    const slug = params.get('store');
+    if (!slug) {
+      showSection('invalid');
+      return;
+    }
+
+    let store;
+    try {
+      store = await fetchStoreBySlug(slug);
+    } catch (err) {
+      console.error('store fetch error', err);
+      showSection('invalid');
+      return;
+    }
+
+    if (!store) {
+      showSection('invalid');
+      return;
+    }
+
+    $('#store-name').textContent = store.display_name;
+    showSection('form');
+
+    const textarea = $('#content');
+    const counter = $('#counter');
+    const submitBtn = $('#submit-btn');
+
+    textarea.addEventListener('input', () => {
+      const len = textarea.value.length;
+      counter.textContent = `${len} / 500`;
+      counter.classList.toggle('over', len > 500);
+      submitBtn.disabled = len < 4 || len > 500;
+    });
+
+    submitBtn.addEventListener('click', async () => {
+      submitBtn.disabled = true;
+      submitBtn.textContent = '전달 중...';
+
+      try {
+        const raw = textarea.value.trim();
+        const deviceKey = getDeviceKey();
+        const result = processFeedback({ content: raw, deviceKey });
+        const hash = await hashDeviceKey(deviceKey);
+
+        await insertFeedback({
+          store_id: store.id,
+          content_clean: result.submission?.content || raw,
+          content_raw: raw,
+          sentiment_score: result.insight?.sentimentScore ?? null,
+          urgency: result.insight?.urgency || 'low',
+          categories: result.insight?.categories || [],
+          pii_removed: !!result.moderation?.piiRemoved,
+          profanity_removed: !!result.moderation?.profanityRemoved,
+          device_hash: hash,
+        });
+
+        showSection('done');
+      } catch (err) {
+        console.error('insert error', err);
+        showError('전달 중 오류가 났어요. 잠시 후 다시 시도해주세요.');
+        submitBtn.disabled = false;
+        submitBtn.textContent = '전달하기';
+      }
+    });
+  }
+
+  main();
+</script>
+</body>
+</html>
