@@ -1,0 +1,382 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Voxpop Owner Guide</title>
+<meta name="description" content="Voxpop을 매장에 설치하고 7일 동안 써보는 사장님용 안내서입니다." />
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
+<style>
+  :root {
+    --ink: #1f2430;
+    --paper: #f6f3ec;
+    --muted: #6b7180;
+    --line: #d9d4c7;
+    --accent: #2f6f6b;
+    --accent-2: #38807b;
+    --alert: #b0683a;
+    --card: #fffdf8;
+    --soft: #f1ede2;
+    --mint: #7fb3ae;
+    --radius: 16px;
+  }
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    margin: 0;
+    font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+    background: var(--paper);
+    color: var(--ink);
+    line-height: 1.65;
+    word-break: keep-all;
+    -webkit-font-smoothing: antialiased;
+  }
+  a { color: inherit; }
+  .wrap { width: min(1040px, calc(100% - 40px)); margin: 0 auto; }
+  .topbar {
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    background: rgba(246, 243, 236, 0.94);
+    backdrop-filter: blur(8px);
+    border-bottom: 1px solid var(--line);
+  }
+  .topbar .wrap {
+    min-height: 64px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+  }
+  .brand {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 20px;
+    font-weight: 800;
+    letter-spacing: -0.03em;
+    text-decoration: none;
+  }
+  .mark {
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    background: var(--accent);
+    color: var(--paper);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 800;
+  }
+  .nav {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+  }
+  .nav a, .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 10px;
+    padding: 10px 14px;
+    font-size: 14px;
+    font-weight: 700;
+    text-decoration: none;
+  }
+  .nav a { color: var(--muted); }
+  .nav a.primary, .btn.primary { background: var(--accent); color: #fff; }
+  .btn.ghost { border: 1px solid var(--line); background: var(--card); color: var(--accent); }
+  .btn.copy { border: 1px solid var(--line); background: var(--card); color: var(--ink); cursor: pointer; font-family: inherit; }
+  .btn.copy.done { border-color: var(--accent); background: var(--accent); color: #fff; }
+  header.hero { padding: clamp(54px, 9vw, 96px) 0 44px; }
+  .eyebrow {
+    color: var(--accent);
+    font-size: 13px;
+    font-weight: 800;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    margin-bottom: 14px;
+  }
+  h1 {
+    margin: 0;
+    font-size: clamp(34px, 6vw, 58px);
+    line-height: 1.12;
+    letter-spacing: -0.04em;
+  }
+  .lead {
+    margin: 18px 0 0;
+    max-width: 680px;
+    color: var(--muted);
+    font-size: clamp(16px, 2.1vw, 20px);
+  }
+  .hero-grid {
+    display: grid;
+    grid-template-columns: 1.1fr 0.9fr;
+    gap: 28px;
+    align-items: start;
+  }
+  @media (max-width: 840px) { .hero-grid { grid-template-columns: 1fr; } }
+  .store-card, .card, .step, .feature, .faq, .phrase-box {
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+  }
+  .store-card { padding: 22px; box-shadow: 0 10px 28px rgba(31, 36, 48, 0.08); }
+  .store-card .label { color: var(--muted); font-size: 12px; font-weight: 700; }
+  .store-card .store-name { font-size: 22px; font-weight: 800; margin-top: 4px; }
+  .link-row {
+    margin-top: 14px;
+    padding: 14px;
+    border-radius: 12px;
+    background: var(--soft);
+  }
+  .link-row .small { color: var(--muted); font-size: 12px; font-weight: 700; }
+  .link-row a { display: block; margin-top: 4px; color: var(--accent); font-size: 13px; overflow-wrap: anywhere; }
+  .actions { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 12px; }
+  section { padding: 48px 0; border-top: 1px solid var(--line); }
+  h2 { margin: 0; font-size: clamp(26px, 4vw, 38px); line-height: 1.2; letter-spacing: -0.03em; }
+  .section-lead { margin: 12px 0 0; color: var(--muted); max-width: 680px; }
+  .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-top: 24px; }
+  .grid-2 { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; margin-top: 24px; }
+  @media (max-width: 840px) { .grid-3, .grid-2 { grid-template-columns: 1fr; } }
+  .card, .step, .feature, .faq, .phrase-box { padding: 22px; }
+  .card strong, .feature strong, .step strong { display: block; font-size: 18px; margin-bottom: 8px; }
+  .card p, .feature p, .step p, .faq p { margin: 0; color: var(--muted); font-size: 15px; }
+  .step .num {
+    width: 34px;
+    height: 34px;
+    border-radius: 999px;
+    background: var(--accent);
+    color: #fff;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 800;
+    margin-bottom: 12px;
+  }
+  .feature { position: relative; overflow: hidden; }
+  .feature::before {
+    content: '';
+    position: absolute;
+    inset: 0 0 auto 0;
+    height: 4px;
+    background: var(--accent);
+  }
+  .feature.alert::before { background: var(--alert); }
+  .phrase-box { margin-top: 24px; }
+  .phrase {
+    margin: 12px 0 0;
+    padding: 16px;
+    background: var(--soft);
+    border-radius: 12px;
+    color: var(--ink);
+  }
+  .phrase p { margin: 0; }
+  .checklist { margin: 18px 0 0; padding: 0; list-style: none; }
+  .checklist li {
+    padding: 12px 0;
+    border-bottom: 1px solid var(--line);
+    color: var(--muted);
+  }
+  .checklist li::before { content: '✓'; color: var(--accent); font-weight: 800; margin-right: 8px; }
+  .note {
+    margin-top: 16px;
+    padding: 14px 16px;
+    border-radius: 12px;
+    background: var(--soft);
+    color: var(--muted);
+    font-size: 14px;
+  }
+  footer { padding: 40px 0; color: var(--muted); font-size: 13px; text-align: center; }
+</style>
+</head>
+<body>
+<nav class="topbar">
+  <div class="wrap">
+    <a class="brand" href="../"><span class="mark">v</span><span>Voxpop</span></a>
+    <div class="nav">
+      <a href="#scenario">사용 흐름</a>
+      <a href="#features">기능</a>
+      <a href="#install">설치</a>
+      <a href="../owner/" class="primary">사장님 화면 열기</a>
+    </div>
+  </div>
+</nav>
+
+<header class="hero">
+  <div class="wrap hero-grid">
+    <div>
+      <div class="eyebrow">Voxpop Owner Guide</div>
+      <h1>사장님이 7일 동안<br>Voxpop을 써보는 법</h1>
+      <p class="lead">Voxpop은 공개 리뷰를 늘리는 도구가 아닙니다. 손님이 공개 악평으로 쓰기 전, 사장님에게만 안전하게 남긴 한마디를 운영 신호로 보여주는 서비스입니다.</p>
+      <div class="actions">
+        <a class="btn primary" href="#install">설치 순서 보기</a>
+        <a class="btn ghost" href="#faq">자주 묻는 질문</a>
+      </div>
+    </div>
+
+    <aside class="store-card">
+      <div class="label">현재 매장</div>
+      <div class="store-name" id="store-name">공통 가이드</div>
+      <p class="note" id="store-note">매장 전용 링크가 있으면 주소 뒤에 <b>?store=매장슬러그</b>를 붙여서 열 수 있어요.</p>
+
+      <div class="link-row">
+        <div class="small">손님용 한마디 링크</div>
+        <a id="customer-link" href="../s/">../s/</a>
+        <div class="actions"><button class="btn copy" data-copy-target="customer-link">손님 링크 복사</button></div>
+      </div>
+
+      <div class="link-row">
+        <div class="small">사장님 대시보드</div>
+        <a id="owner-link" href="../owner/">../owner/</a>
+        <div class="actions"><button class="btn copy" data-copy-target="owner-link">대시보드 링크 복사</button></div>
+      </div>
+    </aside>
+  </div>
+</header>
+
+<section id="what">
+  <div class="wrap">
+    <div class="eyebrow">Service</div>
+    <h2>서비스 한 줄 설명</h2>
+    <p class="section-lead">손님은 이름 없이 짧게 말하고, 사장님은 욕설·개인정보가 가려진 한마디와 오늘 확인할 신호를 봅니다.</p>
+    <div class="grid-3">
+      <div class="card"><strong>손님에게 안전</strong><p>이름과 연락처를 받지 않습니다. 공개 리뷰로 올라가지 않고 사장님에게만 전달됩니다.</p></div>
+      <div class="card"><strong>사장님에게 실용</strong><p>칭찬, 불편, 긴급 확인, 반복 신호를 나눠서 보여줍니다. 읽고 끝나는 설문이 아닙니다.</p></div>
+      <div class="card"><strong>공개 평판 전 단계</strong><p>별점이 떨어진 뒤가 아니라, 고칠 수 있을 때 작은 신호를 먼저 받는 데 목적이 있습니다.</p></div>
+    </div>
+  </div>
+</section>
+
+<section id="scenario">
+  <div class="wrap">
+    <div class="eyebrow">7-day Scenario</div>
+    <h2>7일 베타 사용 흐름</h2>
+    <p class="section-lead">처음 목표는 결제가 아니라 실제 매장에서 QR 설치부터 사장님 확인까지 한 번 굴러가는지 보는 것입니다.</p>
+    <div class="grid-3">
+      <div class="step"><span class="num">1</span><strong>10분 본인 테스트</strong><p>손님용 링크로 사장님이 직접 한마디를 남기고, 대시보드에서 정리본이 보이는지 확인합니다.</p></div>
+      <div class="step"><span class="num">2</span><strong>QR 한 곳에 비치</strong><p>계산대, 픽업대, 테이블 중 손님이 자연스럽게 볼 수 있는 한 곳에 둡니다.</p></div>
+      <div class="step"><span class="num">3</span><strong>7일 동안 확인</strong><p>응답 수보다 중요한 것은 사장님이 대시보드를 보고 계속 둘 이유가 생기는지입니다.</p></div>
+    </div>
+  </div>
+</section>
+
+<section id="features">
+  <div class="wrap">
+    <div class="eyebrow">Features</div>
+    <h2>사장님 화면에서 보는 것</h2>
+    <div class="grid-3">
+      <div class="feature"><strong>가림 처리된 한마디</strong><p>개인정보, 직원 지칭, 욕설 위험은 사장님 화면에 바로 노출하지 않습니다.</p></div>
+      <div class="feature alert"><strong>긴급 확인</strong><p>안전, 위생, 알레르기, 이물질처럼 먼저 확인할 신호를 따로 보여줍니다.</p></div>
+      <div class="feature"><strong>오늘 볼 것</strong><p>오늘 볼 것, 근거, 다음 확인을 3줄로 보여줍니다. 근거가 약하면 억지 액션을 만들지 않습니다.</p></div>
+      <div class="feature"><strong>반복 신호</strong><p>같은 주제 한마디가 2건 이상이면 반복 신호로 보여줍니다.</p></div>
+      <div class="feature"><strong>좋은 한마디</strong><p>칭찬도 따로 모아 보여줍니다. 다만 공개 리뷰 전환 버튼은 만들지 않습니다.</p></div>
+      <div class="feature"><strong>처리 상태</strong><p>새 한마디, 확인함, 조치함, 나중에 볼 것 상태로 가볍게 정리합니다.</p></div>
+    </div>
+  </div>
+</section>
+
+<section id="install">
+  <div class="wrap">
+    <div class="eyebrow">Setup</div>
+    <h2>매장 설치 순서</h2>
+    <ul class="checklist">
+      <li>손님용 QR 또는 링크를 받습니다.</li>
+      <li>사장님이 먼저 직접 테스트 한마디를 남깁니다.</li>
+      <li>사장님 화면에서 그 한마디가 보이는지 확인합니다.</li>
+      <li>QR을 계산대, 픽업대, 테이블 중 한 곳에 둡니다.</li>
+      <li>손님에게 억지로 부탁하지 않고 자연 응답을 봅니다.</li>
+      <li>7일 뒤 계속 둘 이유가 있는지 함께 확인합니다.</li>
+    </ul>
+
+    <div class="phrase-box">
+      <strong>손님에게 말할 때는 이렇게 짧게</strong>
+      <div class="phrase" id="customer-phrase"><p>혹시 오늘 불편했거나 좋았던 점 있으면 QR로 한마디만 남겨주세요. 이름은 안 받고, 공개 리뷰로 올라가지 않고, 사장님에게만 전달됩니다.</p></div>
+      <div class="actions"><button class="btn copy" data-copy-target="customer-phrase">안내 문구 복사</button></div>
+    </div>
+  </div>
+</section>
+
+<section id="faq">
+  <div class="wrap">
+    <div class="eyebrow">FAQ</div>
+    <h2>자주 묻는 질문</h2>
+    <div class="grid-2">
+      <div class="faq"><strong>손님 개인정보를 받나요?</strong><p>아니요. 이름, 전화번호, 이메일을 받지 않는 것이 기본 원칙입니다.</p></div>
+      <div class="faq"><strong>공개 리뷰로 올라가나요?</strong><p>아니요. Voxpop 한마디는 사장님에게만 전달됩니다.</p></div>
+      <div class="faq"><strong>정화 전 원문을 볼 수 있나요?</strong><p>베타에서는 안전을 위해 정화 전 원문을 바로 열어보지 않습니다. 필요한 신호만 가려서 보여드립니다.</p></div>
+      <div class="faq"><strong>응답이 0건이면 실패인가요?</strong><p>아니요. QR 위치, 문구, 손님 동선, 사장님 설명 부담 중 어디가 막혔는지 보는 신호입니다.</p></div>
+      <div class="faq"><strong>돈은 언제 내나요?</strong><p>7일 베타에서는 결제가 목적이 아닙니다. 계속 둘 이유가 있는지 먼저 확인합니다.</p></div>
+      <div class="faq"><strong>여러 기기에서 상태가 같나요?</strong><p>현재 처리 상태는 같은 브라우저 기준입니다. 4주 파일럿 전에는 DB 저장으로 보강할 예정입니다.</p></div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    Voxpop 사장님 가이드 · 문의 <a href="mailto:tototal5542@gmail.com">tototal5542@gmail.com</a>
+  </div>
+</footer>
+
+<script type="module">
+  import { fetchStoreBySlug } from '../lib/supabase-client.js';
+
+  const params = new URLSearchParams(location.search);
+  const rawStore = (params.get('store') || '').trim();
+  const safeSlug = rawStore.toLowerCase().replace(/[^a-z0-9-]/g, '');
+  const nameFromUrl = (params.get('name') || '').trim();
+
+  const storeNameEl = document.querySelector('#store-name');
+  const storeNoteEl = document.querySelector('#store-note');
+  const customerLinkEl = document.querySelector('#customer-link');
+  const ownerLinkEl = document.querySelector('#owner-link');
+
+  const ownerUrl = new URL('../owner/', location.href).href;
+  const customerUrl = safeSlug
+    ? new URL(`../s/?store=${encodeURIComponent(safeSlug)}`, location.href).href
+    : new URL('../s/', location.href).href;
+
+  ownerLinkEl.href = ownerUrl;
+  ownerLinkEl.textContent = ownerUrl;
+  customerLinkEl.href = customerUrl;
+  customerLinkEl.textContent = customerUrl;
+
+  if (safeSlug) {
+    storeNameEl.textContent = nameFromUrl || safeSlug;
+    storeNoteEl.textContent = '이 페이지는 매장 전용 링크가 채워진 가이드입니다.';
+    try {
+      const store = await fetchStoreBySlug(safeSlug);
+      if (store?.display_name) storeNameEl.textContent = store.display_name;
+    } catch (err) {
+      console.info('store lookup skipped', err.message);
+    }
+  }
+
+  async function copyText(text, button) {
+    try {
+      await navigator.clipboard.writeText(text);
+      button.classList.add('done');
+      const oldText = button.textContent;
+      button.textContent = '복사됨';
+      setTimeout(() => {
+        button.classList.remove('done');
+        button.textContent = oldText;
+      }, 1400);
+    } catch {
+      button.textContent = '복사 실패';
+    }
+  }
+
+  document.querySelectorAll('[data-copy-target]').forEach((button) => {
+    button.addEventListener('click', () => {
+      const target = document.querySelector(`#${button.dataset.copyTarget}`);
+      const text = target?.href || target?.innerText || target?.textContent || '';
+      copyText(text.trim(), button);
+    });
+  });
+</script>
+</body>
+</html>

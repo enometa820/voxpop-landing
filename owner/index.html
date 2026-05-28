@@ -70,6 +70,23 @@
     cursor: pointer;
   }
   .signout:hover { color: var(--ink); border-color: var(--muted); }
+  .header-actions {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+  }
+  .guide-link {
+    border: 1px solid var(--line);
+    color: var(--accent);
+    padding: 6px 12px;
+    border-radius: 6px;
+    font-size: 13px;
+    font-weight: 600;
+    text-decoration: none;
+    background: var(--card);
+  }
 
   /* 로그인 카드 */
   .signin {
@@ -201,32 +218,76 @@
     color: var(--ink);
     margin: 8px 0;
   }
-  .feedback .raw-toggle {
-    margin-top: 8px;
-    background: none;
-    border: 1px dashed var(--line);
-    color: var(--muted);
-    padding: 4px 10px;
-    border-radius: 4px;
-    font-family: inherit;
-    font-size: 11px;
-    cursor: pointer;
-  }
-  .feedback .raw-toggle:hover { color: var(--ink); }
-  .feedback .raw {
+  .feedback .safety-note {
     margin-top: 8px;
     padding: 10px 12px;
     background: var(--s2);
     border-radius: 4px;
-    font-size: 13px;
-    color: var(--tm, var(--ink));
-    display: none;
+    font-size: 12px;
+    color: var(--muted);
   }
-  .feedback .raw.show { display: block; }
   .feedback .flags {
     font-size: 11px;
     color: var(--muted);
     margin-top: 6px;
+  }
+  .action-card {
+    background: var(--paper);
+    border: 1px solid var(--line);
+    border-left: 4px solid var(--accent);
+    border-radius: 10px;
+    padding: 18px 20px;
+    margin-bottom: 12px;
+  }
+  .action-card.urgent { border-left-color: var(--alert); }
+  .action-card .line {
+    margin: 5px 0;
+    font-size: 14px;
+  }
+  .action-card .line b { color: var(--accent); }
+  .action-card.urgent .line b { color: var(--alert); }
+  .signal-card {
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    padding: 14px 16px;
+    margin-bottom: 10px;
+  }
+  .signal-card strong { color: var(--accent); }
+  .signal-card .desc {
+    margin-top: 4px;
+    font-size: 13px;
+    color: var(--muted);
+  }
+  .status-row {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-top: 12px;
+    padding-top: 10px;
+    border-top: 1px solid var(--line);
+  }
+  .status-label {
+    font-size: 11px;
+    color: var(--muted);
+    margin-right: 4px;
+  }
+  .status-btn {
+    border: 1px solid var(--line);
+    background: var(--card);
+    color: var(--muted);
+    border-radius: 999px;
+    padding: 5px 9px;
+    font-family: inherit;
+    font-size: 11px;
+    cursor: pointer;
+  }
+  .status-btn:hover { border-color: var(--accent); color: var(--ink); }
+  .status-btn.active {
+    border-color: var(--accent);
+    background: var(--accent);
+    color: var(--paper);
   }
 
   /* 빈 상태 */
@@ -268,6 +329,7 @@
     <div id="signin-notice" style="display:none"></div>
     <div class="info">
       이메일은 voxpop에 등록된 사장님 이메일이어야 합니다. 매장 등록 안 됐으면 voxpop 운영자에게 문의해주세요.
+      처음이라면 <a href="../owner-guide/">사장님 가이드</a>를 먼저 볼 수 있어요.
     </div>
   </div>
 
@@ -281,16 +343,31 @@
           <div class="sub" id="user-email"></div>
         </div>
       </div>
-      <button class="signout" id="signout-btn">로그아웃</button>
+      <div class="header-actions">
+        <a class="guide-link" href="../owner-guide/">사장님 가이드</a>
+        <button class="signout" id="signout-btn">로그아웃</button>
+      </div>
     </header>
 
     <div id="stores-area"></div>
 
-    <h2 class="sec">오늘 액션 <span class="count" id="urgent-count"></span> <span class="badge-alert" id="urgent-badge" style="display:none">긴급</span></h2>
+    <h2 class="sec">긴급 확인 <span class="count" id="urgent-count"></span> <span class="badge-alert" id="urgent-badge" style="display:none">긴급</span></h2>
     <div id="urgent-list"></div>
 
-    <h2 class="sec">전체 한마디 <span class="count" id="all-count"></span></h2>
-    <div id="all-list"></div>
+    <h2 class="sec">오늘 볼 것</h2>
+    <div id="today-action"></div>
+
+    <h2 class="sec">반복 신호 <span class="count" id="repeat-count"></span></h2>
+    <div id="repeat-list"></div>
+
+    <h2 class="sec">새 한마디 <span class="count" id="new-count"></span></h2>
+    <div id="new-list"></div>
+
+    <h2 class="sec">좋은 한마디 <span class="count" id="positive-count"></span></h2>
+    <div id="positive-list"></div>
+
+    <h2 class="sec">처리 기록 <span class="count" id="history-count"></span></h2>
+    <div id="history-list"></div>
   </div>
 
 </div>
@@ -305,6 +382,15 @@
   } from '../lib/supabase-client.js';
 
   const $ = (sel) => document.querySelector(sel);
+  const OWNER_STATUS_KEY = 'voxpop-owner-status-v1';
+  const OWNER_STATUSES = {
+    new: '새 한마디',
+    seen: '확인함',
+    acted: '조치함',
+    later: '나중에 볼 것',
+  };
+  let currentStores = [];
+  let currentFeedback = [];
 
   function showSection(id) {
     ['loading', 'signin-section', 'dashboard'].forEach((s) => {
@@ -342,14 +428,82 @@
 
   function urgencyBadge(urgency) {
     if (urgency === 'high') return { cls: 'high', label: '긴급' };
-    if (urgency === 'mid') return { cls: 'mid', label: '주의' };
+    if (urgency === 'mid' || urgency === 'medium') return { cls: 'mid', label: '주의' };
     return { cls: 'low', label: '평이' };
+  }
+
+  function loadOwnerStatusMap() {
+    try {
+      return JSON.parse(localStorage.getItem(OWNER_STATUS_KEY) || '{}');
+    } catch {
+      return {};
+    }
+  }
+
+  function saveOwnerStatusMap(map) {
+    localStorage.setItem(OWNER_STATUS_KEY, JSON.stringify(map));
+  }
+
+  function getOwnerStatus(item) {
+    return item.owner_status || loadOwnerStatusMap()[item.id] || 'new';
+  }
+
+  function setOwnerStatus(id, status) {
+    const map = loadOwnerStatusMap();
+    map[id] = status;
+    saveOwnerStatusMap(map);
+    currentFeedback = currentFeedback.map((item) => (
+      item.id === id ? { ...item, owner_status: status } : item
+    ));
+    renderDashboard(currentStores, currentFeedback);
+  }
+
+  function getCategories(item) {
+    if (Array.isArray(item.categories)) return item.categories.filter(Boolean);
+    if (typeof item.categories === 'string' && item.categories.trim()) return [item.categories.trim()];
+    return ['기타'];
+  }
+
+  function primaryCategory(item) {
+    return getCategories(item)[0] || '기타';
+  }
+
+  function isUrgentFeedback(item) {
+    return item.urgency === 'high' || (item.sentiment_score != null && item.sentiment_score <= -0.5);
+  }
+
+  function isPositiveFeedback(item) {
+    if (item.sentiment_score != null) return item.sentiment_score >= 0.3;
+    return /좋|맛있|친절|감사|만족|최고|추천|또\s*갈|다시\s*올/.test(item.content_clean || '');
+  }
+
+  function isNegativeFeedback(item) {
+    if (item.sentiment_score != null) return item.sentiment_score <= -0.3;
+    return /아쉽|불편|별로|늦|더럽|비싸|불친절|맛없|차갑|짜|시끄|불만|기다/.test(item.content_clean || '');
+  }
+
+  function isOpenFeedback(item) {
+    return !['seen', 'acted'].includes(getOwnerStatus(item));
+  }
+
+  function renderStatusControls(item) {
+    const current = getOwnerStatus(item);
+    return `
+      <div class="status-row">
+        <span class="status-label">처리 상태: ${OWNER_STATUSES[current] || OWNER_STATUSES.new}</span>
+        ${Object.entries(OWNER_STATUSES).map(([key, label]) => `
+          <button type="button" class="status-btn ${current === key ? 'active' : ''}" data-status="${key}">
+            ${label}
+          </button>
+        `).join('')}
+      </div>
+    `;
   }
 
   function renderFeedback(item) {
     const sb = sentimentBadge(item.sentiment_score);
     const ub = urgencyBadge(item.urgency);
-    const isUrgent = item.urgency === 'high' || (item.sentiment_score != null && item.sentiment_score <= -0.5);
+    const isUrgent = isUrgentFeedback(item);
     const cls = isUrgent ? 'feedback urgent' : (sb.cls === 'pos' ? 'feedback positive' : 'feedback');
 
     const div = document.createElement('div');
@@ -359,8 +513,11 @@
     if (item.pii_removed) flagsHtml.push('개인정보 가림');
     if (item.profanity_removed) flagsHtml.push('욕설 가림');
     const flagsLine = flagsHtml.length ? `<div class="flags">${flagsHtml.join(' · ')}</div>` : '';
+    const safetyNote = item.content_raw && item.content_raw !== item.content_clean
+      ? '<div class="safety-note">정화 전 원본은 안전을 위해 사장님 화면에 노출하지 않아요. 필요한 신호만 가린 문장과 상태로 보여드립니다.</div>'
+      : '';
 
-    const cats = (item.categories || []).filter(Boolean);
+    const cats = getCategories(item);
     const catsBadges = cats.map((c) => `<span class="badge low">${c}</span>`).join('');
 
     div.innerHTML = `
@@ -371,23 +528,123 @@
         <span class="time">${formatTime(item.created_at)}</span>
       </div>
       <div class="body">${escapeHtml(item.content_clean)}</div>
-      ${item.content_raw && item.content_raw !== item.content_clean ? `
-        <button class="raw-toggle" data-id="${item.id}">정화 전 원본 보기</button>
-        <div class="raw" id="raw-${item.id}">${escapeHtml(item.content_raw)}</div>
-      ` : ''}
+      ${safetyNote}
       ${flagsLine}
+      ${renderStatusControls(item)}
     `;
 
-    const btn = div.querySelector('.raw-toggle');
-    if (btn) {
-      btn.addEventListener('click', () => {
-        const raw = div.querySelector(`#raw-${item.id}`);
-        raw.classList.toggle('show');
-        btn.textContent = raw.classList.contains('show') ? '원본 숨기기' : '정화 전 원본 보기';
-      });
-    }
+    div.querySelectorAll('.status-btn').forEach((btn) => {
+      btn.addEventListener('click', () => setOwnerStatus(item.id, btn.dataset.status));
+    });
 
     return div;
+  }
+
+  function buildRepeatSignals(feedback) {
+    const groups = new Map();
+    feedback.filter(isOpenFeedback).forEach((item) => {
+      const category = primaryCategory(item);
+      const current = groups.get(category) || { category, count: 0, lowCount: 0, latestAt: item.created_at };
+      current.count += 1;
+      if (isNegativeFeedback(item) || item.urgency === 'high') current.lowCount += 1;
+      if (new Date(item.created_at) > new Date(current.latestAt)) current.latestAt = item.created_at;
+      groups.set(category, current);
+    });
+    return Array.from(groups.values())
+      .filter((group) => group.count >= 2)
+      .sort((a, b) => {
+        const aStrong = a.count >= 3 || a.lowCount >= 2 ? 1 : 0;
+        const bStrong = b.count >= 3 || b.lowCount >= 2 ? 1 : 0;
+        if (bStrong !== aStrong) return bStrong - aStrong;
+        if (b.count !== a.count) return b.count - a.count;
+        return new Date(b.latestAt) - new Date(a.latestAt);
+      });
+  }
+
+  function buildTodayAction(feedback) {
+    const open = feedback.filter(isOpenFeedback);
+    const urgent = open.find(isUrgentFeedback);
+    if (urgent) {
+      return {
+        kind: 'urgent',
+        item: urgent,
+        title: '고객 주장 기준 긴급 신호 확인',
+        reason: `${primaryCategory(urgent)} 관련 한마디가 긴급 확인으로 들어왔어요.`,
+        next: '실제 상황이 있었는지 먼저 확인하고, 확인 후 조치함으로 바꿔주세요.',
+      };
+    }
+
+    const repeated = buildRepeatSignals(open)[0];
+    if (repeated) {
+      return {
+        kind: 'repeat',
+        title: `${repeated.category} 반복 신호 확인`,
+        reason: `같은 주제 한마디가 ${repeated.count}건 들어왔어요.`,
+        next: '오늘 현장에서 같은 문제가 반복될 수 있는 지점 1곳만 확인해보세요.',
+      };
+    }
+
+    const low = open.find(isNegativeFeedback);
+    if (low) {
+      return {
+        kind: 'low',
+        item: low,
+        title: `${primaryCategory(low)} 한마디 1건 확인`,
+        reason: '아직 반복은 아니지만 그냥 넘기기 아쉬운 신호예요.',
+        next: '원문을 읽고 오늘 바로 확인할 수 있는 작은 지점만 봐주세요.',
+      };
+    }
+
+    const positive = open.find(isPositiveFeedback);
+    if (positive) {
+      return {
+        kind: 'positive',
+        item: positive,
+        title: '좋은 한마디 확인',
+        reason: '지금은 고칠 신호보다 유지하면 좋은 경험이 먼저 보여요.',
+        next: '좋았던 지점을 유지할 수 있게 오늘 한 번만 체크해보세요.',
+      };
+    }
+
+    return {
+      kind: 'empty',
+      title: '오늘은 억지 액션을 만들지 않아도 돼요',
+      reason: '아직 충분한 근거가 없어요.',
+      next: '새 한마디가 들어오면 여기에서 먼저 보여드릴게요.',
+    };
+  }
+
+  function renderTodayAction(feedback) {
+    const action = buildTodayAction(feedback);
+    const div = document.createElement('div');
+    div.className = `action-card ${action.kind === 'urgent' ? 'urgent' : ''}`;
+    div.innerHTML = `
+      <div class="line"><b>오늘 볼 것:</b> ${escapeHtml(action.title)}</div>
+      <div class="line"><b>근거:</b> ${escapeHtml(action.reason)}</div>
+      <div class="line"><b>다음:</b> ${escapeHtml(action.next)}</div>
+    `;
+    return div;
+  }
+
+  function renderRepeatSignals(feedback) {
+    const repeatList = $('#repeat-list');
+    const repeats = buildRepeatSignals(feedback);
+    $('#repeat-count').textContent = repeats.length ? `(${repeats.length})` : '';
+    repeatList.innerHTML = '';
+    if (!repeats.length) {
+      repeatList.innerHTML = `<div class="empty"><p>아직 반복 신호는 없어요.</p><p>같은 주제가 2건 이상 쌓이면 여기 보여드릴게요.</p></div>`;
+      return;
+    }
+    repeats.forEach((signal) => {
+      const strong = signal.count >= 3 || signal.lowCount >= 2;
+      const div = document.createElement('div');
+      div.className = 'signal-card';
+      div.innerHTML = `
+        <strong>${escapeHtml(signal.category)}</strong> ${strong ? '강한 반복 신호' : '반복 신호'}
+        <div class="desc">같은 주제 ${signal.count}건${signal.lowCount ? ` · 낮은 신호 ${signal.lowCount}건` : ''}. 확정 문제가 아니라 확인할 신호로 봅니다.</div>
+      `;
+      repeatList.appendChild(div);
+    });
   }
 
   function escapeHtml(str) {
@@ -395,6 +652,78 @@
     return String(str).replace(/[&<>"']/g, (m) => ({
       '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
     })[m]);
+  }
+
+  function renderDashboard(stores, feedback) {
+    currentStores = stores;
+    currentFeedback = feedback;
+
+    const storesArea = $('#stores-area');
+    if (stores.length === 0) {
+      storesArea.innerHTML = `<div class="empty"><p>아직 등록된 매장이 없습니다.</p><p>voxpop 운영자에게 매장 등록을 문의해주세요.</p></div>`;
+    } else {
+      storesArea.innerHTML = stores.map((s) => {
+        const myFeedback = feedback.filter((f) => f.stores?.id === s.id);
+        return `
+          <div class="store-info">
+            <div>
+              <div class="label">매장</div>
+              <div class="name">${escapeHtml(s.display_name)}</div>
+            </div>
+            <div class="stats">
+              받은 한마디 <b>${myFeedback.length}</b>개
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    const openFeedback = feedback.filter(isOpenFeedback);
+    const urgent = openFeedback.filter(isUrgentFeedback);
+    $('#urgent-count').textContent = urgent.length ? `(${urgent.length})` : '';
+    $('#urgent-badge').style.display = urgent.length ? '' : 'none';
+    const urgentList = $('#urgent-list');
+    urgentList.innerHTML = '';
+    if (urgent.length === 0) {
+      urgentList.innerHTML = `<div class="empty"><p>긴급한 한마디는 없어요.</p></div>`;
+    } else {
+      urgent.forEach((item) => urgentList.appendChild(renderFeedback(item)));
+    }
+
+    const todayAction = $('#today-action');
+    todayAction.innerHTML = '';
+    todayAction.appendChild(renderTodayAction(feedback));
+
+    renderRepeatSignals(feedback);
+
+    const newList = $('#new-list');
+    $('#new-count').textContent = openFeedback.length ? `(${openFeedback.length})` : '';
+    newList.innerHTML = '';
+    if (openFeedback.length === 0) {
+      newList.innerHTML = `<div class="empty"><p>새로 볼 한마디는 없어요.</p></div>`;
+    } else {
+      openFeedback.forEach((item) => newList.appendChild(renderFeedback(item)));
+    }
+
+    const positive = feedback.filter(isPositiveFeedback).slice(0, 5);
+    $('#positive-count').textContent = positive.length ? `(${positive.length})` : '';
+    const positiveList = $('#positive-list');
+    positiveList.innerHTML = '';
+    if (positive.length === 0) {
+      positiveList.innerHTML = `<div class="empty"><p>아직 좋은 한마디는 없어요.</p></div>`;
+    } else {
+      positive.forEach((item) => positiveList.appendChild(renderFeedback(item)));
+    }
+
+    const history = feedback.filter((item) => ['seen', 'acted'].includes(getOwnerStatus(item)));
+    $('#history-count').textContent = history.length ? `(${history.length})` : '';
+    const historyList = $('#history-list');
+    historyList.innerHTML = '';
+    if (history.length === 0) {
+      historyList.innerHTML = `<div class="empty"><p>아직 처리한 기록은 없어요.</p></div>`;
+    } else {
+      history.forEach((item) => historyList.appendChild(renderFeedback(item)));
+    }
   }
 
   async function loadDashboard() {
@@ -412,49 +741,7 @@
         fetchOwnerFeedback(),
       ]);
 
-      // 매장 정보
-      const storesArea = $('#stores-area');
-      if (stores.length === 0) {
-        storesArea.innerHTML = `<div class="empty"><p>아직 등록된 매장이 없습니다.</p><p>voxpop 운영자에게 매장 등록을 문의해주세요.</p></div>`;
-      } else {
-        storesArea.innerHTML = stores.map((s) => {
-          const myFeedback = feedback.filter((f) => f.stores?.id === s.id);
-          return `
-            <div class="store-info">
-              <div>
-                <div class="label">매장</div>
-                <div class="name">${escapeHtml(s.display_name)}</div>
-              </div>
-              <div class="stats">
-                받은 한마디 <b>${myFeedback.length}</b>개
-              </div>
-            </div>
-          `;
-        }).join('');
-      }
-
-      // 긴급 응답
-      const urgent = feedback.filter((f) => f.urgency === 'high' || (f.sentiment_score != null && f.sentiment_score <= -0.5));
-      $('#urgent-count').textContent = urgent.length ? `(${urgent.length})` : '';
-      $('#urgent-badge').style.display = urgent.length ? '' : 'none';
-      const urgentList = $('#urgent-list');
-      urgentList.innerHTML = '';
-      if (urgent.length === 0) {
-        urgentList.innerHTML = `<div class="empty"><p>긴급한 한마디는 없어요.</p></div>`;
-      } else {
-        urgent.forEach((item) => urgentList.appendChild(renderFeedback(item)));
-      }
-
-      // 전체 응답
-      $('#all-count').textContent = `(${feedback.length})`;
-      const allList = $('#all-list');
-      allList.innerHTML = '';
-      if (feedback.length === 0) {
-        allList.innerHTML = `<div class="empty"><p>아직 한마디가 도착하지 않았어요.</p><p>매장에 QR 코드를 비치하면 손님이 직접 남길 수 있어요.</p></div>`;
-      } else {
-        feedback.forEach((item) => allList.appendChild(renderFeedback(item)));
-      }
-
+      renderDashboard(stores, feedback);
       showSection('dashboard');
     } catch (err) {
       console.error('dashboard error', err);

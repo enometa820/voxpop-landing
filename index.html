@@ -39,6 +39,9 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
   .brand{display:flex;align-items:center;gap:11px;font-weight:800;font-size:21px;letter-spacing:-.03em;text-decoration:none}
   .brand b{color:var(--accent)}
   .brand svg{width:32px;height:32px;flex:none}
+  .nav-actions{display:flex;align-items:center;gap:12px}
+  .nav-link{font-size:14px;font-weight:700;color:var(--muted);text-decoration:none}
+  .nav-link:hover{color:var(--accent)}
   .nav-cta{font-size:14px;font-weight:700;background:var(--accent);color:#fff;
     padding:11px 20px;border-radius:10px;text-decoration:none;transition:filter .18s}
   .nav-cta:hover{filter:brightness(1.08)}
@@ -135,7 +138,10 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       </svg>
       <span>Vox<b>pop</b></span>
     </a>
-    <a class="nav-cta" href="https://forms.gle/WTEfz5oMAF4j1eKy5" target="_blank" rel="noopener">1분 설문에 답하기 →</a>
+    <div class="nav-actions">
+      <a class="nav-link" href="owner-guide/">사장님 가이드</a>
+      <a class="nav-cta" href="https://forms.gle/WTEfz5oMAF4j1eKy5" target="_blank" rel="noopener">1분 설문에 답하기 →</a>
+    </div>
   </div>
 </nav>
 
@@ -263,6 +269,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 <footer>
   <div class="wrap">
     © 2026 Voxpop · 별점이 박히기 전에, 진짜 한마디 · 아직 만드는 중인 서비스입니다<br>
+    <a href="owner-guide/">사장님 가이드</a> ·
     문의 <a href="mailto:tototal5542@gmail.com">tototal5542@gmail.com</a>
   </div>
 </footer>

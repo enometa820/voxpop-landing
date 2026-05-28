@@ -92,6 +92,27 @@
     outline-offset: 0;
     border-color: var(--accent);
   }
+  .topic-chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin: 0 0 12px;
+  }
+  .topic-chip {
+    border: 1px solid var(--line);
+    background: var(--card);
+    color: var(--muted);
+    border-radius: 999px;
+    padding: 7px 10px;
+    font-family: inherit;
+    font-size: 12px;
+    cursor: pointer;
+  }
+  .topic-chip.active {
+    border-color: var(--accent);
+    background: var(--accent);
+    color: var(--paper);
+  }
   .counter {
     text-align: right;
     font-size: 12px;
@@ -172,12 +193,19 @@
     <div class="mark">v</div>
     <div class="store-label" id="store-name"></div>
     <h1>익명 한마디 남기기</h1>
-    <p class="sub">사장님께만 전달됩니다. 이름, 연락처는 받지 않아요.</p>
+    <p class="sub">사장님께만 전달됩니다. 이름, 연락처는 받지 않고 공개 리뷰로 올라가지 않아요.</p>
+
+    <div class="topic-chips" aria-label="한마디 종류">
+      <button type="button" class="topic-chip" data-topic="좋았어요">좋았어요</button>
+      <button type="button" class="topic-chip" data-topic="아쉬웠어요">아쉬웠어요</button>
+      <button type="button" class="topic-chip" data-topic="불편했어요">불편했어요</button>
+      <button type="button" class="topic-chip" data-topic="바라는 점">바라는 점</button>
+    </div>
 
     <textarea id="content" placeholder="좋았던 점, 아쉬웠던 점, 바라는 점 무엇이든 좋아요." maxlength="500"></textarea>
     <div class="counter" id="counter">0 / 500</div>
 
-    <button class="btn" id="submit-btn" disabled>전달하기</button>
+    <button class="btn" id="submit-btn" disabled>사장님에게 전달하기</button>
 
     <div class="privacy">
       <b>익명 보장</b><br>
@@ -191,7 +219,7 @@
   <div id="done" class="done" style="display:none">
     <div class="mark">v</div>
     <h2>한마디 감사합니다</h2>
-    <p>사장님께 전달했습니다. 더 나은 가게가 되도록 도와주셨어요.</p>
+    <p>사장님에게만 전달했어요. 공개 리뷰로 올라가지 않습니다.</p>
   </div>
 
   <!-- 잘못된 매장 -->
@@ -230,6 +258,33 @@
     el.style.display = '';
   }
 
+  function getSafeCleanContent(result, raw) {
+    const status = result.moderation?.exposureStatus;
+    const category = result.submission?.category || '기타';
+    if (status === '민감 보류') {
+      return `${category} 관련 민감 표현 포함 피드백 1건`;
+    }
+    if (status === '스팸 제외') {
+      return '운영 신호 없는 입력 1건';
+    }
+    return result.submission?.sanitizedComment || raw;
+  }
+
+  function getDbUrgency(result) {
+    const risk = result.insight?.reviewRiskLevel;
+    if (risk === 'high') return 'high';
+    if (risk === 'medium') return 'mid';
+    return 'low';
+  }
+
+  function estimateSentimentScore(text, topic) {
+    if (topic === '좋았어요') return 0.7;
+    if (topic === '아쉬웠어요' || topic === '불편했어요') return -0.6;
+    if (/좋|맛있|친절|감사|만족|최고|추천|또\s*갈|다시\s*올/.test(text)) return 0.7;
+    if (/아쉽|불편|별로|늦|더럽|비싸|불친절|맛없|차갑|짜|시끄|불만|기다/.test(text)) return -0.6;
+    return 0;
+  }
+
   async function main() {
     const params = new URLSearchParams(location.search);
     const slug = params.get('store');
@@ -258,12 +313,22 @@
     const textarea = $('#content');
     const counter = $('#counter');
     const submitBtn = $('#submit-btn');
+    let selectedTopic = '';
+
+    document.querySelectorAll('.topic-chip').forEach((chip) => {
+      chip.addEventListener('click', () => {
+        selectedTopic = chip.dataset.topic === selectedTopic ? '' : chip.dataset.topic;
+        document.querySelectorAll('.topic-chip').forEach((el) => {
+          el.classList.toggle('active', el.dataset.topic === selectedTopic);
+        });
+      });
+    });
 
     textarea.addEventListener('input', () => {
       const len = textarea.value.length;
       counter.textContent = `${len} / 500`;
       counter.classList.toggle('over', len > 500);
-      submitBtn.disabled = len < 4 || len > 500;
+      submitBtn.disabled = len < 3 || len > 500;
     });
 
     submitBtn.addEventListener('click', async () => {
@@ -273,18 +338,18 @@
       try {
         const raw = textarea.value.trim();
         const deviceKey = getDeviceKey();
-        const result = processFeedback({ content: raw, deviceKey });
+        const result = processFeedback({ comment: raw, deviceKey });
         const hash = await hashDeviceKey(deviceKey);
 
         await insertFeedback({
           store_id: store.id,
-          content_clean: result.submission?.content || raw,
+          content_clean: getSafeCleanContent(result, raw),
           content_raw: raw,
-          sentiment_score: result.insight?.sentimentScore ?? null,
-          urgency: result.insight?.urgency || 'low',
-          categories: result.insight?.categories || [],
-          pii_removed: !!result.moderation?.piiRemoved,
-          profanity_removed: !!result.moderation?.profanityRemoved,
+          sentiment_score: result.insight?.sentimentScore ?? estimateSentimentScore(raw, selectedTopic),
+          urgency: getDbUrgency(result),
+          categories: [result.submission?.category || '기타'],
+          pii_removed: !!result.moderation?.hasPii,
+          profanity_removed: Number(result.moderation?.profanityScore || 0) > 0,
           device_hash: hash,
         });
 
@@ -293,7 +358,7 @@
         console.error('insert error', err);
         showError('전달 중 오류가 났어요. 잠시 후 다시 시도해주세요.');
         submitBtn.disabled = false;
-        submitBtn.textContent = '전달하기';
+        submitBtn.textContent = '사장님에게 전달하기';
       }
     });
   }
