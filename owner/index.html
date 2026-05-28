@@ -514,7 +514,7 @@
     if (item.profanity_removed) flagsHtml.push('욕설 가림');
     const flagsLine = flagsHtml.length ? `<div class="flags">${flagsHtml.join(' · ')}</div>` : '';
     const safetyNote = item.content_raw && item.content_raw !== item.content_clean
-      ? '<div class="safety-note">정화 전 원본은 안전을 위해 사장님 화면에 노출하지 않아요. 필요한 신호만 가린 문장과 상태로 보여드립니다.</div>'
+      ? '<div class="safety-note">가리기 전 원본은 안전을 위해 사장님 화면에 노출하지 않아요. 필요한 신호만 가린 문장과 상태로 보여드립니다.</div>'
       : '';
 
     const cats = getCategories(item);
