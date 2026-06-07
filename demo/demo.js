@@ -87,6 +87,7 @@ function escapeHtml(s) {
 }
 
 function renderReveal(stage) {
+  if (!state.visitor) { goto(1); return; }
   const v = state.visitor.submission;
   stage.innerHTML = `
     <div class="dash">
@@ -113,7 +114,7 @@ function renderOwner(stage) {
   const top = dash.topPainPoints?.[0]?.category ?? '아직 없음';
   stage.innerHTML = `
     <div class="dash">
-      <p style="color:var(--accent);font-weight:700">${dash.storeName} · 사장님 화면</p>
+      <p style="color:var(--accent);font-weight:700">${escapeHtml(dash.storeName)} · 사장님 화면</p>
       <h2>오늘 볼 것</h2>
       <p style="font-size:18px;font-weight:600">${escapeHtml(dash.todayAction ?? '')}</p>
       <div style="display:grid;gap:12px;grid-template-columns:repeat(3,1fr);margin:18px 0">
