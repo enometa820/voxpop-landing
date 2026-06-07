@@ -135,7 +135,19 @@ function renderOwner(stage) {
   $('toCta').onclick = () => goto(5);
 }
 
-// Task 5에서 구현: renderCta
-function renderCta(stage){ stage.innerHTML = '<div class="dash">(마무리 — Task 5)</div>'; }
+function renderCta(stage) {
+  stage.innerHTML = `
+    <div class="dash" style="text-align:center">
+      <h2>우리 매장도 이렇게 받아보고 싶다면</h2>
+      <p class="lead" style="margin-inline:auto;color:var(--muted)">손님은 부담 없이 솔직하게, 사장님은 가려진 한마디를 오늘 할 일로 받습니다.</p>
+      <div class="demo-cta" style="margin-top:18px">
+        <a class="btn btn-primary" href="../index.html#cta">베타 문의 →</a>
+        <a class="btn btn-ghost" href="../owner-guide/">사장님 가이드 보기</a>
+        <button class="btn btn-ghost" id="restart">처음부터 다시</button>
+      </div>
+      <p style="margin-top:14px"><a href="../story/">우리가 푸는 문제와 가는 방향 →</a></p>
+    </div>`;
+  $('restart').onclick = () => { state.visitor = null; goto(1); };
+}
 
 render();
