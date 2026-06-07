@@ -14,6 +14,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <meta name="description" content="공개 악평이 매출을 때리기 전에, 손님의 솔직한 한마디를 비공개로 먼저 듣고, 무기명으로 합의하고, 합의된 것만 공개합니다. 동네 사장님이 AI를 처음 써보는 가장 낮은 문턱. 손님 폼부터 사장 대시보드까지 이미 작동합니다.">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.css" rel="stylesheet">
+<link rel="stylesheet" href="assets/tokens.css" />
 <style>
   :root{
     --ink:#1f2430; --paper:#f6f3ec; --muted:#6b7180;
@@ -157,6 +158,8 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     </a>
     <div class="nav-actions">
       <a class="nav-link" href="#how">작동 방식</a>
+      <a class="nav-link" href="demo/">데모 체험</a>
+      <a class="nav-link" href="story/">우리 이야기</a>
       <a class="nav-link" href="owner-guide/">사장님 가이드</a>
       <a class="nav-cta" href="#cta">베타 문의 →</a>
     </div>
@@ -267,7 +270,26 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       <div class="s"><b>16개</b>자동화 테스트 통과</div>
       <div class="s"><b>베타</b>카페 매장 섭외 중</div>
     </div>
-    <div style="margin-top:36px"><a class="btn btn-ghost" href="owner-guide/" style="color:var(--paper);border-color:rgba(255,255,255,.45)">사장님 가이드 보기 →</a></div>
+    <div class="mini-preview" style="margin-top:32px;background:#fff;border-radius:14px;padding:20px;max-width:560px;color:var(--ink)">
+      <p style="color:var(--accent);font-weight:700;margin-top:0">가림, 직접 해보세요</p>
+      <input id="mp-in" style="width:100%;padding:10px;border:1px solid var(--line);border-radius:8px"
+        value="직원 김민수 불친절. 010-1234-5678로 항의 받아라" />
+      <button class="btn btn-primary" id="mp-go" style="margin-top:10px">가려보기</button>
+      <p id="mp-out" style="margin-top:10px;color:var(--muted)"></p>
+    </div>
+    <div style="margin-top:24px;display:flex;gap:12px;flex-wrap:wrap">
+      <a class="btn btn-primary" href="demo/">전체 데모 보기 →</a>
+      <a class="btn btn-ghost" href="story/" style="color:var(--paper);border-color:rgba(255,255,255,.45)">우리 이야기 →</a>
+    </div>
+    <script type="module">
+      import { processFeedback } from './lib/voc-engine.js';
+      const inEl = document.getElementById('mp-in');
+      const outEl = document.getElementById('mp-out');
+      document.getElementById('mp-go').onclick = () => {
+        const r = processFeedback({ storeId:'demo', rating:2, category:'응대', comment: inEl.value, submittedAt:'2026-06-07T00:00:00.000Z' });
+        outEl.textContent = '→ ' + r.submission.sanitizedComment;
+      };
+    </script>
   </div>
 </section>
 
