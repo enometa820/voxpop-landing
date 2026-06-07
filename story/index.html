@@ -16,17 +16,17 @@
   section.block h2 { font-size: clamp(22px, 3vw, 32px); margin-bottom:20px; }
   .lead { font-size: 18px; color: var(--muted); line-height:1.8; max-width: 720px; }
   .lead + .lead { margin-top:16px; }
-  .origin-box { margin-top:24px; background:#fff; border-left:4px solid var(--accent); border-radius:0 var(--radius) var(--radius) 0; padding:24px 28px; max-width:720px; }
+  .origin-box { margin-top:24px; background:var(--surface); border-left:4px solid var(--accent); border-radius:0 var(--radius) var(--radius) 0; padding:24px 28px; max-width:720px; }
   .origin-box p { margin:0; font-size:17px; line-height:1.8; color:var(--ink); }
   .fact-list { margin-top:20px; padding:0; list-style:none; max-width:720px; display:flex; flex-direction:column; gap:12px; }
   .fact-list li { font-size:16px; color:var(--muted); line-height:1.7; padding-left:20px; position:relative; }
   .fact-list li::before { content:"·"; position:absolute; left:0; color:var(--accent); font-weight:700; font-size:20px; line-height:1.4; }
   .how-grid { display:grid; gap:16px; grid-template-columns: repeat(3, 1fr); margin-top:28px; }
-  .how-card { background:#fff; border:1px solid var(--line); border-radius:var(--radius); padding:24px; }
+  .how-card { background:var(--surface); border:1px solid var(--line); border-radius:var(--radius); padding:24px; }
   .how-card .label { font-size:12px; font-weight:700; color:var(--accent); letter-spacing:.06em; text-transform:uppercase; margin-bottom:10px; }
   .how-card p { margin:0; font-size:16px; line-height:1.7; color:var(--ink); }
   .roadmap { display:grid; gap:16px; grid-template-columns: repeat(3, 1fr); margin-top:24px; }
-  .roadmap .stage { border:1px solid var(--line); border-radius:var(--radius); padding:20px; background:#fff; }
+  .roadmap .stage { border:1px solid var(--line); border-radius:var(--radius); padding:20px; background:var(--surface); }
   .roadmap .when { font-size:13px; font-weight:700; color:var(--accent); letter-spacing:.04em; margin-bottom:10px; }
   .roadmap .stage p { margin:0; font-size:16px; line-height:1.7; color:var(--ink); }
   .cta-row { display:flex; gap:12px; flex-wrap:wrap; margin-top:24px; }
@@ -38,7 +38,7 @@
 </style>
 </head>
 <body>
-  <nav class="nav"><div class="wrap" style="display:flex;justify-content:space-between;align-items:center;padding:16px 0">
+  <nav class="nav" aria-label="주 메뉴"><div class="wrap" style="display:flex;justify-content:space-between;align-items:center;padding:16px 0">
     <a class="brand" href="../index.html" style="text-decoration:none;color:var(--ink);font-weight:800">Vox<b style="color:var(--accent)">pop</b></a>
     <div style="display:flex;gap:16px;align-items:center">
       <a href="../demo/" style="color:var(--ink)">데모 체험</a>
@@ -48,7 +48,7 @@
 
   <header class="story-hero"><div class="wrap">
     <p class="mission">AI는 거대 자본만이 아니라 골목 사장님도 공평하게 누려야 할 기술입니다</p>
-    <h1>막막함을 떠먹여 풀다.<br>AI 접목의 가장 낮은 문턱.</h1>
+    <h1>막막한 AI, 한 입씩 떠먹여 드립니다.<br>접목의 가장 낮은 문턱.</h1>
     <p class="lead" style="margin-inline:auto;margin-top:20px">
       동네 사장님이 AI를 사업에 어떻게 접목할지 막막한 것을 풀어주는 것이 voxpop의 존재 이유입니다.
       그 첫 접목점이 손님의 솔직한 한마디를 무기명으로 받아 AI가 "오늘 할 일" 한 줄로 바꿔주는 것입니다.
