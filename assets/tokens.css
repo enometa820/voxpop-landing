@@ -1,0 +1,22 @@
+/* voxpop 공유 브랜드 토큰 — 랜딩·데모·스토리 공유. 출처: business/BRAND-SSOT.md */
+:root {
+  --ink: #1f2430;
+  --paper: #f6f3ec;
+  --muted: #6b7180;
+  --line: #d9d4c7;
+  --accent: #2f6f6b;
+  --acl: #38807b;
+  --alert: #b0683a;
+  --rev: #e8c37a;
+  --radius: 14px;
+  --maxw: 1080px;
+  --font: "Pretendard", system-ui, -apple-system, sans-serif;
+}
+* { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; }
+body { font-family: var(--font); color: var(--ink); background: var(--paper); -webkit-font-smoothing: antialiased; }
+.wrap { width: min(100% - 40px, var(--maxw)); margin-inline: auto; }
+a { color: var(--accent); }
+.btn { display:inline-flex; align-items:center; gap:6px; padding:12px 20px; border-radius:999px; font-weight:600; text-decoration:none; border:1.5px solid transparent; cursor:pointer; font-size:15px; }
+.btn-primary { background: var(--accent); color: var(--paper); }
+.btn-ghost { background: transparent; color: var(--accent); border-color: var(--accent); }
