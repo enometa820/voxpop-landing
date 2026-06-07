@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>voxpop 데모 — 직접 만져보기</title>
+<meta name="description" content="로그인 없이 손님 화면과 사장 화면을 직접 체험해보세요." />
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
+<link rel="stylesheet" href="../assets/tokens.css" />
+<style>
+  .demo-top { text-align:center; padding:40px 0 8px; }
+  .stepbar { display:flex; gap:8px; justify-content:center; margin:16px 0 28px; flex-wrap:wrap; }
+  .stepbar span { width:28px; height:6px; border-radius:3px; background:var(--line); }
+  .stepbar span.on { background:var(--accent); }
+  .stage-wrap { min-height: 60vh; display:flex; justify-content:center; align-items:flex-start; padding-bottom:64px; }
+  .phone { width:380px; max-width:100%; border:10px solid #11151c; border-radius:36px; background:var(--surface); padding:20px; box-shadow:0 20px 60px rgba(0,0,0,.18); }
+  .dash { width:min(100%, 760px); background:var(--surface); border:1px solid var(--line); border-radius:var(--radius); padding:24px; }
+  .navline { display:flex; justify-content:space-between; align-items:center; padding:16px 0; }
+  .demo-cta { display:flex; gap:10px; flex-wrap:wrap; justify-content:center; }
+  .hidden { display:none; }
+  fieldset { border:1px solid var(--line); border-radius:10px; margin:0 0 14px; }
+  textarea { width:100%; border:1px solid var(--line); border-radius:8px; padding:10px; font-family:inherit; }
+  .reveal-grid { display:grid; gap:12px; grid-template-columns:1fr 1fr; }
+  .reveal-grid .col { border:1px solid var(--line); border-radius:10px; padding:14px; }
+  .reveal-grid .col.masked { border-color:var(--accent); background:#f0f6f5; }
+  @media (max-width:640px){ .reveal-grid { grid-template-columns:1fr; } }
+</style>
+</head>
+<body>
+  <nav><div class="wrap navline">
+    <a class="brand" href="../index.html" style="text-decoration:none;color:var(--ink);font-weight:800">Vox<b style="color:var(--accent)">pop</b></a>
+    <a href="../story/">우리 이야기</a>
+  </div></nav>
+
+  <div class="wrap demo-top">
+    <div class="stepbar" id="stepbar"></div>
+    <div id="stage" class="stage-wrap"></div>
+  </div>
+
+  <script type="module" src="./demo.js"></script>
+</body>
+</html>
