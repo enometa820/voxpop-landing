@@ -5,7 +5,7 @@ const TOTAL_STEPS = 5;
 const seed = getSeedFeedback();               // 이미 processFeedback된 items
 const state = { step: 1, visitor: null };     // visitor = processFeedback 결과(제출 후)
 
-const RUDE_EXAMPLE = '직원 김민수 진짜 개짜증나고 불친절함. 항의하려니 010-1234-5678로 연락하라고만 함';
+const RUDE_EXAMPLE = '직원 김민수 진짜 불친절하고 지랄남. 항의하려니 010-1234-5678로 연락하라고만 함';
 
 const $ = (id) => document.getElementById(id);
 
