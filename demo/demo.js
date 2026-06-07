@@ -81,10 +81,61 @@ function renderCustomerForm(stage) {
   };
 }
 
-// Task 4에서 구현: renderReveal, renderOwner
+function escapeHtml(s) {
+  return String(s).replace(/[&<>"']/g, (c) =>
+    ({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;' }[c]));
+}
+
+function renderReveal(stage) {
+  const v = state.visitor.submission;
+  stage.innerHTML = `
+    <div class="dash">
+      <p style="color:var(--accent);font-weight:700">가림 순간</p>
+      <h2>이렇게 안전하게 바뀌어 저장됩니다</h2>
+      <div class="reveal-grid">
+        <div class="col"><p style="font-size:13px;color:var(--muted)">손님이 입력한 원문</p><p>${escapeHtml(v.comment)}</p></div>
+        <div class="col masked"><p style="font-size:13px;color:var(--accent)">가려져 저장되는 한마디</p><p>${escapeHtml(v.sanitizedComment)}</p></div>
+      </div>
+      <p style="color:var(--muted);font-size:14px;margin-top:14px">욕설·전화번호·직원 지칭·개인정보가 자동으로 가려집니다. 사장님은 가려진 한마디만 봅니다.</p>
+      <div class="demo-cta" style="justify-content:flex-start;margin-top:16px">
+        <button class="btn btn-ghost" id="back2">다시 입력</button>
+        <button class="btn btn-primary" id="toOwner">사장님 화면 보기 →</button>
+      </div>
+    </div>`;
+  $('back2').onclick = () => goto(2);
+  $('toOwner').onclick = () => goto(4);
+}
+
+function renderOwner(stage) {
+  const all = items();
+  const dash = buildOwnerDashboard(all, { storeName: STORE, now: '2026-06-07T01:30:00.000Z' });
+  const digest = buildDailyDigest(all, { now: '2026-06-07T01:30:00.000Z' });
+  const top = dash.topPainPoints?.[0]?.category ?? '아직 없음';
+  stage.innerHTML = `
+    <div class="dash">
+      <p style="color:var(--accent);font-weight:700">${dash.storeName} · 사장님 화면</p>
+      <h2>오늘 볼 것</h2>
+      <p style="font-size:18px;font-weight:600">${escapeHtml(dash.todayAction ?? '')}</p>
+      <div style="display:grid;gap:12px;grid-template-columns:repeat(3,1fr);margin:18px 0">
+        <div class="col" style="border:1px solid var(--line);border-radius:10px;padding:12px">
+          <p style="font-size:13px;color:var(--muted)">유효 응답</p><strong style="font-size:22px">${dash.responseCount}</strong></div>
+        <div class="col" style="border:1px solid var(--line);border-radius:10px;padding:12px">
+          <p style="font-size:13px;color:var(--muted)">반복 신호</p><strong style="font-size:22px">${escapeHtml(top)}</strong></div>
+        <div class="col" style="border:1px solid var(--alert);border-radius:10px;padding:12px">
+          <p style="font-size:13px;color:var(--alert)">위험 신호</p><strong style="font-size:22px">${dash.riskSignalCount}건</strong></div>
+      </div>
+      <details style="margin-top:8px"><summary style="cursor:pointer;color:var(--accent)">전체 보기 · 주간 요약</summary>
+        <ul style="color:var(--muted);line-height:1.7">${String(digest.body).split('\n').map((l) => `<li>${escapeHtml(l)}</li>`).join('')}</ul>
+      </details>
+      <p style="color:var(--muted);font-size:14px;margin-top:8px">방금 남기신 한마디도 이 안에 반영됐어요. 제외된 입력 ${dash.filteredCount}건은 통계에서 빠집니다.</p>
+      <div class="demo-cta" style="justify-content:flex-start;margin-top:16px">
+        <button class="btn btn-primary" id="toCta">마무리 →</button>
+      </div>
+    </div>`;
+  $('toCta').onclick = () => goto(5);
+}
+
 // Task 5에서 구현: renderCta
-function renderReveal(stage){ stage.innerHTML = '<div class="dash">(가림 순간 — Task 4)</div>'; }
-function renderOwner(stage){ stage.innerHTML = '<div class="dash">(사장 화면 — Task 4)</div>'; }
 function renderCta(stage){ stage.innerHTML = '<div class="dash">(마무리 — Task 5)</div>'; }
 
 render();
