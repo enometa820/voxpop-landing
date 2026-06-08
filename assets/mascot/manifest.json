@@ -1,0 +1,17 @@
+{
+  "_note": "voxpop 공식 마스코트 1호기(어글리큐트 송곳니 슬라임). 상태→에셋 매핑. expressions·growth는 가로 스프라이트 시트(등간격 프레임). 화면에서 background-position으로 해당 프레임 표시. 애니메이션은 차수 1 후속(spec 제외).",
+  "base": "voxpop-mascot-base.png",
+  "expressions": {
+    "sheet": "voxpop-mascot-expressions.png",
+    "frames": 6,
+    "aspect": "21:9",
+    "map": { "idle": 0, "happy": 1, "playful": 2, "sassy": 3, "hungry": 4, "sick": 5 }
+  },
+  "growth": {
+    "sheet": "voxpop-mascot-growth.png",
+    "frames": 4,
+    "aspect": "16:9",
+    "map": { "droplet": 0, "baby": 1, "grown": 2, "thriving": 3 },
+    "stageIndex": [0, 1, 2, 3]
+  }
+}

@@ -153,6 +153,137 @@
   .store-info .stats { font-size: 13px; color: var(--muted); }
   .store-info .stats b { color: var(--ink); }
 
+  /* 매장 슬라임 (다마고치형 마스코트) */
+  .slime-panel {
+    background: var(--paper);
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    padding: 20px 22px;
+    margin-bottom: 24px;
+    display: flex;
+    align-items: flex-start;
+    gap: 18px;
+    flex-wrap: wrap;
+  }
+  .slime-figure {
+    flex: 0 0 auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+  }
+  .slime-sprite {
+    /* 표정 시트 3168x1344, 가로 6프레임 → 프레임당 528x1344 (세로형, 마스코트는 위쪽에 위치). */
+    /* 폭 64px 기준으로 시트를 비율대로 키우고(384x163), 박스 높이는 마스코트만 보이게 잘라 표시. */
+    width: 64px;
+    height: 112px;
+    background-image: url('../assets/mascot/voxpop-mascot-expressions.png');
+    background-repeat: no-repeat;
+    background-size: 384px 163px;
+    background-position: 0 4px;
+    image-rendering: pixelated;
+    image-rendering: crisp-edges;
+  }
+  .slime-stage-label {
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--accent);
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    padding: 3px 12px;
+  }
+  .slime-body { flex: 1 1 260px; min-width: 0; }
+  .slime-bubble {
+    position: relative;
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    padding: 12px 16px;
+    font-size: 14px;
+    line-height: 1.6;
+    color: var(--ink);
+  }
+  .slime-bubble::before {
+    content: '';
+    position: absolute;
+    left: -8px;
+    top: 18px;
+    width: 14px;
+    height: 14px;
+    background: var(--card);
+    border-left: 1px solid var(--line);
+    border-bottom: 1px solid var(--line);
+    transform: rotate(45deg);
+  }
+  .slime-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 12px;
+    font-size: 12px;
+    color: var(--muted);
+  }
+  .slime-meta .chip {
+    background: var(--s2);
+    border-radius: 999px;
+    padding: 3px 10px;
+  }
+  .slime-meta .chip b { color: var(--ink); font-weight: 700; }
+  .slime-growth { margin-top: 14px; }
+  .slime-growth .gr-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    font-size: 12px;
+    color: var(--muted);
+    margin-bottom: 6px;
+  }
+  .slime-growth .gr-head b { color: var(--accent); font-weight: 700; font-size: 13px; }
+  .slime-bar {
+    height: 8px;
+    background: var(--s2);
+    border-radius: 999px;
+    overflow: hidden;
+  }
+  .slime-bar > span {
+    display: block;
+    height: 100%;
+    background: var(--accent);
+    border-radius: 999px;
+    transition: width 0.4s ease;
+  }
+
+  /* 조치함(성장) 버튼 */
+  .resolve-row {
+    margin-top: 10px;
+    padding-top: 10px;
+    border-top: 1px solid var(--line);
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+  .resolve-btn {
+    border: 1px solid var(--accent);
+    background: var(--accent);
+    color: var(--paper);
+    border-radius: 999px;
+    padding: 6px 14px;
+    font-family: inherit;
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+  }
+  .resolve-btn:hover { background: var(--acl); }
+  .resolve-btn:disabled {
+    background: var(--s2);
+    border-color: var(--line);
+    color: var(--muted);
+    cursor: default;
+  }
+  .resolve-hint { font-size: 11px; color: var(--muted); }
+
   /* 섹션 헤더 */
   h2.sec {
     font-size: 15px;
@@ -351,6 +482,29 @@
 
     <div id="stores-area"></div>
 
+    <!-- 매장 슬라임 (다마고치형 마스코트) -->
+    <div id="slime-panel" class="slime-panel" style="display:none">
+      <div class="slime-figure">
+        <div id="slime-sprite" class="slime-sprite" role="img" aria-label="매장 슬라임 마스코트"></div>
+        <div id="slime-stage-label" class="slime-stage-label"></div>
+      </div>
+      <div class="slime-body">
+        <div id="slime-bubble" class="slime-bubble"></div>
+        <div class="slime-meta">
+          <span class="chip">기분 <b id="slime-mood"></b></span>
+          <span class="chip">건강 <b id="slime-health"></b></span>
+          <span class="chip" id="slime-risk-chip" style="display:none">확인 먼저 <b id="slime-risk"></b>건</span>
+        </div>
+        <div class="slime-growth">
+          <div class="gr-head">
+            <span>성장 단계 <b id="slime-stagename"></b></span>
+            <span id="slime-growth-note"></span>
+          </div>
+          <div class="slime-bar"><span id="slime-bar-fill" style="width:0%"></span></div>
+        </div>
+      </div>
+    </div>
+
     <h2 class="sec">긴급 확인 <span class="count" id="urgent-count"></span> <span class="badge-alert" id="urgent-badge" style="display:none">긴급</span></h2>
     <div id="urgent-list"></div>
 
@@ -379,9 +533,28 @@
     signOut,
     fetchOwnerStores,
     fetchOwnerFeedback,
+    fetchStoreActions,
+    insertStoreAction,
+    fetchStoreSlime,
+    upsertStoreSlime,
   } from '../lib/supabase-client.js';
+  import {
+    buildSlimeState,
+    slimeBubble,
+    growthFromPoints,
+    growthGateOpen,
+    computeHealth,
+    applyKAnon,
+  } from '../lib/slime-engine.js';
 
   const $ = (sel) => document.querySelector(sel);
+  // 표정 6프레임 시트 순서 (manifest expressions.map) — buildSlimeState.expression → 프레임 인덱스
+  const EXPRESSION_FRAME = { idle: 0, happy: 1, playful: 2, sassy: 3, hungry: 4, sick: 5 };
+  const EXPRESSION_FRAMES = 6;
+  // 슬라임 상태 (현재 매장 1곳 기준 — 베타 카페 교두보)
+  let slimeStoreId = null;
+  let slimeActions = [];
+  let slimeRow = null;
   const OWNER_STATUS_KEY = 'voxpop-owner-status-v1';
   const OWNER_STATUSES = {
     new: '새 한마디',
@@ -520,6 +693,22 @@
     const cats = getCategories(item);
     const catsBadges = cats.map((c) => `<span class="badge low">${c}</span>`).join('');
 
+    // 위험·부정 한마디에 "조치함(성장)" 버튼 — 슬라임 건강·성장과 연동
+    const showResolve = slimeStoreId
+      && item.stores?.id === slimeStoreId
+      && (isUrgent || isNegativeFeedback(item));
+    const alreadyResolved = getOwnerStatus(item) === 'acted';
+    const resolveHtml = showResolve ? `
+      <div class="resolve-row">
+        <button type="button" class="resolve-btn" data-resolve="1" ${alreadyResolved ? 'disabled' : ''}>
+          ${alreadyResolved ? '조치 완료' : '조치함 (성장)'}
+        </button>
+        <span class="resolve-hint">${alreadyResolved
+          ? '슬라임 건강에 반영됐어요.'
+          : '확인하고 다뤘다면 눌러주세요. 가게가 건강하면 슬라임이 자랍니다.'}</span>
+      </div>
+    ` : '';
+
     div.innerHTML = `
       <div class="meta">
         <span class="badge ${ub.cls}">${ub.label}</span>
@@ -531,11 +720,16 @@
       ${safetyNote}
       ${flagsLine}
       ${renderStatusControls(item)}
+      ${resolveHtml}
     `;
 
     div.querySelectorAll('.status-btn').forEach((btn) => {
       btn.addEventListener('click', () => setOwnerStatus(item.id, btn.dataset.status));
     });
+    const resolveBtn = div.querySelector('[data-resolve]');
+    if (resolveBtn && !alreadyResolved) {
+      resolveBtn.addEventListener('click', () => handleResolve(item, resolveBtn));
+    }
 
     return div;
   }
@@ -628,20 +822,22 @@
 
   function renderRepeatSignals(feedback) {
     const repeatList = $('#repeat-list');
-    const repeats = buildRepeatSignals(feedback);
+    // k-anonymity — 소표본(3건 미만) 슬라이스는 정확 수치를 가려 재식별을 막는다(spec 성공기준).
+    const repeats = applyKAnon(buildRepeatSignals(feedback), 3, 'count');
     $('#repeat-count').textContent = repeats.length ? `(${repeats.length})` : '';
     repeatList.innerHTML = '';
     if (!repeats.length) {
-      repeatList.innerHTML = `<div class="empty"><p>아직 반복 신호는 없어요.</p><p>같은 주제가 2건 이상 쌓이면 여기 보여드릴게요.</p></div>`;
+      repeatList.innerHTML = `<div class="empty"><p>아직 반복 신호는 없어요.</p><p>같은 주제가 충분히 쌓이면 여기 보여드릴게요.</p></div>`;
       return;
     }
     repeats.forEach((signal) => {
-      const strong = signal.count >= 3 || signal.lowCount >= 2;
+      const hidden = signal.hidden;
+      const strong = !hidden && (signal.count >= 3 || signal.lowCount >= 2);
       const div = document.createElement('div');
       div.className = 'signal-card';
       div.innerHTML = `
-        <strong>${escapeHtml(signal.category)}</strong> ${strong ? '강한 반복 신호' : '반복 신호'}
-        <div class="desc">같은 주제 ${signal.count}건${signal.lowCount ? ` · 낮은 신호 ${signal.lowCount}건` : ''}. 확정 문제가 아니라 확인할 신호로 봅니다.</div>
+        <strong>${escapeHtml(signal.category)}</strong> ${hidden ? '소수 신호' : strong ? '강한 반복 신호' : '반복 신호'}
+        <div class="desc">${hidden ? '아직 소수라 정확한 수치는 가립니다(소표본 보호). 더 쌓이면 보여드릴게요.' : `같은 주제 ${signal.count}건${signal.lowCount ? ` · 낮은 신호 ${signal.lowCount}건` : ''}. 확정 문제가 아니라 확인할 신호로 봅니다.`}</div>
       `;
       repeatList.appendChild(div);
     });
@@ -652,6 +848,141 @@
     return String(str).replace(/[&<>"']/g, (m) => ({
       '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
     })[m]);
+  }
+
+  // ── 슬라임 어댑터 ──────────────────────────────────────────
+  // Supabase feedback row → slimeEngine item 구조 변환.
+  // slimeEngine은 vocEngine processFeedback 결과
+  //   {submission:{id,rating,category,submittedAt}, moderation:{includeInStats,urgentAlert}, insight:{reviewRiskLevel}}
+  // 를 기대한다. Supabase feedback에는 rating 컬럼이 없으므로(urgency·sentiment_score 중심)
+  // 기존 owner가 쓰는 신호(urgency·sentiment_score)를 그대로 매핑한다. 새 수치를 지어내지 않는다.
+  function toSlimeItem(item) {
+    const urgent = item.urgency === 'high';
+    const negative = isNegativeFeedback(item);
+    const positive = isPositiveFeedback(item);
+
+    // rating은 slimeEngine의 기분 집계(>=4 칭찬·<=2 불만)에만 쓰인다.
+    // 기존 owner의 sentiment 판정(긍정/부정/중립)을 그대로 옮긴다.
+    let rating = 3;
+    if (positive) rating = 5;
+    else if (negative) rating = 2;
+
+    // reviewRiskLevel — 기존 isUrgentFeedback 기준과 정렬.
+    let reviewRiskLevel = 'low';
+    if (urgent || (item.sentiment_score != null && item.sentiment_score <= -0.5)) {
+      reviewRiskLevel = 'high';
+    } else if (item.urgency === 'mid' || item.urgency === 'medium' || negative) {
+      reviewRiskLevel = 'medium';
+    }
+
+    return {
+      submission: {
+        id: item.id,
+        rating,
+        category: primaryCategory(item),
+        submittedAt: item.created_at,
+      },
+      moderation: {
+        // Supabase에 저장된 응답은 서버에서 이미 가림·검수를 거쳐 노출 중이므로 통계 포함.
+        includeInStats: true,
+        urgentAlert: urgent,
+      },
+      insight: { reviewRiskLevel },
+    };
+  }
+
+  // 현재 매장(1곳)에 해당하는 feedback만 slime item으로
+  function slimeItemsFor(storeId, feedback) {
+    return feedback
+      .filter((f) => !storeId || f.stores?.id === storeId)
+      .map(toSlimeItem);
+  }
+
+  // buildOwnerDashboard 요약을 slimeBubble이 읽는 최소 형태로 — 기존 owner의 "오늘 볼 것"을 재사용
+  function dashboardForBubble(feedback) {
+    const items = slimeItemsFor(slimeStoreId, feedback);
+    if (items.length === 0) return { state: 'empty' };
+    const action = buildTodayAction(feedback.filter((f) => !slimeStoreId || f.stores?.id === slimeStoreId));
+    return {
+      state: 'normal',
+      todayAction: action && action.kind !== 'empty' ? action.title : '',
+    };
+  }
+
+  function renderSlime(feedback) {
+    const panel = $('#slime-panel');
+    if (!slimeStoreId) { panel.style.display = 'none'; return; }
+    panel.style.display = '';
+
+    const items = slimeItemsFor(slimeStoreId, feedback);
+    const state = buildSlimeState(items, slimeActions, slimeRow || {});
+
+    // 표정 프레임 — background-position
+    const frame = EXPRESSION_FRAME[state.expression] ?? 0;
+    const sprite = $('#slime-sprite');
+    const pct = EXPRESSION_FRAMES > 1 ? (frame / (EXPRESSION_FRAMES - 1)) * 100 : 0;
+    sprite.style.backgroundPosition = `${pct}% 0`;
+    sprite.setAttribute('aria-label', `매장 슬라임 — ${state.stageName}, 기분 ${moodLabel(state.mood)}`);
+
+    // 말풍선
+    $('#slime-bubble').textContent = slimeBubble(dashboardForBubble(feedback), state);
+
+    // 메타 (기분·건강·미조치 위험)
+    $('#slime-mood').textContent = moodLabel(state.mood);
+    $('#slime-health').textContent = `${state.health}점`;
+    const riskChip = $('#slime-risk-chip');
+    if (state.unresolvedRisk > 0) {
+      riskChip.style.display = '';
+      $('#slime-risk').textContent = state.unresolvedRisk;
+    } else {
+      riskChip.style.display = 'none';
+    }
+
+    // 성장 단계 + 진척 바
+    $('#slime-stage-label').textContent = state.stageName;
+    $('#slime-stagename').textContent = state.stageName;
+    $('#slime-bar-fill').style.width = `${Math.round(state.growthProgress * 100)}%`;
+    $('#slime-growth-note').textContent = state.isMaxStage
+      ? '최고 단계까지 키웠어요'
+      : `다음 단계까지 ${Math.round(state.growthProgress * 100)}%`;
+  }
+
+  function moodLabel(mood) {
+    return ({
+      happy: '좋음', calm: '평온', worried: '주의', hungry: '한마디 기다리는 중',
+    })[mood] || '평온';
+  }
+
+  // "조치함" — 한마디를 다뤘다고 기록. 건강 양호일 때만 성장 누적.
+  async function handleResolve(item, btn) {
+    if (!slimeStoreId) return;
+    btn.disabled = true;
+    btn.textContent = '기록 중…';
+    try {
+      // 1) 조치 기록 추가
+      const action = await insertStoreAction(slimeStoreId, item.id, 'resolved');
+      slimeActions = [action, ...slimeActions];
+
+      // 2) 새 actions로 건강 재계산
+      const items = slimeItemsFor(slimeStoreId, currentFeedback);
+      const health = computeHealth(items, slimeActions);
+
+      // 3) 건강 게이트 통과 시에만 성장 1포인트 누적
+      if (growthGateOpen(health.score)) {
+        const prevPoints = slimeRow?.growth_points ?? 0;
+        const prevStage = slimeRow?.stage ?? 0;
+        const nextPoints = prevPoints + 1;
+        const grown = growthFromPoints(nextPoints, prevStage);
+        slimeRow = await upsertStoreSlime(slimeStoreId, nextPoints, grown.stage);
+      }
+
+      // 4) 처리 상태도 '조치함'으로 동기화 (기존 처리 기록 흐름과 일관)
+      setOwnerStatus(item.id, 'acted'); // renderDashboard 재호출 → renderSlime 포함
+    } catch (err) {
+      console.error('resolve error', err);
+      btn.disabled = false;
+      btn.textContent = '조치함 (성장)';
+    }
   }
 
   function renderDashboard(stores, feedback) {
@@ -724,6 +1055,8 @@
     } else {
       history.forEach((item) => historyList.appendChild(renderFeedback(item)));
     }
+
+    renderSlime(feedback);
   }
 
   async function loadDashboard() {
@@ -740,6 +1073,24 @@
         fetchOwnerStores(),
         fetchOwnerFeedback(),
       ]);
+
+      // 슬라임 — 현재 매장 1곳(베타 카페 교두보) 기준으로 actions·성장값 로드
+      slimeStoreId = stores[0]?.id ?? null;
+      if (slimeStoreId) {
+        try {
+          const [actions, row] = await Promise.all([
+            fetchStoreActions(slimeStoreId),
+            fetchStoreSlime(slimeStoreId),
+          ]);
+          slimeActions = actions || [];
+          slimeRow = row || null;
+        } catch (slimeErr) {
+          // 슬라임 데이터 실패는 대시보드 본체를 막지 않는다(추가 기능)
+          console.warn('slime load failed', slimeErr);
+          slimeActions = [];
+          slimeRow = null;
+        }
+      }
 
       renderDashboard(stores, feedback);
       showSection('dashboard');

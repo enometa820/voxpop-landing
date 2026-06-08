@@ -74,6 +74,46 @@
     font-weight: 600;
     margin-bottom: 4px;
   }
+  /* 가게 슬라임 — 성장단계만 보여준다(긍정). 기분·건강은 손님에게 노출하지 않음 */
+  .slime-box {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin: 0 0 22px;
+    padding: 14px 16px;
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: 10px;
+  }
+  .slime-art {
+    flex: 0 0 auto;
+    width: 64px;
+    height: 64px;
+    /* 가로 4프레임 성장 시트에서 해당 단계 1칸만 표시 */
+    background-image: url('../assets/mascot/voxpop-mascot-growth.png');
+    background-repeat: no-repeat;
+    background-size: 400% 100%;
+    background-position: 0% 50%;
+    image-rendering: pixelated;
+    border-radius: 8px;
+  }
+  .slime-art.stage-0 { background-position: 0% 50%; }
+  .slime-art.stage-1 { background-position: 33.3333% 50%; }
+  .slime-art.stage-2 { background-position: 66.6667% 50%; }
+  .slime-art.stage-3 { background-position: 100% 50%; }
+  .slime-art.big { width: 96px; height: 96px; }
+  .slime-text { min-width: 0; }
+  .slime-msg {
+    font-size: 13px;
+    color: var(--ink);
+    font-weight: 600;
+    line-height: 1.5;
+  }
+  .slime-stage {
+    margin-top: 2px;
+    font-size: 12px;
+    color: var(--muted);
+  }
   textarea {
     width: 100%;
     min-height: 140px;
@@ -195,6 +235,15 @@
     <h1>익명 한마디 남기기</h1>
     <p class="sub">사장님께만 전달됩니다. 이름, 연락처는 받지 않고 공개 리뷰로 올라가지 않아요.</p>
 
+    <!-- 가게 슬라임 — 손님 참여가 슬라임을 키운다(성장단계만 노출) -->
+    <div class="slime-box" id="slime-box" style="display:none">
+      <div class="slime-art stage-0" id="slime-art"></div>
+      <div class="slime-text">
+        <div class="slime-msg">내 한마디가 이 가게 슬라임을 키워요</div>
+        <div class="slime-stage" id="slime-stage"></div>
+      </div>
+    </div>
+
     <div class="topic-chips" aria-label="한마디 종류">
       <button type="button" class="topic-chip" data-topic="좋았어요">좋았어요</button>
       <button type="button" class="topic-chip" data-topic="아쉬웠어요">아쉬웠어요</button>
@@ -218,8 +267,10 @@
   <!-- 완료 화면 (제출 후) -->
   <div id="done" class="done" style="display:none">
     <div class="mark">v</div>
+    <div class="slime-art big stage-0" id="slime-art-done" style="margin:0 auto 14px"></div>
     <h2>한마디 감사합니다</h2>
-    <p>사장님에게만 전달했어요. 공개 리뷰로 올라가지 않습니다.</p>
+    <p id="done-slime-msg">고마워요! 덕분에 가게 슬라임이 무럭무럭 자라요.</p>
+    <p style="margin-top:8px">사장님에게만 전달했어요. 공개 리뷰로 올라가지 않습니다.</p>
   </div>
 
   <!-- 잘못된 매장 -->
@@ -237,11 +288,13 @@
 <script type="module">
   import {
     fetchStoreBySlug,
+    fetchStoreSlime,
     insertFeedback,
     getDeviceKey,
     hashDeviceKey,
   } from '../lib/supabase-client.js';
   import { processFeedback } from '../lib/voc-engine.js';
+  import { growthFromPoints } from '../lib/slime-engine.js';
 
   const $ = (sel) => document.querySelector(sel);
 
@@ -270,11 +323,39 @@
     return result.submission?.sanitizedComment || raw;
   }
 
+  // 가게 슬라임 성장단계 렌더 — 손님에겐 성장단계만(긍정). 기분·건강은 노출하지 않는다.
+  function applyStage(el, stage) {
+    if (!el) return;
+    el.classList.remove('stage-0', 'stage-1', 'stage-2', 'stage-3');
+    el.classList.add(`stage-${stage}`);
+  }
+
+  // slimeRow(없으면 null)에서 성장단계를 안전하게 산출. null이면 첫 단계(방울).
+  function resolveGrowth(slimeRow) {
+    if (!slimeRow) return growthFromPoints(0, 0);
+    return growthFromPoints(slimeRow.growth_points ?? 0, slimeRow.stage ?? 0);
+  }
+
   function getDbUrgency(result) {
     const risk = result.insight?.reviewRiskLevel;
     if (risk === 'high') return 'high';
     if (risk === 'medium') return 'mid';
     return 'low';
+  }
+
+  // 클라이언트 즉각 차단(UX). 진짜 강제는 DB 트리거가 한다 — 여기는 빠른 안내용.
+  const LAST_SUBMIT_KEY = 'voxpop-last-submit-v1';
+  const CLIENT_INTERVAL_MS = 20000;
+
+  function getRateLimitMessage(err) {
+    const msg = String(err?.message || '');
+    if (msg.includes('rate_limit_device_daily') || msg.includes('rate_limit_ip_daily')) {
+      return '오늘은 한마디를 충분히 남기셨어요. 내일 다시 들러주세요.';
+    }
+    if (msg.includes('rate_limit')) {
+      return '조금 빠르게 다시 누르셨어요. 잠시 후 다시 시도해주세요.';
+    }
+    return null;
   }
 
   function estimateSentimentScore(text, topic) {
@@ -310,6 +391,20 @@
     $('#store-name').textContent = store.display_name;
     showSection('form');
 
+    // 가게 슬라임 성장단계 표시 (anon 조회, 실패해도 폼은 정상)
+    let currentStage = 0;
+    try {
+      const slimeRow = await fetchStoreSlime(store.id);
+      const growth = resolveGrowth(slimeRow);
+      currentStage = growth.stage;
+      applyStage($('#slime-art'), currentStage);
+      $('#slime-stage').textContent = `지금은 "${growth.stageName}" 단계예요`;
+      $('#slime-box').style.display = '';
+    } catch (err) {
+      console.warn('slime fetch skipped', err);
+      // 슬라임은 부가 표면 — 못 불러와도 폼 동작을 막지 않는다(슬라임 박스 숨김 유지).
+    }
+
     const textarea = $('#content');
     const counter = $('#counter');
     const submitBtn = $('#submit-btn');
@@ -332,6 +427,13 @@
     });
 
     submitBtn.addEventListener('click', async () => {
+      // 즉각 차단: 같은 기기에서 너무 빠른 재제출(UX). DB가 최종 강제.
+      const last = Number(localStorage.getItem(LAST_SUBMIT_KEY) || 0);
+      if (last && Date.now() - last < CLIENT_INTERVAL_MS) {
+        showError('조금 빠르게 다시 누르셨어요. 잠시 후 다시 시도해주세요.');
+        return;
+      }
+
       submitBtn.disabled = true;
       submitBtn.textContent = '전달 중...';
 
@@ -353,10 +455,14 @@
           device_hash: hash,
         });
 
+        localStorage.setItem(LAST_SUBMIT_KEY, String(Date.now()));
+        // 제출 후 긍정 반응 — 슬라임이 기뻐함(현재 성장단계 그대로 보여줌)
+        applyStage($('#slime-art-done'), currentStage);
         showSection('done');
       } catch (err) {
         console.error('insert error', err);
-        showError('전달 중 오류가 났어요. 잠시 후 다시 시도해주세요.');
+        const rateMsg = getRateLimitMessage(err);
+        showError(rateMsg || '전달 중 오류가 났어요. 잠시 후 다시 시도해주세요.');
         submitBtn.disabled = false;
         submitBtn.textContent = '사장님에게 전달하기';
       }
