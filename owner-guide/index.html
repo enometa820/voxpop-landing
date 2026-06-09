@@ -46,6 +46,8 @@
     -webkit-font-smoothing: antialiased;
   }
   a { color: inherit; }
+  .skip-link{position:absolute;left:-9999px;top:0;z-index:100;background:var(--accent);color:#fff;padding:11px 18px;border-radius:0 0 10px 0;font-weight:700;font-size:14px;text-decoration:none}
+  .skip-link:focus{left:0}
   .wrap { width: min(1040px, calc(100% - 40px)); margin: 0 auto; }
   .topbar {
     position: sticky;
@@ -207,6 +209,7 @@
 </style>
 </head>
 <body>
+<a class="skip-link" href="#main">본문 바로가기</a>
 <nav class="topbar">
   <div class="wrap">
     <a class="brand" href="../"><span class="mark">v</span><span>Voxpop</span></a>
@@ -219,6 +222,7 @@
   </div>
 </nav>
 
+<main id="main">
 <header class="hero">
   <div class="wrap hero-grid">
     <div>
@@ -327,6 +331,7 @@
     </div>
   </div>
 </section>
+</main>
 
 <footer>
   <div class="wrap">
