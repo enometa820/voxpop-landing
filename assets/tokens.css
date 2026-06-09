@@ -2,12 +2,12 @@
 :root {
   --ink: #1f2430;
   --paper: #f6f3ec;
-  --muted: #6b7180;
+  --muted: #646a78;
   --line: #d9d4c7;
   --accent: #2f6f6b;
-  --surface: #fff;
+  --surface: #fffdf8;
   --acl: #38807b;
-  --alert: #b0683a;
+  --alert: #9c5a30;
   --rev: #e8c37a;
   --radius: 14px;
   --maxw: 1080px;
