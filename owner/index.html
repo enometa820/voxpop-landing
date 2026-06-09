@@ -431,6 +431,87 @@
   }
   .empty p { margin: 8px 0; }
 
+  /* 매장 선택 드롭다운 (다매장) */
+  .store-selector-wrap {
+    margin-bottom: 16px;
+  }
+  .store-selector-wrap label {
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--muted);
+    margin-right: 8px;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+  }
+  #store-selector {
+    border: 1px solid var(--line);
+    background: var(--card);
+    color: var(--ink);
+    border-radius: 8px;
+    padding: 7px 12px;
+    font-family: inherit;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+  }
+  #store-selector:focus { outline: 2px solid var(--accent); }
+
+  /* 온보딩 카드 */
+  .onboarding-card {
+    background: var(--paper);
+    border: 1px solid var(--line);
+    border-left: 4px solid var(--accent);
+    border-radius: 12px;
+    padding: 22px 24px;
+    margin-bottom: 24px;
+  }
+  .onboarding-card h3 {
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--accent);
+    margin: 0 0 12px;
+  }
+  .onboarding-steps {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  .onboarding-steps li {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    font-size: 14px;
+    line-height: 1.55;
+  }
+  .onboarding-steps .step-num {
+    flex: 0 0 auto;
+    width: 22px;
+    height: 22px;
+    background: var(--accent);
+    color: var(--paper);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 11px;
+    font-weight: 700;
+    margin-top: 1px;
+  }
+  .onboarding-card .oc-link {
+    display: inline-block;
+    background: var(--accent);
+    color: var(--paper);
+    padding: 8px 18px;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 600;
+    text-decoration: none;
+  }
+  .onboarding-card .oc-link:hover { background: var(--acl); }
+
   /* 알림 */
   .notice {
     padding: 10px 14px;
@@ -441,6 +522,183 @@
     margin-bottom: 16px;
   }
   .notice.error { background: var(--alert); }
+
+  /* 미확인 긴급 — 상단 고정 강조 배너 (인앱만, 외부 알림 없음) */
+  .urgent-banner {
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    background: var(--alert);
+    color: var(--paper);
+    border-radius: 10px;
+    padding: 14px 18px;
+    margin: 0 0 20px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    box-shadow: 0 4px 18px rgba(176, 104, 58, 0.32);
+    animation: urgent-pulse 1.6s ease-in-out infinite;
+  }
+  @keyframes urgent-pulse {
+    0%, 100% { box-shadow: 0 4px 18px rgba(176, 104, 58, 0.30); }
+    50% { box-shadow: 0 4px 26px rgba(176, 104, 58, 0.55); }
+  }
+  .urgent-banner .ub-count {
+    font-size: 22px;
+    font-weight: 800;
+    line-height: 1;
+    background: var(--paper);
+    color: var(--alert);
+    border-radius: 8px;
+    padding: 6px 12px;
+    flex: 0 0 auto;
+  }
+  .urgent-banner .ub-text { flex: 1 1 auto; font-size: 14px; line-height: 1.45; }
+  .urgent-banner .ub-text b { font-weight: 700; }
+  .urgent-banner .ub-jump {
+    flex: 0 0 auto;
+    background: var(--paper);
+    color: var(--alert);
+    border: none;
+    border-radius: 999px;
+    padding: 7px 14px;
+    font-family: inherit;
+    font-size: 13px;
+    font-weight: 700;
+    cursor: pointer;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .urgent-banner { animation: none; }
+  }
+
+  /* 트렌드 — 카테고리 막대 + 시간축 추이 (순수 SVG/CSS, 차트 lib 없음) */
+  .trend-panel {
+    background: var(--paper);
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    padding: 20px 22px;
+    margin-bottom: 24px;
+  }
+  .trend-toggle { display: flex; gap: 6px; margin-bottom: 16px; }
+  .trend-toggle button {
+    border: 1px solid var(--line);
+    background: var(--card);
+    color: var(--muted);
+    border-radius: 999px;
+    padding: 5px 12px;
+    font-family: inherit;
+    font-size: 12px;
+    cursor: pointer;
+  }
+  .trend-toggle button.active {
+    border-color: var(--accent);
+    background: var(--accent);
+    color: var(--paper);
+  }
+  .trend-section-title { font-size: 12px; color: var(--muted); font-weight: 600; margin: 14px 0 8px; }
+  .cat-bars { display: flex; flex-direction: column; gap: 8px; }
+  .cat-row { display: grid; grid-template-columns: 56px 1fr 42px; align-items: center; gap: 10px; }
+  .cat-row .cat-name { font-size: 13px; font-weight: 600; color: var(--ink); }
+  .cat-row .cat-track { background: var(--s2); border-radius: 999px; height: 14px; overflow: hidden; position: relative; }
+  .cat-row .cat-fill { height: 100%; background: var(--accent); border-radius: 999px; transition: width 0.4s ease; }
+  .cat-row .cat-fill.has-urgent { background: var(--alert); }
+  .cat-row .cat-num { font-size: 12px; color: var(--muted); text-align: right; }
+  .cat-row .cat-num .urg { color: var(--alert); font-weight: 700; }
+  .trend-spark { width: 100%; height: auto; display: block; margin-top: 4px; }
+  .trend-spark .axis { stroke: var(--line); stroke-width: 1; }
+  .trend-spark .bar { fill: var(--accent); }
+  .trend-spark .lbl { fill: var(--muted); font-size: 9px; }
+  .trend-spark .val { fill: var(--ink); font-size: 9px; font-weight: 700; }
+  .trend-empty { font-size: 13px; color: var(--muted); padding: 8px 0; }
+
+  /* 답하기 (Plan B) */
+  .reply-row {
+    margin-top: 10px;
+    padding-top: 10px;
+    border-top: 1px solid var(--line);
+  }
+  .reply-toggle {
+    border: 1px solid var(--accent);
+    background: var(--card);
+    color: var(--accent);
+    border-radius: 999px;
+    padding: 6px 14px;
+    font-family: inherit;
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+  }
+  .reply-toggle:hover { background: var(--s2); }
+  .reply-panel { margin-top: 10px; }
+  .reply-templates {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 8px;
+  }
+  .reply-template {
+    border: 1px solid var(--line);
+    background: var(--card);
+    color: var(--muted);
+    border-radius: 8px;
+    padding: 8px 10px;
+    font-family: inherit;
+    font-size: 12px;
+    line-height: 1.45;
+    text-align: left;
+    cursor: pointer;
+    max-width: 100%;
+  }
+  .reply-template:hover { border-color: var(--accent); color: var(--ink); }
+  .reply-text {
+    width: 100%;
+    min-height: 72px;
+    padding: 10px 12px;
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    background: var(--card);
+    font-family: inherit;
+    font-size: 14px;
+    line-height: 1.6;
+    color: var(--ink);
+    resize: vertical;
+  }
+  .reply-text:focus { outline: 2px solid var(--accent); border-color: var(--accent); }
+  .reply-send {
+    margin-top: 8px;
+    border: none;
+    background: var(--accent);
+    color: var(--paper);
+    border-radius: 8px;
+    padding: 8px 16px;
+    font-family: inherit;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+  }
+  .reply-send:hover { background: var(--acl); }
+  .reply-send:disabled { background: var(--muted); opacity: 0.6; cursor: default; }
+  .reply-sent {
+    margin-top: 10px;
+    padding: 10px 12px;
+    background: var(--s2);
+    border-radius: 8px;
+    font-size: 13px;
+    line-height: 1.6;
+  }
+  .reply-sent .seen {
+    display: inline-block;
+    margin-left: 6px;
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--accent);
+  }
+  .reply-sent .unseen {
+    display: inline-block;
+    margin-left: 6px;
+    font-size: 11px;
+    color: var(--muted);
+  }
 </style>
 </head>
 <body>
@@ -480,7 +738,38 @@
       </div>
     </header>
 
+    <div id="urgent-banner" class="urgent-banner" style="display:none">
+      <span class="ub-count" id="ub-count">0</span>
+      <span class="ub-text" id="ub-text"></span>
+      <button type="button" class="ub-jump" id="ub-jump">바로 보기</button>
+    </div>
+
+    <!-- 다매장 드롭다운 (매장 2개+ 시만 표시) -->
+    <div id="store-selector-wrap" class="store-selector-wrap" style="display:none">
+      <label for="store-selector">매장 선택</label>
+      <select id="store-selector"></select>
+    </div>
+
     <div id="stores-area"></div>
+
+    <!-- 온보딩 카드 (매장 있음 + 피드백 0건 시) -->
+    <div id="onboarding-card" class="onboarding-card" style="display:none">
+      <h3>첫 한마디를 기다리고 있어요</h3>
+      <ol class="onboarding-steps">
+        <li>
+          <span class="step-num">1</span>
+          <span><a href="../owner-guide/" style="color:var(--accent);font-weight:600;">사장님 가이드</a>에서 매장 QR을 받으세요.</span>
+        </li>
+        <li>
+          <span class="step-num">2</span>
+          <span>손님이 잘 보이는 곳에 QR 포스터를 붙여주세요.</span>
+        </li>
+        <li>
+          <span class="step-num">3</span>
+          <span>손님이 QR을 찍으면 첫 한마디가 여기 바로 나타나요.</span>
+        </li>
+      </ol>
+    </div>
 
     <!-- 매장 슬라임 (다마고치형 마스코트) -->
     <div id="slime-panel" class="slime-panel" style="display:none">
@@ -503,6 +792,18 @@
           <div class="slime-bar"><span id="slime-bar-fill" style="width:0%"></span></div>
         </div>
       </div>
+    </div>
+
+    <div id="trend-panel" class="trend-panel" style="display:none">
+      <h2 class="sec" style="margin-top:0">한눈에 보는 흐름</h2>
+      <div class="trend-toggle">
+        <button type="button" data-window="7d" class="active">최근 7일</button>
+        <button type="button" data-window="24h">최근 24시간</button>
+      </div>
+      <div class="trend-section-title">카테고리별 한마디</div>
+      <div id="trend-cats" class="cat-bars"></div>
+      <div class="trend-section-title" id="trend-spark-title">시간 흐름</div>
+      <div id="trend-spark"></div>
     </div>
 
     <h2 class="sec">긴급 확인 <span class="count" id="urgent-count"></span> <span class="badge-alert" id="urgent-badge" style="display:none">긴급</span></h2>
@@ -537,7 +838,13 @@
     insertStoreAction,
     fetchStoreSlime,
     upsertStoreSlime,
+    insertOwnerResponse,
+    fetchOwnerResponses,
+    fetchFeedbackStatus,
+    upsertFeedbackStatus,
   } from '../lib/supabase-client.js';
+  import { suggestResponses } from '../lib/response-templates.js';
+  import { aggregateByCategory } from '../lib/trend-aggregate.js';
   import {
     buildSlimeState,
     slimeBubble,
@@ -551,8 +858,8 @@
   // 표정 6프레임 시트 순서 (manifest expressions.map) — buildSlimeState.expression → 프레임 인덱스
   const EXPRESSION_FRAME = { idle: 0, happy: 1, playful: 2, sassy: 3, hungry: 4, sick: 5 };
   const EXPRESSION_FRAMES = 6;
-  // 슬라임 상태 (현재 매장 1곳 기준 — 베타 카페 교두보)
-  let slimeStoreId = null;
+  // 슬라임 + 다매장 선택 상태
+  let selectedStoreId = null;
   let slimeActions = [];
   let slimeRow = null;
   const OWNER_STATUS_KEY = 'voxpop-owner-status-v1';
@@ -564,6 +871,8 @@
   };
   let currentStores = [];
   let currentFeedback = [];
+  // feedback_id → 그 한마디에 달린 사장 답 배열 (Plan B)
+  let responseMap = new Map();
 
   function showSection(id) {
     ['loading', 'signin-section', 'dashboard'].forEach((s) => {
@@ -621,7 +930,9 @@
     return item.owner_status || loadOwnerStatusMap()[item.id] || 'new';
   }
 
-  function setOwnerStatus(id, status) {
+  // DB 우선 저장. 실패해도 화면은 즉시 반영(localStorage 캐시 + 메모리). 무기명 — store_id만 보냄.
+  async function setOwnerStatus(id, status) {
+    // 1) 즉시 UI 반영 (낙관적)
     const map = loadOwnerStatusMap();
     map[id] = status;
     saveOwnerStatusMap(map);
@@ -629,6 +940,16 @@
       item.id === id ? { ...item, owner_status: status } : item
     ));
     renderDashboard(currentStores, currentFeedback);
+
+    // 2) DB 영속 (기기·세션 무관 일관). 실패는 캐시로 버틴다.
+    const item = currentFeedback.find((f) => f.id === id);
+    const storeId = item?.stores?.id ?? selectedStoreId;
+    if (!storeId) return;
+    try {
+      await upsertFeedbackStatus(id, storeId, status);
+    } catch (err) {
+      console.warn('feedback_status 저장 실패(로컬 캐시 유지)', err);
+    }
   }
 
   function getCategories(item) {
@@ -673,6 +994,38 @@
     `;
   }
 
+  function renderSentReplies(item) {
+    const sent = responseMap.get(item.id) || [];
+    if (!sent.length) return '';
+    return sent.map((r) => `
+      <div class="reply-sent">
+        <div>${escapeHtml(r.body)}</div>
+        ${r.seen_by_customer
+          ? '<span class="seen">손님 확인함</span>'
+          : '<span class="unseen">손님 미확인</span>'}
+      </div>
+    `).join('');
+  }
+
+  function renderReplyArea(item) {
+    const cat = primaryCategory(item);
+    const drafts = suggestResponses(cat, item.urgency);
+    const templatesHtml = drafts.map((d) => `
+      <button type="button" class="reply-template" data-draft="${escapeHtml(d)}">${escapeHtml(d)}</button>
+    `).join('');
+    return `
+      ${renderSentReplies(item)}
+      <div class="reply-row">
+        <button type="button" class="reply-toggle" data-reply-toggle="1">답하기</button>
+        <div class="reply-panel" data-reply-panel style="display:none">
+          <div class="reply-templates">${templatesHtml}</div>
+          <textarea class="reply-text" data-reply-text placeholder="손님에게 전할 답을 적어주세요. 위 초안을 눌러 채운 뒤 다듬어도 좋아요."></textarea>
+          <button type="button" class="reply-send" data-reply-send="1">손님에게 답 보내기</button>
+        </div>
+      </div>
+    `;
+  }
+
   function renderFeedback(item) {
     const sb = sentimentBadge(item.sentiment_score);
     const ub = urgencyBadge(item.urgency);
@@ -686,7 +1039,7 @@
     if (item.pii_removed) flagsHtml.push('개인정보 가림');
     if (item.profanity_removed) flagsHtml.push('욕설 가림');
     const flagsLine = flagsHtml.length ? `<div class="flags">${flagsHtml.join(' · ')}</div>` : '';
-    const safetyNote = item.content_raw && item.content_raw !== item.content_clean
+    const safetyNote = (item.pii_removed || item.profanity_removed)
       ? '<div class="safety-note">가리기 전 원본은 안전을 위해 사장님 화면에 노출하지 않아요. 필요한 신호만 가린 문장과 상태로 보여드립니다.</div>'
       : '';
 
@@ -694,8 +1047,8 @@
     const catsBadges = cats.map((c) => `<span class="badge low">${c}</span>`).join('');
 
     // 위험·부정 한마디에 "조치함(성장)" 버튼 — 슬라임 건강·성장과 연동
-    const showResolve = slimeStoreId
-      && item.stores?.id === slimeStoreId
+    const showResolve = selectedStoreId
+      && item.stores?.id === selectedStoreId
       && (isUrgent || isNegativeFeedback(item));
     const alreadyResolved = getOwnerStatus(item) === 'acted';
     const resolveHtml = showResolve ? `
@@ -721,6 +1074,7 @@
       ${flagsLine}
       ${renderStatusControls(item)}
       ${resolveHtml}
+      ${renderReplyArea(item)}
     `;
 
     div.querySelectorAll('.status-btn').forEach((btn) => {
@@ -729,6 +1083,24 @@
     const resolveBtn = div.querySelector('[data-resolve]');
     if (resolveBtn && !alreadyResolved) {
       resolveBtn.addEventListener('click', () => handleResolve(item, resolveBtn));
+    }
+
+    const toggleBtn = div.querySelector('[data-reply-toggle]');
+    const panel = div.querySelector('[data-reply-panel]');
+    if (toggleBtn && panel) {
+      toggleBtn.addEventListener('click', () => {
+        panel.style.display = panel.style.display === 'none' ? '' : 'none';
+      });
+    }
+    div.querySelectorAll('[data-draft]').forEach((tplBtn) => {
+      tplBtn.addEventListener('click', () => {
+        const ta = div.querySelector('[data-reply-text]');
+        if (ta) { ta.value = tplBtn.dataset.draft; ta.focus(); }
+      });
+    });
+    const sendBtn = div.querySelector('[data-reply-send]');
+    if (sendBtn) {
+      sendBtn.addEventListener('click', () => handleReply(item, div, sendBtn));
     }
 
     return div;
@@ -850,12 +1222,81 @@
     })[m]);
   }
 
+  // ── 트렌드 시각화 (순수 SVG/CSS — 차트 lib 없음) ──────────────
+  let trendWindow = '7d';
+
+  function renderTrend(feedback) {
+    const panel = $('#trend-panel');
+    // 선택된 매장 한마디만 — selectedStoreId 기준, 없으면 전체
+    const items = feedback.filter((f) => !selectedStoreId || f.stores?.id === selectedStoreId);
+    if (items.length === 0) {
+      // 패널은 유지하되 빈 상태 메시지 표시
+      panel.style.display = '';
+      $('#trend-cats').innerHTML = `<div class="trend-empty">아직 손님 한마디가 없어요. QR 포스터를 붙여 첫 목소리를 받아보세요.</div>`;
+      $('#trend-spark').innerHTML = '';
+      return;
+    }
+    panel.style.display = '';
+
+    const agg = aggregateByCategory(items, { window: trendWindow });
+
+    // 카테고리 막대
+    const catsEl = $('#trend-cats');
+    if (agg.categories.length === 0) {
+      catsEl.innerHTML = `<div class="trend-empty">아직 분류된 한마디가 없어요.</div>`;
+    } else {
+      const maxCount = agg.categories[0].count || 1;
+      catsEl.innerHTML = agg.categories.map((c) => {
+        const pct = Math.round((c.count / maxCount) * 100);
+        const urgentMark = c.urgentCount > 0 ? ` <span class="urg">긴급 ${c.urgentCount}</span>` : '';
+        return `
+          <div class="cat-row">
+            <span class="cat-name">${escapeHtml(c.category)}</span>
+            <span class="cat-track"><span class="cat-fill ${c.urgentCount > 0 ? 'has-urgent' : ''}" style="width:${pct}%"></span></span>
+            <span class="cat-num">${c.count}${urgentMark}</span>
+          </div>
+        `;
+      }).join('');
+    }
+
+    // 시간축 추이 — 순수 SVG 막대 스파크라인
+    $('#trend-spark-title').textContent = trendWindow === '7d' ? '최근 7일 추이' : '최근 24시간 추이';
+    $('#trend-spark').innerHTML = sparkSvg(agg.buckets, agg.maxBucketTotal);
+  }
+
+  function sparkSvg(buckets, maxTotal) {
+    const W = 600, H = 120, padB = 22, padT = 14;
+    const n = buckets.length || 1;
+    const slot = W / n;
+    const barW = Math.min(40, slot * 0.6);
+    const usableH = H - padB - padT;
+    const max = Math.max(1, maxTotal);
+    const bars = buckets.map((b, i) => {
+      const h = Math.round((b.total / max) * usableH);
+      const x = Math.round(i * slot + (slot - barW) / 2);
+      const y = H - padB - h;
+      const cx = Math.round(i * slot + slot / 2);
+      const valLabel = b.total > 0 ? `<text class="val" x="${cx}" y="${y - 4}" text-anchor="middle">${b.total}</text>` : '';
+      return `
+        <rect class="bar" x="${x}" y="${y}" width="${barW}" height="${h}" rx="3"></rect>
+        ${valLabel}
+        <text class="lbl" x="${cx}" y="${H - 7}" text-anchor="middle">${escapeHtml(b.label)}</text>
+      `;
+    }).join('');
+    return `
+      <svg class="trend-spark" viewBox="0 0 ${W} ${H}" role="img" aria-label="시간 흐름 막대 그래프">
+        <line class="axis" x1="0" y1="${H - padB}" x2="${W}" y2="${H - padB}"></line>
+        ${bars}
+      </svg>
+    `;
+  }
+
   // ── 슬라임 어댑터 ──────────────────────────────────────────
   // Supabase feedback row → slimeEngine item 구조 변환.
   // slimeEngine은 vocEngine processFeedback 결과
   //   {submission:{id,rating,category,submittedAt}, moderation:{includeInStats,urgentAlert}, insight:{reviewRiskLevel}}
   // 를 기대한다. Supabase feedback에는 rating 컬럼이 없으므로(urgency·sentiment_score 중심)
-  // 기존 owner가 쓰는 신호(urgency·sentiment_score)를 그대로 매핑한다. 새 수치를 지어내지 않는다.
+  // 기존 owner가 쓰는 신호(urgency·sentiment_score)를 그대로 매핑한다. 새 수치를 만들어내지 않는다.
   function toSlimeItem(item) {
     const urgent = item.urgency === 'high';
     const negative = isNegativeFeedback(item);
@@ -891,7 +1332,7 @@
     };
   }
 
-  // 현재 매장(1곳)에 해당하는 feedback만 slime item으로
+  // 선택된 매장에 해당하는 feedback만 slime item으로
   function slimeItemsFor(storeId, feedback) {
     return feedback
       .filter((f) => !storeId || f.stores?.id === storeId)
@@ -900,9 +1341,9 @@
 
   // buildOwnerDashboard 요약을 slimeBubble이 읽는 최소 형태로 — 기존 owner의 "오늘 볼 것"을 재사용
   function dashboardForBubble(feedback) {
-    const items = slimeItemsFor(slimeStoreId, feedback);
+    const items = slimeItemsFor(selectedStoreId, feedback);
     if (items.length === 0) return { state: 'empty' };
-    const action = buildTodayAction(feedback.filter((f) => !slimeStoreId || f.stores?.id === slimeStoreId));
+    const action = buildTodayAction(feedback.filter((f) => !selectedStoreId || f.stores?.id === selectedStoreId));
     return {
       state: 'normal',
       todayAction: action && action.kind !== 'empty' ? action.title : '',
@@ -911,10 +1352,10 @@
 
   function renderSlime(feedback) {
     const panel = $('#slime-panel');
-    if (!slimeStoreId) { panel.style.display = 'none'; return; }
+    if (!selectedStoreId) { panel.style.display = 'none'; return; }
     panel.style.display = '';
 
-    const items = slimeItemsFor(slimeStoreId, feedback);
+    const items = slimeItemsFor(selectedStoreId, feedback);
     const state = buildSlimeState(items, slimeActions, slimeRow || {});
 
     // 표정 프레임 — background-position
@@ -955,16 +1396,16 @@
 
   // "조치함" — 한마디를 다뤘다고 기록. 건강 양호일 때만 성장 누적.
   async function handleResolve(item, btn) {
-    if (!slimeStoreId) return;
+    if (!selectedStoreId) return;
     btn.disabled = true;
     btn.textContent = '기록 중…';
     try {
       // 1) 조치 기록 추가
-      const action = await insertStoreAction(slimeStoreId, item.id, 'resolved');
+      const action = await insertStoreAction(selectedStoreId, item.id, 'resolved');
       slimeActions = [action, ...slimeActions];
 
       // 2) 새 actions로 건강 재계산
-      const items = slimeItemsFor(slimeStoreId, currentFeedback);
+      const items = slimeItemsFor(selectedStoreId, currentFeedback);
       const health = computeHealth(items, slimeActions);
 
       // 3) 건강 게이트 통과 시에만 성장 1포인트 누적
@@ -973,11 +1414,11 @@
         const prevStage = slimeRow?.stage ?? 0;
         const nextPoints = prevPoints + 1;
         const grown = growthFromPoints(nextPoints, prevStage);
-        slimeRow = await upsertStoreSlime(slimeStoreId, nextPoints, grown.stage);
+        slimeRow = await upsertStoreSlime(selectedStoreId, nextPoints, grown.stage);
       }
 
       // 4) 처리 상태도 '조치함'으로 동기화 (기존 처리 기록 흐름과 일관)
-      setOwnerStatus(item.id, 'acted'); // renderDashboard 재호출 → renderSlime 포함
+      await setOwnerStatus(item.id, 'acted'); // renderDashboard 재호출 → renderSlime 포함
     } catch (err) {
       console.error('resolve error', err);
       btn.disabled = false;
@@ -985,15 +1426,69 @@
     }
   }
 
+  // "손님에게 답 보내기" — owner_response INSERT 후 카드 갱신.
+  async function handleReply(item, cardEl, btn) {
+    const ta = cardEl.querySelector('[data-reply-text]');
+    const body = (ta?.value || '').trim();
+    if (!body) { ta?.focus(); return; }
+    const storeId = item.stores?.id || selectedStoreId;
+    if (!storeId) { console.warn('no store id for reply'); return; }
+    btn.disabled = true;
+    btn.textContent = '보내는 중…';
+    try {
+      const saved = await insertOwnerResponse(item.id, storeId, body, 'comment');
+      const arr = responseMap.get(item.id) || [];
+      arr.push(saved);
+      responseMap.set(item.id, arr);
+      renderDashboard(currentStores, currentFeedback); // 보낸 답·미확인 배지 반영
+    } catch (err) {
+      console.error('reply error', err);
+      btn.disabled = false;
+      btn.textContent = '손님에게 답 보내기';
+    }
+  }
+
+  // 드롭다운 이벤트 등록 여부 (한 번만 바인딩)
+  let storeSelectorBound = false;
+
   function renderDashboard(stores, feedback) {
     currentStores = stores;
     currentFeedback = feedback;
 
+    // ── 다매장 드롭다운 ──
+    const selectorWrap = $('#store-selector-wrap');
+    const selectorEl = $('#store-selector');
+    if (stores.length >= 2) {
+      selectorWrap.style.display = '';
+      // 옵션 목록 갱신 (선택 상태는 selectedStoreId 기준으로 유지)
+      const prevVal = selectorEl.value;
+      selectorEl.innerHTML = stores.map((s) =>
+        `<option value="${escapeHtml(s.id)}">${escapeHtml(s.display_name)}</option>`
+      ).join('');
+      if (prevVal && stores.find((s) => s.id === prevVal)) {
+        selectorEl.value = prevVal;
+      }
+      if (!storeSelectorBound) {
+        storeSelectorBound = true;
+        selectorEl.addEventListener('change', () => {
+          selectedStoreId = selectorEl.value || null;
+          renderDashboard(currentStores, currentFeedback);
+        });
+      }
+    } else {
+      selectorWrap.style.display = 'none';
+    }
+
+    // ── 매장 정보 바 ──
     const storesArea = $('#stores-area');
     if (stores.length === 0) {
-      storesArea.innerHTML = `<div class="empty"><p>아직 등록된 매장이 없습니다.</p><p>voxpop 운영자에게 매장 등록을 문의해주세요.</p></div>`;
+      storesArea.innerHTML = `<div class="empty"><p>아직 등록된 매장이 없습니다.</p><p>voxpop 운영자에게 매장 등록을 <a href="../owner-guide/">사장님 가이드</a>를 통해 문의해주세요.</p></div>`;
     } else {
-      storesArea.innerHTML = stores.map((s) => {
+      // 선택된 매장만 표시 (단일 매장이면 그 매장, 다매장이면 selectedStoreId 매장)
+      const displayStores = selectedStoreId
+        ? stores.filter((s) => s.id === selectedStoreId)
+        : stores.slice(0, 1);
+      storesArea.innerHTML = displayStores.map((s) => {
         const myFeedback = feedback.filter((f) => f.stores?.id === s.id);
         return `
           <div class="store-info">
@@ -1009,10 +1504,48 @@
       }).join('');
     }
 
-    const openFeedback = feedback.filter(isOpenFeedback);
+    // ── 온보딩 카드 ──
+    const onboardingCard = $('#onboarding-card');
+    const selectedStore = stores.find((s) => s.id === selectedStoreId) || stores[0];
+    const storeFilteredFeedback = feedback.filter((f) => f.stores?.id === (selectedStoreId || selectedStore?.id));
+    if (stores.length > 0 && storeFilteredFeedback.length === 0) {
+      // 첫 한마디 없는 상태 — 온보딩 카드 표시 + "직접 폼 열어보기" 링크
+      const slug = selectedStore?.slug;
+      // 기존 oc-link 제거 후 재삽입 (매 renderDashboard 중복 방지)
+      onboardingCard.querySelectorAll('.oc-link').forEach((el) => el.remove());
+      if (slug) {
+        const link = document.createElement('a');
+        link.className = 'oc-link';
+        link.href = `../s/?store=${encodeURIComponent(slug)}`;
+        link.target = '_blank';
+        link.textContent = '직접 폼 열어보기';
+        onboardingCard.appendChild(link);
+      }
+      onboardingCard.style.display = '';
+    } else {
+      onboardingCard.style.display = 'none';
+    }
+
+    // selectedStoreId 기준으로 피드백 필터링 (다매장 섹션 공통)
+    const filteredFeedback = selectedStoreId
+      ? feedback.filter((f) => f.stores?.id === selectedStoreId)
+      : feedback;
+
+    const openFeedback = filteredFeedback.filter(isOpenFeedback);
     const urgent = openFeedback.filter(isUrgentFeedback);
     $('#urgent-count').textContent = urgent.length ? `(${urgent.length})` : '';
     $('#urgent-badge').style.display = urgent.length ? '' : 'none';
+
+    // 미확인 긴급 상단 고정 배너 (인앱만 — 외부 알림 없음)
+    const banner = $('#urgent-banner');
+    if (urgent.length > 0) {
+      banner.style.display = '';
+      $('#ub-count').textContent = urgent.length;
+      $('#ub-text').innerHTML = `<b>아직 확인하지 않은 긴급 한마디 ${urgent.length}건</b>이 있어요. 안전·위생 신호일 수 있으니 먼저 확인해주세요.`;
+    } else {
+      banner.style.display = 'none';
+    }
+
     const urgentList = $('#urgent-list');
     urgentList.innerHTML = '';
     if (urgent.length === 0) {
@@ -1023,9 +1556,9 @@
 
     const todayAction = $('#today-action');
     todayAction.innerHTML = '';
-    todayAction.appendChild(renderTodayAction(feedback));
+    todayAction.appendChild(renderTodayAction(filteredFeedback));
 
-    renderRepeatSignals(feedback);
+    renderRepeatSignals(filteredFeedback);
 
     const newList = $('#new-list');
     $('#new-count').textContent = openFeedback.length ? `(${openFeedback.length})` : '';
@@ -1036,7 +1569,7 @@
       openFeedback.forEach((item) => newList.appendChild(renderFeedback(item)));
     }
 
-    const positive = feedback.filter(isPositiveFeedback).slice(0, 5);
+    const positive = filteredFeedback.filter(isPositiveFeedback).slice(0, 5);
     $('#positive-count').textContent = positive.length ? `(${positive.length})` : '';
     const positiveList = $('#positive-list');
     positiveList.innerHTML = '';
@@ -1046,7 +1579,7 @@
       positive.forEach((item) => positiveList.appendChild(renderFeedback(item)));
     }
 
-    const history = feedback.filter((item) => ['seen', 'acted'].includes(getOwnerStatus(item)));
+    const history = filteredFeedback.filter((item) => ['seen', 'acted'].includes(getOwnerStatus(item)));
     $('#history-count').textContent = history.length ? `(${history.length})` : '';
     const historyList = $('#history-list');
     historyList.innerHTML = '';
@@ -1056,7 +1589,8 @@
       history.forEach((item) => historyList.appendChild(renderFeedback(item)));
     }
 
-    renderSlime(feedback);
+    renderSlime(filteredFeedback);
+    renderTrend(filteredFeedback);
   }
 
   async function loadDashboard() {
@@ -1069,18 +1603,29 @@
 
       $('#user-email').textContent = session.user.email;
 
-      const [stores, feedback] = await Promise.all([
+      const [stores, feedback, statusMap] = await Promise.all([
         fetchOwnerStores(),
         fetchOwnerFeedback(),
+        fetchFeedbackStatus().catch((err) => {
+          // 상태 테이블 조회 실패는 본체를 막지 않는다(localStorage 폴백)
+          console.warn('feedback_status 조회 실패(로컬 캐시 사용)', err);
+          return {};
+        }),
       ]);
 
-      // 슬라임 — 현재 매장 1곳(베타 카페 교두보) 기준으로 actions·성장값 로드
-      slimeStoreId = stores[0]?.id ?? null;
-      if (slimeStoreId) {
+      // DB 상태를 feedback에 병합 (DB 우선, 없으면 localStorage 폴백은 getOwnerStatus가 처리)
+      const localMap = loadOwnerStatusMap();
+      feedback.forEach((f) => {
+        f.owner_status = statusMap[f.id] || localMap[f.id] || undefined;
+      });
+
+      // 슬라임 — 선택된 매장(없으면 첫 매장) 기준으로 actions·성장값 로드
+      if (!selectedStoreId) selectedStoreId = stores[0]?.id ?? null;
+      if (selectedStoreId) {
         try {
           const [actions, row] = await Promise.all([
-            fetchStoreActions(slimeStoreId),
-            fetchStoreSlime(slimeStoreId),
+            fetchStoreActions(selectedStoreId),
+            fetchStoreSlime(selectedStoreId),
           ]);
           slimeActions = actions || [];
           slimeRow = row || null;
@@ -1090,6 +1635,21 @@
           slimeActions = [];
           slimeRow = null;
         }
+      }
+
+      // 사장 답 로드 → feedback_id별로 그룹핑 (Plan B)
+      try {
+        const ids = feedback.map((f) => f.id);
+        const responses = await fetchOwnerResponses(ids);
+        responseMap = new Map();
+        responses.forEach((r) => {
+          const arr = responseMap.get(r.feedback_id) || [];
+          arr.push(r);
+          responseMap.set(r.feedback_id, arr);
+        });
+      } catch (respErr) {
+        console.warn('owner responses load failed', respErr);
+        responseMap = new Map();
       }
 
       renderDashboard(stores, feedback);
@@ -1120,6 +1680,19 @@
   $('#signout-btn').addEventListener('click', async () => {
     await signOut();
     location.reload();
+  });
+
+  $('#ub-jump').addEventListener('click', () => {
+    const target = document.querySelector('#urgent-list');
+    if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  });
+
+  document.querySelectorAll('.trend-toggle button').forEach((btn) => {
+    btn.addEventListener('click', () => {
+      trendWindow = btn.dataset.window;
+      document.querySelectorAll('.trend-toggle button').forEach((b) => b.classList.toggle('active', b === btn));
+      renderTrend(currentFeedback);
+    });
   });
 
   loadDashboard();
