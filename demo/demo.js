@@ -1,7 +1,7 @@
 import { processFeedback, buildOwnerDashboard, buildDailyDigest, getSeedFeedback } from '../lib/voc-engine.js';
 
 const STORE = '모닝브루 성수점';
-const TOTAL_STEPS = 5;
+const TOTAL_STEPS = 6;
 const seed = getSeedFeedback();               // 이미 processFeedback된 items
 const state = { step: 1, visitor: null };     // visitor = processFeedback 결과(제출 후)
 
@@ -27,7 +27,8 @@ function render() {
   if (state.step === 2) return renderCustomerForm(stage);
   if (state.step === 3) return renderReveal(stage);
   if (state.step === 4) return renderOwner(stage);
-  if (state.step === 5) return renderCta(stage);
+  if (state.step === 5) return renderThread(stage);
+  if (state.step === 6) return renderCta(stage);
 }
 
 function renderIntro(stage) {
@@ -95,9 +96,9 @@ function renderReveal(stage) {
       <h2>이렇게 안전하게 바뀌어 저장됩니다</h2>
       <div class="reveal-grid">
         <div class="col"><p style="font-size:13px;color:var(--muted)">손님이 입력한 원문</p><p>${escapeHtml(v.comment)}</p></div>
-        <div class="col masked"><p style="font-size:13px;color:var(--accent)">가려져 저장되는 한마디</p><p>${escapeHtml(v.sanitizedComment)}</p></div>
+        <div class="col masked"><p style="font-size:13px;color:var(--accent)">사장님이 보는 한마디</p><p>${escapeHtml(v.cleanSentence)}</p>${v.maskedMeta?.length ? `<p style="font-size:12px;color:var(--muted);margin-top:8px">가린 내역 — ${v.maskedMeta.map((m) => escapeHtml(`${m.type} ${m.count}건`)).join(' · ')}</p>` : ''}</div>
       </div>
-      <p style="color:var(--muted);font-size:14px;margin-top:14px">욕설·전화번호·직원 지칭·개인정보가 자동으로 가려집니다. 사장님은 가려진 한마디만 봅니다.</p>
+      <p style="color:var(--muted);font-size:14px;margin-top:14px">욕설·전화번호·직원 지칭·개인정보를 가리되, 사장님에게는 토큰 없는 한 문장으로 전합니다. 무엇을 가렸는지는 아래에 따로 보여줍니다.</p>
       <div class="demo-cta" style="justify-content:flex-start;margin-top:16px">
         <button class="btn btn-ghost" id="back2">다시 입력</button>
         <button class="btn btn-primary" id="toOwner">사장님 화면 보기 →</button>
@@ -130,10 +131,50 @@ function renderOwner(stage) {
       </details>
       <p style="color:var(--muted);font-size:14px;margin-top:8px">방금 남기신 한마디도 이 안에 반영됐어요. 제외된 입력 ${dash.filteredCount}건은 통계에서 빠집니다.</p>
       <div class="demo-cta" style="justify-content:flex-start;margin-top:16px">
+        <button class="btn btn-primary" id="toThread">사장님이 답하기 →</button>
+      </div>
+    </div>`;
+  $('toThread').onclick = () => goto(5);
+}
+
+function renderThread(stage) {
+  const v = state.visitor?.submission;
+  const replyDrafts = {
+    맛: '맛이 기대에 못 미쳤군요. 오늘 바로 점검하겠습니다.',
+    응대: '응대가 불편하셨다니 죄송합니다. 직원과 바로 공유하겠습니다.',
+    청결: '청결에 신경 쓰지 못해 죄송합니다. 바로 점검하겠습니다.',
+    대기: '기다리게 해 죄송합니다. 대기 안내를 바로 개선하겠습니다.',
+    가격: '가격이 부담되셨군요. 구성과 양을 다시 살펴보겠습니다.',
+    소음: '시끄러워 불편하셨군요. 피크 시간 소음을 점검하겠습니다.',
+    기타: '소중한 의견 감사합니다. 바로 살펴보고 개선하겠습니다.',
+  };
+  const reply = replyDrafts[v?.category] ?? replyDrafts.기타;
+  const guestLine = v?.cleanSentence || '대기가 길었고 안내가 없어 답답했어요';
+  const bubble = (side, who, text) => `
+    <div style="align-self:${side === 'owner' ? 'flex-end' : 'flex-start'};max-width:82%;
+      background:${side === 'owner' ? 'var(--accent)' : 'var(--paper)'};color:${side === 'owner' ? '#fff' : 'inherit'};
+      border:1px solid ${side === 'owner' ? 'var(--accent)' : 'var(--line)'};
+      border-radius:${side === 'owner' ? '14px 14px 4px 14px' : '14px 14px 14px 4px'};padding:10px 14px">
+      <span style="font-size:12px;opacity:.75">${escapeHtml(who)}</span>
+      <p style="margin:4px 0 0">${escapeHtml(text)}</p>
+    </div>`;
+  stage.innerHTML = `
+    <div class="dash">
+      <p style="color:var(--accent);font-weight:700">무기명 스레드 · 핵심</p>
+      <h2>사장님이 답하면 손님이 다시 봅니다 — 끝까지 익명으로</h2>
+      <div style="display:flex;flex-direction:column;gap:10px;margin-top:14px">
+        ${bubble('guest', '손님 · 익명', guestLine)}
+        ${bubble('owner', '사장님 답', reply)}
+        ${bubble('guest', '손님 · 영수증 링크로 열람', '답변 확인했어요. 다음에 또 들를게요.')}
+      </div>
+      <p style="color:var(--muted);font-size:14px;margin-top:16px">손님은 받은 영수증 링크로만 사장님 답을 봅니다. 누가 썼는지는 사장님도 voxpop도 끝까지 알 수 없어요 — 익명이 벽이 아니라 다리가 됩니다.</p>
+      <div class="demo-cta" style="justify-content:flex-start;margin-top:16px">
+        <button class="btn btn-ghost" id="backOwner">사장님 화면으로</button>
         <button class="btn btn-primary" id="toCta">마무리 →</button>
       </div>
     </div>`;
-  $('toCta').onclick = () => goto(5);
+  $('backOwner').onclick = () => goto(4);
+  $('toCta').onclick = () => goto(6);
 }
 
 function renderCta(stage) {
