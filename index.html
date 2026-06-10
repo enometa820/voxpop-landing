@@ -184,6 +184,17 @@ h2{font-size:clamp(28px,4.4vw,42px);line-height:1.24;letter-spacing:-.02em;font-
 .market-bars .bar .fill{width:100%;max-width:90px;background:var(--accent);border-radius:8px 8px 0 0}
 .market-bars .bar .cap{font-size:12.5px;color:var(--muted);margin-top:8px;text-align:center}
 .market-bars .bar .v{font-size:13px;font-weight:700;color:var(--ink);margin-bottom:6px}
+/* 시장 깔때기 — 넓게 보되 좁혀 들어간다 */
+.funnel{margin-top:36px;display:flex;flex-direction:column;gap:7px;align-items:center}
+.funnel-row{height:48px;border-radius:9px;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700;font-size:14.5px;padding:0 14px;text-align:center;line-height:1.2;transition:width .3s}
+.funnel-row .sub{font-weight:500;opacity:.85;font-size:12.5px;margin-left:7px}
+.funnel-row.r1{width:100%;background:#3a8079}
+.funnel-row.r2{width:80%;background:#2f6f6b}
+.funnel-row.r3{width:56%;background:#27605b}
+.funnel-row.r4{width:36%;background:var(--accent-deep)}
+@media(max-width:620px){.funnel-row.r3{width:74%}.funnel-row.r4{width:60%}}
+.funnel-aim{margin-top:16px;padding:15px 17px;border:1.5px dashed var(--accent);border-radius:12px;background:var(--accent-soft);font-size:13.5px;color:var(--accent-deep);line-height:1.65}
+.funnel-aim b{font-weight:800}
 
 /* 로드맵 */
 .road{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-top:42px;position:relative}
@@ -524,12 +535,13 @@ footer a{color:var(--accent);text-decoration:none}
         <div class="desc">소상공인 운영 SaaS 실거래가가 월 1만~2.2만 원. 1인 사장님의 시간까지 아껴주는 기준선</div>
       </div>
     </div>
-    <div class="market-bars" aria-label="시장 규모 비교">
-      <div class="bar"><span class="v">46만</span><div class="fill" style="height:100%"></div><div class="cap">TAM<br>외식 전체</div></div>
-      <div class="bar"><span class="v">36.8만</span><div class="fill" style="height:80%"></div><div class="cap">SAM<br>단일·소형 외식</div></div>
-      <div class="bar"><span class="v">10만</span><div class="fill" style="height:22%"></div><div class="cap">첫 거점<br>커피전문점</div></div>
-      <div class="bar"><span class="v">1년 10곳</span><div class="fill" style="height:4%;background:var(--alert)"></div><div class="cap">SOM<br>1년 차 직접 확보</div></div>
+    <div class="funnel" aria-label="시장 규모 — 넓게 보되 좁혀 들어갑니다">
+      <div class="funnel-row r1">TAM 약 46만<span class="sub">외식 전체</span></div>
+      <div class="funnel-row r2">SAM 약 36.8만<span class="sub">단일·소형 외식</span></div>
+      <div class="funnel-row r3">첫 거점 약 10만<span class="sub">커피전문점</span></div>
+      <div class="funnel-row r4">SOM 1년 10곳<span class="sub">→ 3년 600곳</span></div>
     </div>
+    <div class="funnel-aim">그 너머 — <b>소상공인 전체 약 596만 곳</b>. 카페에서 검증한 '손님 한마디 → 오늘 할 일'을 가게 운영 전반의 AI 전환(AX)으로 넓혀가는 것이 우리가 바라보는 시장입니다. <span style="opacity:.8">(596만 = 2023 정부 1차 통계 · 도입 의향은 베타로 검증할 가설)</span></div>
     <p class="market-note">시장 규모는 늘 응답률 한계와 함께 봅니다 — 보상 없는 QR의 자발 응답률은 2~5%가 천장입니다(SIRA 벤치마크). 매장이 많아도 매장당 응답이 적으면 실제 도달 가능 시장이 흔들리므로, 사장 답글·재방문 알림 같은 장치와 QR 노출 위치로 응답률을 끌어올립니다. 뒤에는 정부의 우호적인 흐름도 있습니다 — 2026년 소상공인 예산 약 5.4조 원에 AI 활용 지원이 새로 편성됐습니다(voxpop이 직접 받는 돈은 아니고, 사장님이 AI를 시작하기 좋아진 환경이라는 뜻입니다).</p>
   </div>
 </section>
