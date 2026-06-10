@@ -178,14 +178,14 @@
     gap: 8px;
   }
   .slime-sprite {
-    /* 표정 시트 3168x1344, 가로 6프레임 → 프레임당 528x1344 (세로형, 마스코트는 위쪽에 위치). */
-    /* 폭 64px 기준으로 시트를 비율대로 키우고(384x163), 박스 높이는 마스코트만 보이게 잘라 표시. */
+    /* 표정 시트 3168x1344, 가로 6프레임 → 프레임당 528x1344. 마스코트는 프레임 세로 중앙에 위치. */
+    /* 폭 64px 기준으로 시트를 비율대로 키우고(384x163), 박스 창을 마스코트 중앙 밴드에 맞춰 잘라 표시. */
     width: 64px;
-    height: 112px;
+    height: 120px;
     background-image: url('../assets/mascot/voxpop-mascot-expressions.png');
     background-repeat: no-repeat;
     background-size: 384px 163px;
-    background-position: 0 4px;
+    background-position: 0 -22px;
     image-rendering: pixelated;
     image-rendering: crisp-edges;
   }
