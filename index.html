@@ -135,6 +135,12 @@ h2{font-size:clamp(28px,4.4vw,42px);line-height:1.24;letter-spacing:-.02em;font-
 .ef-node span{font-size:12.5px;color:var(--muted);line-height:1.5}
 .ef-arr{display:flex;align-items:center;justify-content:center;color:var(--accent);font-size:22px;padding:0 8px;flex:0 0 auto}
 @media(max-width:680px){.ef-arr{transform:rotate(90deg);padding:8px 0}}
+/* 문제 3주체 수렴(병목) 도식 */
+.converge{margin-top:34px;display:flex;flex-direction:column;align-items:center}
+.cv-row{display:flex;gap:clamp(28px,8vw,72px)}
+.cv-chip{background:var(--card);border:1px solid var(--line);border-radius:999px;padding:9px 22px;font-weight:700;font-size:14.5px;color:var(--ink)}
+.cv-merge{width:min(380px,92%);height:42px;margin:2px 0}
+.cv-bottleneck{background:var(--accent-soft);color:var(--accent-deep);border-radius:10px;padding:11px 18px;font-weight:700;font-size:14px;text-align:center}
 
 /* 작동 증명 — 다크 밴드 */
 .proof{border-bottom:0;background:var(--accent-deep);color:var(--paper)}
@@ -363,6 +369,11 @@ footer a{color:var(--accent);text-decoration:none}
   <div class="wrap">
     <div class="kicker">지금은 어떻게 되고 있나</div>
     <h2>손님도, 사장도, 시장도<br>같은 한 곳에서 막혀 있습니다</h2>
+    <div class="converge" aria-label="손님·사장·시장이 한 곳에서 막힙니다">
+      <div class="cv-row"><span class="cv-chip">손님</span><span class="cv-chip">사장</span><span class="cv-chip">시장</span></div>
+      <svg class="cv-merge" viewBox="0 0 360 42" fill="none" stroke="var(--accent)" stroke-width="1.6" opacity="0.55" aria-hidden="true"><path d="M60 4 L180 40 M180 4 L180 40 M300 4 L180 40"/></svg>
+      <div class="cv-bottleneck">공개 리뷰판 — 진짜 목소리가 사라지는 한 곳</div>
+    </div>
     <div class="persona">
       <div class="persona-item">
         <div class="who">손님</div>
