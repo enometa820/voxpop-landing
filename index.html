@@ -205,6 +205,10 @@ h2{font-size:clamp(28px,4.4vw,42px);line-height:1.24;letter-spacing:-.02em;font-
 .road .stage .t{font-size:18px;font-weight:800;letter-spacing:-.01em}
 .road .stage p{font-size:14.5px;color:var(--muted);margin-top:10px;line-height:1.7}
 .road .gate{font-size:13px;font-weight:700;color:var(--alert);margin-top:14px}
+.road .gate-vision{color:var(--accent)}
+/* 한 칸씩 올라가는 사다리 — 1단계(지금)부터 위로 */
+.road{align-items:start}
+@media(min-width:821px){.road .stage:nth-child(1){margin-top:54px}.road .stage:nth-child(2){margin-top:27px}}
 .honesty{margin-top:40px;background:var(--accent-soft);border-radius:var(--r);padding:30px;display:grid;grid-template-columns:1fr 1fr;gap:0 36px}
 @media(max-width:720px){.honesty{grid-template-columns:1fr;gap:24px}}
 .honesty h4{font-size:15px;font-weight:800;color:var(--accent-deep);margin-bottom:12px}
@@ -563,13 +567,14 @@ footer a{color:var(--accent);text-decoration:none}
       <div class="stage">
         <div class="when">다음 — 옆으로 확장</div>
         <div class="t">같은 고객, 두 번째 가치</div>
-        <p>첫 단계가 자리잡은 뒤, 같은 카페 사장님에게 두 번째 운영 가치를 더하거나, 같은 엔진을 공공 민원·조직 건의·시설·환자 경험으로 넓힙니다.</p>
-        <div class="gate">통과 조건: 두 번째 기능을 더 쓰거나 돈을 내는 사례 여러 건</div>
+        <p>첫 단계가 자리잡으면 같은 카페 사장님에게 두 번째 가치를 더합니다 — 무기명 엔진을 직원 내부 건의함이나 단골 관계 관리로. 같은 기술을 공공 민원·조직 건의·시설·환자 경험 같은 인접 시장으로도 넓힙니다(다음에 검증할 방향).</p>
+        <div class="gate">통과 조건: 같은 고객이 두 번째 기능을 추가로 쓰거나 지불하는 사례 다섯 건 이상</div>
       </div>
       <div class="stage">
         <div class="when">지향 — AX 비전</div>
         <div class="t">소상공인의 첫 AI 운영 전환</div>
-        <p>손님 목소리가 "오늘 할 일"이 되는 경험이 사장님의 첫 AI 성공 체험이 되고, 그 신뢰가 다음 운영 결정으로 넓혀집니다. 다음 단계를 증명하기 전까지 AX는 목표가 아니라 방향입니다.</p>
+        <p>손님 목소리가 "오늘 할 일"이 되는 경험이 사장님의 첫 AI 성공 체험이 되고, 그 신뢰가 다음 운영 결정으로 넓혀집니다. 다음 단계를 증명하기 전까지 AX는 목표가 아니라 방향입니다. 좋은 기술은 늘 큰 자본에 먼저 닿았지만, 우리는 골목 사장님부터 닿고 싶습니다.</p>
+        <div class="gate gate-vision">바라보는 곳: 사장님이 "이건 내 편이구나" 하고 느끼는 첫 AI 경험</div>
       </div>
     </div>
     <div class="honesty">
@@ -603,7 +608,7 @@ footer a{color:var(--accent);text-decoration:none}
   <div class="wrap">
     <div class="kicker">왜 우리가 푸는가</div>
     <h2>짬뽕 한 그릇에서<br>시작했습니다</h2>
-    <p class="lead">이 문제를 직접 겪은 사람이, 그걸 풀 제품을 끝까지 만들었습니다.</p>
+    <p class="lead">같은 자리에서 막막했던 사람이, 사장님들을 생각하며 이 제품을 끝까지 만들었습니다.</p>
     <div class="founder-box">
       <p>배달앱으로 시킨 짬뽕이 정말 별로였습니다. 면이 불고 국물이 밍밍했는데, 리뷰엔 칭찬뿐이었습니다. 욕도 비방도 아니게, 처음으로 솔직한 한 줄을 남겼습니다. 그 글은 지워졌고, 7일간 리뷰를 못 쓰게 됐습니다.</p>
       <p>화났다기보다 멍했습니다. 까다롭지도 않은 사람이 처음 한 솔직한 말이 그냥 사라진 겁니다. 찾아보니 개인 일화가 아니라 구조였습니다 — 업주 요청만으로 부정 리뷰가 가려지고, 후기의 65.2%가 보상 이벤트로 쓰이며 그 98.3%가 실제보다 높게 평가합니다(한국소비자원 2024). 그래서 voxpop을 만듭니다. 공개 리뷰의 반대편, 사장만 보는 비공개 채널을.</p>
