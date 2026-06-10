@@ -169,6 +169,18 @@ h2{font-size:clamp(28px,4.4vw,42px);line-height:1.24;letter-spacing:-.02em;font-
 @media(max-width:780px){.diff-three{grid-template-columns:1fr}}
 .diff-three .b{background:var(--accent-soft);border-radius:var(--r);padding:22px}
 .diff-three .b .t{font-size:16px;font-weight:800;color:var(--accent-deep)}
+/* 경쟁 비교 매트릭스 */
+.cmp-matrix{width:100%;border-collapse:collapse;margin-top:28px;font-size:14px}
+.cmp-matrix th,.cmp-matrix td{padding:13px 8px;text-align:center;border-bottom:1px solid var(--line)}
+.cmp-matrix thead th{font-weight:800;font-size:13px;color:var(--ink);vertical-align:bottom}
+.cmp-matrix tbody td:first-child,.cmp-matrix thead th:first-child{text-align:left;font-weight:600;color:var(--ink);width:40%}
+.cmp-matrix .th-vox{color:var(--accent);background:var(--accent-soft);border-radius:9px 9px 0 0}
+.cmp-matrix .td-vox{background:var(--accent-soft)}
+.cmp-matrix .ic-y{color:var(--accent)}
+.cmp-matrix .ic-n{color:#bcb6a8}
+.cmp-matrix .ic-y svg,.cmp-matrix .ic-n svg{width:20px;height:20px}
+.cmp-matrix .wk{font-size:12.5px;color:var(--muted)}
+.cmp-note{font-size:12.5px;color:var(--muted);margin-top:11px}
 .diff-three .b p{font-size:14px;color:var(--ink);margin-top:8px;line-height:1.6}
 
 /* 시장 */
@@ -493,6 +505,30 @@ footer a{color:var(--accent);text-decoration:none}
         </ul>
       </div>
     </div>
+    <table class="cmp-matrix" aria-label="경쟁 비교 매트릭스">
+      <thead><tr>
+        <th></th><th>공개 리뷰·별점</th><th>해외 익명 서비스</th><th class="th-vox">Voxpop</th>
+      </tr></thead>
+      <tbody>
+        <tr><td>완전 무기명 (연락처도 안 받음)</td>
+          <td class="ic-n"><svg viewBox="0 0 22 22" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M6 6l10 10M16 6L6 16"/></svg></td>
+          <td class="wk">약함</td>
+          <td class="td-vox ic-y"><svg viewBox="0 0 22 22" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M5 11.5l3.5 3.5L17 7"/></svg></td></tr>
+        <tr><td>한국어 안전 가림 (욕설·개인정보·실명)</td>
+          <td class="ic-n"><svg viewBox="0 0 22 22" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M6 6l10 10M16 6L6 16"/></svg></td>
+          <td class="ic-n"><svg viewBox="0 0 22 22" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M6 6l10 10M16 6L6 16"/></svg></td>
+          <td class="td-vox ic-y"><svg viewBox="0 0 22 22" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M5 11.5l3.5 3.5L17 7"/></svg></td></tr>
+        <tr><td>손님을 밖으로 안 내보냄</td>
+          <td class="ic-n"><svg viewBox="0 0 22 22" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M6 6l10 10M16 6L6 16"/></svg></td>
+          <td class="wk">약함</td>
+          <td class="td-vox ic-y"><svg viewBox="0 0 22 22" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M5 11.5l3.5 3.5L17 7"/></svg></td></tr>
+        <tr><td>공개 전, 사장님만 먼저 봄</td>
+          <td class="ic-n"><svg viewBox="0 0 22 22" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M6 6l10 10M16 6L6 16"/></svg></td>
+          <td class="wk">약함</td>
+          <td class="td-vox ic-y"><svg viewBox="0 0 22 22" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M5 11.5l3.5 3.5L17 7"/></svg></td></tr>
+      </tbody>
+    </table>
+    <p class="cmp-note">해외 유사 서비스 7곳(Ovation 등) 공개 정보 기준 · 한국 진출 0곳. 이 넷을 한 번에 갖춘 곳은 아직 찾지 못했습니다.</p>
     <div class="diff-three">
       <div class="b">
         <div class="t">완전 무기명</div>
