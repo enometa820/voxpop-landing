@@ -669,20 +669,11 @@
   }
 
   function getSafeCleanContent(result, raw, rating, category) {
-    const status = result.moderation?.exposureStatus;
-    const cat = result.submission?.category || category || '기타';
-    if (status === '민감 보류') {
-      return `${cat} 관련 민감 표현 포함 피드백 1건`;
-    }
-    if (status === '스팸 제외') {
-      return '운영 신호 없는 입력 1건';
-    }
-    const text = result.submission?.sanitizedComment || raw;
-    // 한마디 없이 별점만 남긴 경우 — content_clean이 NOT NULL이므로 별점 요약으로 채운다.
-    if (!text) {
-      return `별점 ${rating}점 (한마디 없음)`;
-    }
-    return text;
+    // 한마디 없이 별점만 — content_clean이 NOT NULL이므로 별점 요약으로 채운다.
+    if (!raw) return `별점 ${rating}점 (한마디 없음)`;
+    // 엔진의 완결문(cleanSentence) — 가림 토큰을 없애고 운영 신호는 보존,
+    // 위험 표현(명예훼손·인신공격·스팸)은 카테고리 요약으로 닫는다. 사장은 토큰 없는 한 문장을 본다.
+    return result.submission?.cleanSentence || `별점 ${rating}점 (한마디 없음)`;
   }
 
   // 가게 슬라임 성장단계 렌더 — 손님에겐 성장단계만(긍정). 기분·건강은 노출하지 않는다.

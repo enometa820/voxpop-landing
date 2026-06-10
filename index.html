@@ -408,9 +408,12 @@ footer a{color:var(--accent);text-decoration:none}
       import { processFeedback } from './lib/voc-engine.js';
       const inEl = document.getElementById('mp-in');
       const outEl = document.getElementById('mp-out');
+      const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;' }[c]));
       document.getElementById('mp-go').onclick = () => {
         const r = processFeedback({ storeId:'demo', rating:2, category:'응대', comment: inEl.value, submittedAt:'2026-06-07T00:00:00.000Z' });
-        outEl.textContent = '→ ' + r.submission.sanitizedComment;
+        const meta = r.submission.maskedMeta.map((m) => `${m.type} ${m.count}건`).join(' · ');
+        outEl.innerHTML = `<span style="color:var(--ink);font-weight:600">${esc(r.submission.cleanSentence)}</span>` +
+          (meta ? `<br><span style="color:var(--muted);font-size:13px">가린 내역 — ${esc(meta)}</span>` : '');
       };
     </script>
   </div>
