@@ -14,6 +14,7 @@
 <meta property="og:site_name" content="Voxpop" />
 <meta property="og:title" content="사장님 가이드 — Voxpop 7일 베타 사용 안내" />
 <meta property="og:description" content="Voxpop을 매장에 설치하고 7일 동안 써보는 사장님용 안내서입니다." />
+<script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.4/build/qrcode.min.js"></script>
 <meta property="og:url" content="https://voxpop.kr/owner-guide/" />
 <meta property="og:image" content="https://voxpop.kr/assets/og-image.png" />
 <meta name="twitter:card" content="summary_large_image" />
@@ -243,7 +244,7 @@
       <div class="link-row">
         <div class="small">손님용 한마디 링크</div>
         <a id="customer-link" href="../demo/">데모로 손님 화면 미리보기</a>
-        <div class="actions"><button class="btn copy" data-copy-target="customer-link">손님 링크 복사</button></div>
+        <div class="actions"><button class="btn copy" data-copy-target="customer-link">손님 링크 복사</button><button class="btn" id="qr-btn" type="button" style="display:none">매장 QR 받기</button></div>
       </div>
 
       <div class="link-row">
@@ -365,12 +366,34 @@
   if (safeSlug) {
     storeNameEl.textContent = nameFromUrl || safeSlug;
     storeNoteEl.textContent = '이 페이지는 매장 전용 링크가 채워진 가이드입니다.';
+    const qrBtn = document.querySelector('#qr-btn');
+    if (qrBtn) {
+      qrBtn.style.display = '';
+      qrBtn.addEventListener('click', () => downloadQR(safeSlug));
+    }
     try {
       const store = await fetchStoreBySlug(safeSlug);
       if (store?.display_name) storeNameEl.textContent = store.display_name;
     } catch (err) {
       console.info('store lookup skipped', err.message);
     }
+  }
+
+  async function downloadQR(slug) {
+    const url = `${location.origin}/s/?store=${encodeURIComponent(slug)}`;
+    if (typeof QRCode === 'undefined') { window.open(url, '_blank'); return; }
+    const canvas = document.createElement('canvas');
+    canvas.width = 800; canvas.height = 800;
+    await new Promise((res, rej) => QRCode.toCanvas(canvas, url, {
+      width: 800, margin: 2, color: { dark: '#1f2430', light: '#f6f3ec' }, errorCorrectionLevel: 'M',
+    }, (e) => (e ? rej(e) : res())));
+    canvas.toBlob((blob) => {
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(blob);
+      a.download = `voxpop-qr-${slug}.png`;
+      a.click();
+      setTimeout(() => URL.revokeObjectURL(a.href), 1000);
+    }, 'image/png');
   }
 
   async function copyText(text, button) {
