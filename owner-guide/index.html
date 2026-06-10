@@ -242,7 +242,7 @@
 
       <div class="link-row">
         <div class="small">손님용 한마디 링크</div>
-        <a id="customer-link" href="../s/">../s/</a>
+        <a id="customer-link" href="../demo/">데모로 손님 화면 미리보기</a>
         <div class="actions"><button class="btn copy" data-copy-target="customer-link">손님 링크 복사</button></div>
       </div>
 
@@ -355,12 +355,12 @@
   const ownerUrl = new URL('../owner/', location.href).href;
   const customerUrl = safeSlug
     ? new URL(`../s/?store=${encodeURIComponent(safeSlug)}`, location.href).href
-    : new URL('../s/', location.href).href;
+    : new URL('../demo/', location.href).href;
 
   ownerLinkEl.href = ownerUrl;
   ownerLinkEl.textContent = ownerUrl;
   customerLinkEl.href = customerUrl;
-  customerLinkEl.textContent = customerUrl;
+  customerLinkEl.textContent = safeSlug ? customerUrl : '데모로 손님 화면 미리보기';
 
   if (safeSlug) {
     storeNameEl.textContent = nameFromUrl || safeSlug;
