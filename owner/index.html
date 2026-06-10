@@ -842,6 +842,7 @@
     fetchStoreActions,
     insertStoreAction,
     fetchStoreSlime,
+    fetchStoreMemory,
     upsertStoreSlime,
     insertOwnerResponse,
     fetchOwnerResponses,
@@ -867,6 +868,7 @@
   let selectedStoreId = null;
   let slimeActions = [];
   let slimeRow = null;
+  let slimeMemory = null; // 매장 AI 메모리(롤링 요약 + 인사이트). renderSlime 말풍선 입력.
   const OWNER_STATUS_KEY = 'voxpop-owner-status-v1';
   const OWNER_STATUSES = {
     new: '새 한마디',
@@ -1370,8 +1372,10 @@
     sprite.style.backgroundPosition = `${pct}% 0`;
     sprite.setAttribute('aria-label', `매장 슬라임 — ${state.stageName}, 기분 ${moodLabel(state.mood)}`);
 
-    // 말풍선
-    $('#slime-bubble').textContent = slimeBubble(dashboardForBubble(feedback), state);
+    // 말풍선 — AI 매장 메모리 인사이트가 있으면 슬라임 목소리로 우선 표시("기억하는 친구"),
+    // 없으면 규칙기반 "오늘 볼 것"으로 폴백.
+    const memoryLine = (slimeMemory?.insights || [])[0]?.content;
+    $('#slime-bubble').textContent = memoryLine || slimeBubble(dashboardForBubble(feedback), state);
 
     // 메타 (기분·건강·미조치 위험)
     $('#slime-mood').textContent = moodLabel(state.mood);
@@ -1628,17 +1632,20 @@
       if (!selectedStoreId) selectedStoreId = stores[0]?.id ?? null;
       if (selectedStoreId) {
         try {
-          const [actions, row] = await Promise.all([
+          const [actions, row, memory] = await Promise.all([
             fetchStoreActions(selectedStoreId),
             fetchStoreSlime(selectedStoreId),
+            fetchStoreMemory(selectedStoreId).catch(() => null),
           ]);
           slimeActions = actions || [];
           slimeRow = row || null;
+          slimeMemory = memory || null;
         } catch (slimeErr) {
           // 슬라임 데이터 실패는 대시보드 본체를 막지 않는다(추가 기능)
           console.warn('slime load failed', slimeErr);
           slimeActions = [];
           slimeRow = null;
+          slimeMemory = null;
         }
       }
 
