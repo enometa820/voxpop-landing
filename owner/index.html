@@ -1074,7 +1074,7 @@
         ${catsBadges}
         <span class="time">${formatTime(item.created_at)}</span>
       </div>
-      <div class="body">${escapeHtml(item.content_clean)}</div>
+      <div class="body">${escapeHtml(item.content_polished || item.content_clean)}</div>
       ${safetyNote}
       ${flagsLine}
       ${renderStatusControls(item)}
