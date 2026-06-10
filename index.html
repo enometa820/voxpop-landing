@@ -123,6 +123,18 @@ h2{font-size:clamp(28px,4.4vw,42px);line-height:1.24;letter-spacing:-.02em;font-
 .arc-core .tag{position:absolute;top:-11px;left:32px;background:var(--accent);color:#fff;font-size:11.5px;font-weight:700;letter-spacing:.06em;padding:4px 11px;border-radius:999px}
 .arc-line{font-size:clamp(17px,2.4vw,22px);font-weight:700;color:var(--ink);margin-top:34px;line-height:1.5}
 .arc-line em{font-style:normal;color:var(--accent)}
+/* 가림 엔진 4단계 플로우 */
+.engine-flow{display:flex;align-items:stretch;margin-top:34px}
+@media(max-width:680px){.engine-flow{flex-direction:column}}
+.ef-node{flex:1;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:18px 12px;text-align:center;display:flex;flex-direction:column;align-items:center;gap:6px}
+.ef-node.ef-final{border-color:var(--accent);background:#eef5f4}
+.ef-ic{width:42px;height:42px;border-radius:12px;background:#eef5f4;display:flex;align-items:center;justify-content:center;color:var(--accent)}
+.ef-node.ef-final .ef-ic{background:var(--accent);color:#fff}
+.ef-ic svg{width:24px;height:24px}
+.ef-l{font-size:15px;font-weight:800;color:var(--ink)}
+.ef-node span{font-size:12.5px;color:var(--muted);line-height:1.5}
+.ef-arr{display:flex;align-items:center;justify-content:center;color:var(--accent);font-size:22px;padding:0 8px;flex:0 0 auto}
+@media(max-width:680px){.ef-arr{transform:rotate(90deg);padding:8px 0}}
 
 /* 작동 증명 — 다크 밴드 */
 .proof{border-bottom:0;background:var(--accent-deep);color:var(--paper)}
@@ -370,6 +382,27 @@ footer a{color:var(--accent);text-decoration:none}
       </div>
     </div>
     <p class="arc-line">그리고 이건 동네 사장님이 AI를 처음 써보는 <em>가장 쉬운 첫걸음</em>입니다.<br>QR 하나 붙이면 손님 한마디가 "오늘 할 일"로 정리됩니다.</p>
+    <div class="engine-flow" aria-label="가림 엔진 처리 흐름 4단계">
+      <div class="ef-node">
+        <div class="ef-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><path d="M14 14h3v3M21 14v.01M17 21h.01M21 21v.01M21 17.5v.01"/></svg></div>
+        <div class="ef-l">손님 입력</div><span>QR로 익명 한마디</span>
+      </div>
+      <div class="ef-arr" aria-hidden="true">→</div>
+      <div class="ef-node">
+        <div class="ef-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 3l7 3v5c0 4-3 7-7 9-4-2-7-5-7-9V6z"/><path d="M9 12l2 2 4-4"/></svg></div>
+        <div class="ef-l">한국어 가림</div><span>욕설·전화번호·실명</span>
+      </div>
+      <div class="ef-arr" aria-hidden="true">→</div>
+      <div class="ef-node">
+        <div class="ef-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M20.6 13.4l-7.2 7.2a2 2 0 01-2.8 0l-7-7A2 2 0 013 12.2V5a2 2 0 012-2h7.2a2 2 0 011.4.6l7 7a2 2 0 010 2.8z"/><circle cx="8.5" cy="8.5" r="1.3"/></svg></div>
+        <div class="ef-l">분류</div><span>맛·응대·청결·대기…</span>
+      </div>
+      <div class="ef-arr" aria-hidden="true">→</div>
+      <div class="ef-node ef-final">
+        <div class="ef-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="9"/><path d="M8.3 12.4l2.6 2.6 4.8-5.2"/></svg></div>
+        <div class="ef-l">오늘 할 일</div><span>사장님 액션 한 줄</span>
+      </div>
+    </div>
   </div>
 </section>
 
