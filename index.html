@@ -130,7 +130,9 @@ h2{font-size:clamp(28px,4.4vw,42px);line-height:1.24;letter-spacing:-.02em;font-
 .proof-shots{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-top:42px}
 @media(max-width:780px){.proof-shots{grid-template-columns:1fr}}
 .proof-shot{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.16);border-radius:var(--r);overflow:hidden}
-.proof-shot img{display:block;width:100%;height:auto}
+.proof-shot img{display:block;width:100%;height:380px;background:#fffdf8;border-bottom:1px solid rgba(255,255,255,.12)}
+.proof-shot.shot-guest img{object-fit:cover;object-position:top center}
+.proof-shot.shot-owner img{object-fit:contain;object-position:center;padding:18px}
 .proof-shot .t{font-size:16px;font-weight:800;color:#fff;padding:16px 18px 4px}
 .proof-shot p{font-size:14px;color:#cfe6e2;padding:0 18px 18px;line-height:1.6}
 /* 스크린샷 미존재 시 카드 대체 */
@@ -380,25 +382,13 @@ footer a{color:var(--accent);text-decoration:none}
     <h2>써보면 압니다</h2>
     <p class="lead">손님이 QR로 한마디를 남기고, 사장님이 '오늘 할 일'을 받기까지 — 전 과정이 지금 실제로 돌아갑니다. 아래에서 직접 가려보고, 사장님 화면이 어떻게 보이는지 확인해 보세요.</p>
     <div class="proof-shots">
-      <div class="proof-shot proof-shot-placeholder">
-        <div class="ph">
-          <svg viewBox="0 0 48 48" aria-label="손님 폼 아이콘">
-            <circle cx="24" cy="24" r="18" fill="none" stroke="rgba(255,255,255,.3)" stroke-width="1.5"/>
-            <path d="M16 18h16M16 23h16M16 28h10" stroke="rgba(255,255,255,.5)" stroke-width="2" stroke-linecap="round"/>
-          </svg>
-        </div>
+      <div class="proof-shot shot-guest">
+        <img src="assets/shots/guest-form.png" alt="손님이 QR로 들어와 무기명 한마디를 남기는 화면" loading="lazy" width="430" height="340">
         <div class="t">손님 폼</div>
         <p>QR로 들어와 무기명 한마디를 남기는 화면. 이름·연락처를 받지 않고, 남긴 순간 욕설·개인정보가 가려집니다.</p>
       </div>
-      <div class="proof-shot proof-shot-placeholder">
-        <div class="ph">
-          <svg viewBox="0 0 48 48" aria-label="사장 대시보드 아이콘">
-            <circle cx="24" cy="24" r="18" fill="none" stroke="rgba(255,255,255,.3)" stroke-width="1.5"/>
-            <rect x="15" y="16" width="18" height="3" rx="1.5" fill="rgba(255,255,255,.5)"/>
-            <rect x="15" y="22" width="12" height="3" rx="1.5" fill="rgba(255,255,255,.35)"/>
-            <rect x="15" y="28" width="15" height="3" rx="1.5" fill="rgba(255,255,255,.35)"/>
-          </svg>
-        </div>
+      <div class="proof-shot shot-owner">
+        <img src="assets/shots/owner-dashboard.png" alt="사장 대시보드 — 가려진 한마디가 오늘 할 일로 정리된 화면" loading="lazy" width="760" height="340">
         <div class="t">사장 대시보드</div>
         <p>가려진 한마디, 반복 신호, 위험 신호, 오늘 볼 것을 정리해 보여줍니다. 사장님은 따로 설정할 게 없습니다.</p>
       </div>
