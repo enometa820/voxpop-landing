@@ -1,7 +1,7 @@
 // voxpop Supabase 클라이언트 래퍼
 // 손님 폼(익명), 사장 대시보드, 관리자 페이지에서 공통 사용.
 
-import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.45.0';
+import { createClient } from '@supabase/supabase-js';
 import { SUPABASE_URL, SUPABASE_ANON_KEY, DEVICE_KEY } from './config.js';
 
 let _client = null;

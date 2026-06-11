@@ -1,2 +1,6 @@
 .vercel
 .gstack/
+node_modules/
+dist/
+*.local
+.DS_Store
