@@ -2,7 +2,6 @@ import { Link } from "react-router";
 import { TerminalWindow } from "../components/terminal/TerminalWindow";
 import { TerminalLog, type LogLine } from "../components/terminal/TerminalLog";
 import { AsciiProgress } from "../components/terminal/AsciiProgress";
-import { CopyButton } from "../components/terminal/CopyButton";
 import { MonoLabel } from "../components/terminal/MonoLabel";
 import { PixelTree, type TreeLevel } from "../components/mascots/PixelTree";
 import { PixelCat } from "../components/mascots/PixelCat";
@@ -118,15 +117,12 @@ export function Landing() {
                 <span className="size-3 rounded-full bg-[#28c840] ring-1 ring-black/10" />
               </span>
               <span className="ml-1 font-mono text-[11px] text-muted-foreground">
-                install — bash
+                voxpop — 매장 시작 2단계
               </span>
             </div>
             <div className="space-y-2 p-4 font-mono text-[13px]">
               {installCmds.map((cmd) => (
-                <div key={cmd} className="flex items-center justify-between gap-3">
-                  <span className="text-foreground">{cmd}</span>
-                  <CopyButton value={cmd} />
-                </div>
+                <div key={cmd} className="text-foreground">{cmd}</div>
               ))}
               <div className="text-muted-foreground">
                 → 손님은 받지 않아요: 이름 · 번호 · 위치
