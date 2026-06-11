@@ -22,6 +22,8 @@ export const router = createBrowserRouter([
       { path: "privacy", Component: Privacy },
       { path: "owner-guide", Component: OwnerGuide },
       // 구 경로 호환 리다이렉트
+      { path: "index.html", element: <Navigate to="/" replace /> },
+      { path: "demo", element: <Navigate to="/s?store=u61zh7b2" replace /> },
       { path: "feedback", element: <Navigate to="/s" replace /> },
       { path: "thread", element: <Navigate to="/s" replace /> },
       { path: "dashboard", element: <Navigate to="/owner" replace /> },
