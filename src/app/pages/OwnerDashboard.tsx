@@ -141,7 +141,7 @@ export function OwnerDashboard() {
       return;
     }
     try {
-      await sendMagicLink(e, `${location.origin}/owner`);
+      await sendMagicLink(e, `${location.origin}/owner/`);
       setNotice({ text: "로그인 링크를 보냈어요. 이메일을 확인해주세요.", error: false });
     } catch {
       setNotice({ text: "로그인 링크 발송 실패. 잠시 후 다시 시도해주세요.", error: true });

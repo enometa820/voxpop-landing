@@ -76,7 +76,7 @@ export function Admin() {
     if (!e.includes("@")) { setNotice({ text: "이메일을 정확히 입력해주세요.", error: true }); return; }
     if (!ADMIN_EMAILS.includes(e)) { setNotice({ text: "등록된 관리자 이메일이 아닙니다.", error: true }); return; }
     try {
-      await sendMagicLink(e, `${location.origin}/admin`);
+      await sendMagicLink(e, `${location.origin}/admin/`);
       setNotice({ text: "로그인 링크를 보냈어요. 이메일을 확인해주세요.", error: false });
     } catch (err) {
       setNotice({ text: "발송 실패: " + (err as Error).message, error: true });
