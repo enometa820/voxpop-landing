@@ -25,8 +25,14 @@ jobs:
           cache: npm
       - run: npm ci
       - run: npm run build
-      # SPA 폴백 — 딥링크(/s?store=…·/owner 등)가 404 대신 앱을 로드하도록 index.html을 404.html로
-      - run: cp dist/index.html dist/404.html
+      # GH Pages는 정적 파일만 서빙 → 실제 라우트 경로마다 앱 셸(index.html)을 두어 200으로 서빙.
+      # 각 라우트 디렉토리에 index.html을 두면 /s/?store=·/owner/ 등이 정상 200. 그 외 미지정 경로는 404.html(앱 셸)이 받아 React NotFound로.
+      - run: |
+          cp dist/index.html dist/404.html
+          for r in s owner admin story privacy owner-guide; do
+            mkdir -p "dist/$r"
+            cp dist/index.html "dist/$r/index.html"
+          done
       - uses: actions/upload-pages-artifact@v3
         with:
           path: dist
