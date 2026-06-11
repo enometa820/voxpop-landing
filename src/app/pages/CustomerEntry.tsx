@@ -324,7 +324,7 @@ export function CustomerEntry() {
               transition={{ delay: 0.15 }}
               className="font-mono text-[15px] text-primary"
             >
-              {">＜>"} +1 적립!
+              {"><>"} +1 적립!
             </motion.p>
             <p className="text-[15px] leading-relaxed text-foreground">읽고 진짜 바뀝니다. 고마워요.</p>
             <p className="font-mono text-[12px] text-muted-foreground">

@@ -82,7 +82,7 @@ export function Landing() {
           // 작동 방식
         </a>
         <Link
-          to="/dashboard"
+          to="/owner"
           className="flex items-center justify-between gap-2 px-4 py-4 font-mono text-[13px] text-primary transition-colors hover:bg-surface-raised"
         >
           시작하기 <span aria-hidden>→</span>
@@ -135,13 +135,13 @@ export function Landing() {
 
           <div className="mt-6 flex flex-wrap gap-3">
             <Link
-              to="/feedback"
+              to="/s?store=u61zh7b2"
               className="rounded-lg border border-primary bg-primary px-4 py-2 font-mono text-[13px] text-primary-foreground shadow-sm transition-all hover:-translate-y-0.5 hover:opacity-95"
             >
               [ 손님 화면 체험 ]
             </Link>
             <Link
-              to="/dashboard"
+              to="/owner"
               className="rounded-lg border border-border bg-card px-4 py-2 font-mono text-[13px] text-foreground transition-colors hover:bg-surface-raised"
             >
               [ 사장 대시보드 ]
@@ -283,14 +283,14 @@ export function Landing() {
             <p className="text-center font-mono text-[12px] text-muted-foreground">
               QR을 찍으면 익명 고양이가 됩니다.
               <br />
-              한마디 남길 때마다 <span className="text-primary">{">＜>"}</span> +1
+              한마디 남길 때마다 <span className="text-primary">{"><>"}</span> +1
             </p>
           </div>
           <div className="p-4 sm:p-6">
             <TerminalWindow title="CLOSET ── 내 옷장">
               <div className="mb-3 flex items-center justify-between text-muted-foreground">
                 <span>내 옷장</span>
-                <span className="text-primary">{">＜>"} x {fishTokens}</span>
+                <span className="text-primary">{"><>"} x {fishTokens}</span>
               </div>
               <div className="space-y-1.5">
                 {closet.map((item) => (
@@ -305,8 +305,8 @@ export function Landing() {
                       {item.owned
                         ? "보유"
                         : item.locked
-                          ? `${">＜>"} ${item.cost} · 잠김`
-                          : `${">＜>"} ${item.cost}`}
+                          ? `${"><>"} ${item.cost} · 잠김`
+                          : `${"><>"} ${item.cost}`}
                     </span>
                   </div>
                 ))}
@@ -327,45 +327,46 @@ export function Landing() {
         </h2>
         <div className="mt-6 flex flex-wrap justify-center gap-3">
           <Link
-            to="/feedback"
+            to="/s?store=u61zh7b2"
             className="rounded-lg border border-primary bg-primary px-5 py-2.5 font-mono text-[13px] text-primary-foreground shadow-sm transition-all hover:-translate-y-0.5 hover:opacity-95"
           >
             [ 손님 화면 체험 → ]
           </Link>
           <Link
-            to="/thread"
+            to="/story"
             className="rounded-lg border border-border bg-card px-5 py-2.5 font-mono text-[13px] text-foreground transition-colors hover:bg-surface-raised"
           >
-            [ 대화 스레드 보기 ]
+            [ 우리 이야기 보기 ]
           </Link>
         </div>
       </section>
 
       {/* FOOTER */}
-      <footer className="grid grid-cols-2 border-t border-border md:grid-cols-4">
-        <div className="border-b border-r border-border px-4 py-5 md:border-b-0">
-          <span className="font-mono text-[12px] text-foreground">voxpop</span>
-          <p className="mt-1 font-mono text-[11px] text-muted-foreground">
-            v0.1.0 — beta
-          </p>
+      <footer className="border-t border-border">
+        <div className="grid grid-cols-2 md:grid-cols-4">
+          <div className="border-b border-r border-border px-4 py-5 md:border-b-0">
+            <span className="font-mono text-[12px] text-foreground">voxpop</span>
+            <p className="mt-1 font-mono text-[11px] text-muted-foreground">v0.1.0 — beta</p>
+          </div>
+          <div className="border-b border-border px-4 py-5 md:border-b-0 md:border-r">
+            <p className="font-mono text-[11px] text-muted-foreground">EST 2026</p>
+            <p className="font-mono text-[11px] text-muted-foreground">Seoul, KR</p>
+          </div>
+          <div className="border-r border-border px-4 py-5">
+            <p className="font-mono text-[11px] text-muted-foreground">ANONYMOUS</p>
+            <p className="font-mono text-[11px] text-muted-foreground">BY DESIGN</p>
+          </div>
+          <div className="px-4 py-5">
+            <p className="font-mono text-[11px] text-muted-foreground">device=null</p>
+            <p className="font-mono text-[11px] text-muted-foreground">ip=hashed</p>
+          </div>
         </div>
-        <div className="border-b border-border px-4 py-5 md:border-b-0 md:border-r">
-          <p className="font-mono text-[11px] text-muted-foreground">EST 2026</p>
-          <p className="font-mono text-[11px] text-muted-foreground">Seoul, KR</p>
-        </div>
-        <div className="border-r border-border px-4 py-5">
-          <p className="font-mono text-[11px] text-muted-foreground">
-            ANONYMOUS
-          </p>
-          <p className="font-mono text-[11px] text-muted-foreground">BY DESIGN</p>
-        </div>
-        <div className="px-4 py-5">
-          <p className="font-mono text-[11px] text-muted-foreground">
-            device=null
-          </p>
-          <p className="font-mono text-[11px] text-muted-foreground">
-            ip=hashed
-          </p>
+        <div className="flex flex-wrap items-center gap-x-4 gap-y-2 border-t border-border px-4 py-4">
+          <Link to="/story" className="font-mono text-[11px] text-muted-foreground hover:text-primary">우리 이야기</Link>
+          <Link to="/owner-guide" className="font-mono text-[11px] text-muted-foreground hover:text-primary">사장님 가이드</Link>
+          <Link to="/privacy" className="font-mono text-[11px] text-muted-foreground hover:text-primary">개인정보처리방침</Link>
+          <a href="mailto:tototal5542@gmail.com" className="font-mono text-[11px] text-muted-foreground hover:text-primary">문의</a>
+          <span className="ml-auto font-mono text-[11px] text-muted-foreground/60">© 2026 Voxpop</span>
         </div>
       </footer>
     </main>
