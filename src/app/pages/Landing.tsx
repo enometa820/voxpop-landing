@@ -104,8 +104,10 @@ export function Landing() {
             가게가 자랍니다.
           </h1>
           <p className="mt-5 max-w-md text-[15px] leading-relaxed text-muted-foreground">
-            매장 QR을 찍은 손님이 익명으로 별점과 한마디를 남기면, 위험한 말은
-            자동으로 가려지고 사장님은 ‘오늘 할 일’ 한 줄을 받습니다.
+            공개 리뷰엔 못 남기는 솔직한 한마디를, 손님이 매장 QR로 무기명 남깁니다.
+            욕설·개인정보·위험 표현은 한국어 엔진이 자동으로 가리고, 사장님은
+            ‘오늘 할 일’ 한 줄을 받습니다. 사장이 답하면 손님에게 닿고, 매장
+            나무가 한 뼘 자랍니다.
           </p>
 
           <div className="mt-7 overflow-hidden rounded-xl border border-border bg-surface-raised shadow-[0_8px_24px_-14px_rgba(12,36,23,0.4)]">
@@ -176,6 +178,29 @@ export function Landing() {
         <p className="mt-3 font-mono text-[11px] text-muted-foreground">
           source=한국소비자원 2024 · voxpop은 매출 과장 대신 ‘오늘 고칠 한 줄’만
           약속합니다.
+        </p>
+      </section>
+
+      {/* HOW IT WORKS */}
+      <section className="border-t border-border bg-surface-raised px-4 py-10 sm:px-6">
+        <MonoLabel className="text-primary">// 어떻게 작동하나</MonoLabel>
+        <div className="mt-5 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
+          {[
+            { n: "01", t: "QR 스캔", d: "손님이 테이블 QR을 찍고 익명 폼에 들어옵니다. 이름·번호·위치는 받지 않아요." },
+            { n: "02", t: "솔직한 한마디", d: "공개 리뷰엔 못 쓰는 진짜 속마음을 무기명으로 남깁니다. 욕설·개인정보·위험 표현은 한국어 엔진이 자동으로 가립니다." },
+            { n: "03", t: "오늘 할 일", d: "쌓인 한마디가 사장님에겐 오늘 바로 고칠 한 줄 액션으로 정리됩니다. 매출 과장 대신 실행만." },
+            { n: "04", t: "자라고, 닿고", d: "사장이 조치하면 매장 나무가 자라고, 영수증 링크로 손님은 사장의 답을 받습니다 — 누가 썼는지는 끝까지 비공개." },
+          ].map((s) => (
+            <div key={s.n} className="rounded-xl border border-border bg-card px-5 py-6">
+              <MonoLabel bracket className="text-primary">{s.n}</MonoLabel>
+              <h3 className="mt-3 text-foreground" style={{ fontWeight: 700 }}>{s.t}</h3>
+              <p className="mt-2 text-[14px] leading-relaxed text-muted-foreground">{s.d}</p>
+            </div>
+          ))}
+        </div>
+        <p className="mt-6 max-w-3xl text-[15px] leading-relaxed text-foreground" style={{ fontWeight: 500 }}>
+          voxpop은 <span className="text-primary">동네 사장님이 AI를 사업에 처음 접목하는 가장 낮은 문턱</span>입니다.
+          가장 부담 없는 무기명 피드백으로 시작해, 매장에 쌓인 목소리를 모아 운영 전반을 돕는 쪽으로 넓혀갑니다.
         </p>
       </section>
 
