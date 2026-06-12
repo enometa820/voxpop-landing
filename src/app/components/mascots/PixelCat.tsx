@@ -21,19 +21,19 @@ const W = 30;
 const H = 31;
 
 const COLORS: Record<string, string> = {
-  D: "#0c2417", // outline
-  b: "#3e8e63", // body
-  B: "#2c6a49", // body shadow
-  h: "#7fc39a", // body highlight
-  w: "#e7efe1", // chest / muzzle / socks
-  W: "#cfdec9", // soft white shade
-  e: "#0c2417", // eyes / mouth
-  i: "#eef5ea", // eye shine
-  r: "#b5544a", // nose / inner ear
-  R: "#c96a5f", // ribbon
+  D: "#050806", // outline (더 진한 검정)
+  b: "#15201a", // body — 그린블랙(브랜드 잉크 틴트)
+  B: "#0a0d0b", // body shadow
+  h: "#39413a", // body highlight (차콜, 위-왼쪽 광원)
+  w: "#f3f7ef", // chest / muzzle / socks — 크림(턱시도 시크)
+  W: "#d8e0d2", // soft chest shade
+  e: "#ffe14d", // eyes — 선옐로 황금눈
+  i: "#ffffff", // eye shine
+  r: "#ff5c5c", // nose / inner ear — 코랄
+  R: "#c96a5f", // ribbon (코스튬 유지)
   j: "#26402f", // cloth (beret / tuxedo)
   J: "#3c5c45", // cloth highlight
-  g: "#caa24a", // gold
+  g: "#caa24a", // gold (crown)
   G: "#e6cf86", // gold highlight
 };
 
