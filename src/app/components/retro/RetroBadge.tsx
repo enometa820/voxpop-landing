@@ -16,7 +16,7 @@ export function RetroBadge({
   return (
     <span
       className={cn(
-        "bevel-out-thin inline-flex items-center gap-1 px-2 py-0.5 font-mono text-[11px]",
+        "bevel-out-thin inline-flex flex-none items-center gap-1 whitespace-nowrap px-2 py-0.5 font-mono text-caption",
         tone === "default" && "bg-secondary text-muted-foreground",
         tone === "primary" && "bg-primary text-primary-foreground",
         tone === "danger" && "bg-destructive text-destructive-foreground",

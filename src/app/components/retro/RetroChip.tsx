@@ -13,7 +13,7 @@ export function RetroChip({
       type="button"
       data-on={on ? "true" : undefined}
       aria-pressed={on}
-      className={cn("retro-chip px-3 py-1.5 font-mono text-[12px]", className)}
+      className={cn("retro-chip whitespace-nowrap px-3 py-1.5 font-mono text-caption", className)}
       {...props}
     >
       {children}

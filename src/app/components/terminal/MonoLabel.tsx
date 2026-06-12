@@ -14,7 +14,7 @@ export function MonoLabel({
 }) {
   return (
     <span
-      className={`font-mono uppercase tracking-[0.18em] text-[11px] text-muted-foreground ${className}`}
+      className={`font-mono uppercase tracking-[0.18em] whitespace-nowrap text-caption text-muted-foreground ${className}`}
     >
       {bracket ? <>[ {children} ]</> : children}
     </span>
