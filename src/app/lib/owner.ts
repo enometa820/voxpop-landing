@@ -200,12 +200,5 @@ export function moodLabel(mood?: string): string {
   )[mood || ""] || "평온";
 }
 
-// 매장 나무 단계(1~5) — store_slime.growth_points 단일 출처. (손님 폼과 동일 규칙)
-export function treeLevelFromPoints(points?: number): 1 | 2 | 3 | 4 | 5 {
-  const p = Number(points) || 0;
-  if (p >= 45) return 5;
-  if (p >= 20) return 4;
-  if (p >= 8) return 3;
-  if (p >= 3) return 2;
-  return 1;
-}
+// 매장 나무 단계 — store_slime.growth_points 단일 출처. (나무 SSOT = ./tree)
+export { treeLevelFromPoints } from "./tree";

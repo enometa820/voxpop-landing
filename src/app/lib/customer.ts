@@ -1,6 +1,8 @@
 // 손님 폼 순수 헬퍼 — 레거시 s/index.html 로직을 React로 포팅.
 // DOM·네트워크 의존 없음. 엔진/슬라임 모듈은 src/lib에서 가져온다.
 import { growthFromPoints } from "../../lib/slime-engine.js";
+import { treeLevelFromPoints, TREE_LABELS, type TreeLevel } from "./tree";
+export { treeLevelFromPoints, TREE_LABELS, type TreeLevel };
 
 type EngineResult = {
   submission?: { cleanSentence?: string; category?: string };
@@ -43,26 +45,7 @@ export function estimateSentimentScore(rating: number, text: string): number {
   return 0;
 }
 
-// 매장 나무 단계(1~5: 새싹·어린싹·묘목·나무·금전수)를 누적 성장 포인트로 산출.
-// store_slime.growth_points 단일 출처. (DB stage 0~3은 슬라임엔진 호환용으로 별도 유지)
-export type TreeLevel = 1 | 2 | 3 | 4 | 5;
-export function treeLevelFromPoints(points: number): TreeLevel {
-  const p = Number(points) || 0;
-  if (p >= 45) return 5;
-  if (p >= 20) return 4;
-  if (p >= 8) return 3;
-  if (p >= 3) return 2;
-  return 1;
-}
-
-// store_slime 행(없으면 null)에서 나무 단계 + 라벨 산출.
-const TREE_LABELS: Record<TreeLevel, string> = {
-  1: "새싹",
-  2: "어린싹",
-  3: "묘목",
-  4: "나무",
-  5: "금전수",
-};
+// store_slime 행(없으면 null)에서 나무 단계 + 라벨 산출. (나무 SSOT = ./tree)
 export function resolveTree(slimeRow: { growth_points?: number } | null) {
   const points = slimeRow?.growth_points ?? 0;
   const level = treeLevelFromPoints(points);
