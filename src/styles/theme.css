@@ -36,6 +36,15 @@
   --chart-5: #9a3b2f;
   --radius: 0;                  /* 레트로 OS — 각진 모서리 (radius 0) */
 
+  /* ── 타입 스케일 (모바일 기준, line-height 동반) ── */
+  --text-caption: 12px;     --lh-caption: 1.4;
+  --text-body: 14px;        --lh-body: 1.6;
+  --text-body-lg: 16px;     --lh-body-lg: 1.6;  /* 입력칸 최소 — iOS 줌 방지 */
+  --text-title-sm: 18px;    --lh-title-sm: 1.3;
+  --text-title: 20px;       --lh-title: 1.3;
+  --text-title-lg: 24px;    --lh-title-lg: 1.25;
+  --text-display: 32px;     --lh-display: 1.1;
+
   /* ── 팝 포인트색 (Y2K · 뉴브루탈리즘 — 색=의미, 한 화면 최대 2색) ── */
   --coral: #ff5c5c;   --coral-foreground: #ffffff;   /* 긴급 · 핫 CTA */
   --sun: #ffe14d;     --sun-foreground: #163021;     /* 씨앗 · 보상 · 하이라이트 */
@@ -170,6 +179,14 @@
   --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-ring: var(--sidebar-ring);
+  /* 타입 스케일 → Tailwind text-* 유틸 생성 근거 */
+  --text-caption: var(--text-caption);
+  --text-body: var(--text-body);
+  --text-body-lg: var(--text-body-lg);
+  --text-title-sm: var(--text-title-sm);
+  --text-title: var(--text-title);
+  --text-title-lg: var(--text-title-lg);
+  --text-display: var(--text-display);
 }
 
 @layer base {
@@ -222,45 +239,11 @@
     font-size: var(--font-size);
   }
 
-  h1 {
-    font-size: var(--text-2xl);
-    font-weight: var(--font-weight-medium);
-    line-height: 1.5;
-  }
-
-  h2 {
-    font-size: var(--text-xl);
-    font-weight: var(--font-weight-medium);
-    line-height: 1.5;
-  }
-
-  h3 {
-    font-size: var(--text-lg);
-    font-weight: var(--font-weight-medium);
-    line-height: 1.5;
-  }
-
-  h4 {
-    font-size: var(--text-base);
-    font-weight: var(--font-weight-medium);
-    line-height: 1.5;
-  }
-
-  label {
-    font-size: var(--text-base);
-    font-weight: var(--font-weight-medium);
-    line-height: 1.5;
-  }
-
-  button {
-    font-size: var(--text-base);
-    font-weight: var(--font-weight-medium);
-    line-height: 1.5;
-  }
-
-  input {
-    font-size: var(--text-base);
-    font-weight: var(--font-weight-normal);
-    line-height: 1.5;
-  }
+  h1 { font-size: var(--text-title-lg); line-height: var(--lh-title-lg); font-weight: var(--font-weight-medium); }
+  h2 { font-size: var(--text-title);    line-height: var(--lh-title);    font-weight: var(--font-weight-medium); }
+  h3 { font-size: var(--text-title-sm); line-height: var(--lh-title-sm); font-weight: var(--font-weight-medium); }
+  h4 { font-size: var(--text-body-lg);  line-height: var(--lh-body-lg);  font-weight: var(--font-weight-medium); }
+  label  { font-size: var(--text-body-lg); line-height: var(--lh-body-lg); font-weight: var(--font-weight-medium); }
+  button { font-size: var(--text-body);    line-height: var(--lh-body);    font-weight: var(--font-weight-medium); }
+  input  { font-size: var(--text-body-lg); line-height: var(--lh-body-lg); font-weight: var(--font-weight-normal); }
 }
