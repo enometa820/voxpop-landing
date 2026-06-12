@@ -6,14 +6,14 @@ import {
   outline,
   type Grid,
 } from "./pixelGrid";
+import { type TreeLevel, TREE_LABELS } from "../../lib/tree";
 
 /**
  * High-res pixel-art store tree mascot, monotone green with shading.
- * 5 growth levels: 새싹 → 어린싹 → 묘목 → 나무 → 금전수(최종).
+ * 6 growth levels: 씨앗 → 새싹 → 줄기 → 앙상한 나무 → 푸른 나무 → 열매(최종).
  * Owner-only `health="wilting"` fades/droops — never dead.
  */
 
-export type TreeLevel = 1 | 2 | 3 | 4 | 5;
 export type TreeHealth = "healthy" | "wilting";
 
 const W = 34;
@@ -30,9 +30,9 @@ const COLORS: Record<string, string> = {
   K: "#5a4a36", // trunk light
   s: "#b2c8ab", // soil
   S: "#9bb394", // soil dark
-  c: "#caa24a", // coin
-  C: "#e6cf86", // coin highlight
-  x: "#8a6d2c", // coin rim
+  f: "#e0483a", // fruit base (빨강)
+  F: "#ff7a4d", // fruit highlight (주황)
+  v: "#b8322a", // fruit shadow
 };
 
 type Blob = [number, number, number, number]; // cx, cy, rx, ry
@@ -43,11 +43,20 @@ type Spec = {
   trunkW: number;
   blobs: Blob[];
   branches: Branch[];
-  coins: [number, number][];
+  coins: [number, number][]; // LV6: 열매 위치
 };
 
 const SPECS: Record<TreeLevel, Spec> = {
   1: {
+    // 씨앗 — 흙 위로 막 튼 작은 싹 끝
+    trunkTop: 30,
+    trunkW: 1,
+    blobs: [[17, 29, 2.4, 1.8]],
+    branches: [],
+    coins: [],
+  },
+  2: {
+    // (옛 1 새싹)
     trunkTop: 27,
     trunkW: 1,
     blobs: [
@@ -58,7 +67,8 @@ const SPECS: Record<TreeLevel, Spec> = {
     branches: [],
     coins: [],
   },
-  2: {
+  3: {
+    // (옛 2 어린싹 → 줄기)
     trunkTop: 19,
     trunkW: 1,
     blobs: [
@@ -69,7 +79,8 @@ const SPECS: Record<TreeLevel, Spec> = {
     branches: [],
     coins: [],
   },
-  3: {
+  4: {
+    // (옛 3 묘목 → 앙상한 나무)
     trunkTop: 17,
     trunkW: 2,
     blobs: [
@@ -84,7 +95,8 @@ const SPECS: Record<TreeLevel, Spec> = {
     ],
     coins: [],
   },
-  4: {
+  5: {
+    // (옛 4 나무 → 푸른 나무)
     trunkTop: 15,
     trunkW: 3,
     blobs: [
@@ -101,7 +113,8 @@ const SPECS: Record<TreeLevel, Spec> = {
     ],
     coins: [],
   },
-  5: {
+  6: {
+    // (옛 5 금전수 → 열매) — coins 위치를 열매로 재사용
     trunkTop: 13,
     trunkW: 4,
     blobs: [
@@ -130,20 +143,13 @@ const SPECS: Record<TreeLevel, Spec> = {
   },
 };
 
-const LABELS: Record<TreeLevel, string> = {
-  1: "새싹",
-  2: "어린싹",
-  3: "묘목",
-  4: "나무",
-  5: "금전수",
-};
-
 const SPARKLES: Record<TreeLevel, [number, number][]> = {
   1: [],
   2: [],
   3: [],
   4: [],
-  5: [
+  5: [],
+  6: [
     [4, 6],
     [30, 9],
     [17, 2],
@@ -180,13 +186,12 @@ function buildTree(level: TreeLevel): Grid {
     fillEllipse(g, cx + rx * 0.34, cy + ry * 0.36, rx * 0.66, ry * 0.66, "m", "l");
   });
 
-  // money tree coins
+  // LV6 fruits (옛 금전수 동전 → 빨강·주황 열매)
   spec.coins.forEach(([cx, cy]) => {
-    fillEllipse(g, cx, cy, 2, 2, "c");
-    setPx(g, cx, cy - 1, "C", "c");
-    setPx(g, cx - 1, cy, "C", "c");
-    setPx(g, cx + 1, cy + 1, "x", "c");
-    setPx(g, cx, cy + 2, "x");
+    fillEllipse(g, cx, cy, 2, 2, "f");
+    setPx(g, cx, cy - 1, "F", "f");
+    setPx(g, cx - 1, cy, "F", "f");
+    setPx(g, cx + 1, cy + 1, "v", "f");
   });
 
   // outline silhouette
@@ -246,7 +251,7 @@ export function PixelTree({
           transition: "opacity 0.35s, transform 0.35s",
         }}
         role="img"
-        aria-label={`매장 나무 LV.${level} ${LABELS[level]}${
+        aria-label={`매장 나무 LV.${level} ${TREE_LABELS[level]}${
           wilting ? " (시듦)" : ""
         }`}
       >
@@ -273,7 +278,7 @@ export function PixelTree({
             x={x * cell}
             y={y * cell + cell * 1.6}
             fontSize={cell * 2}
-            fill="#e6cf86"
+            fill="#ffe14d"
             fontFamily="monospace"
           >
             ✦
@@ -282,11 +287,9 @@ export function PixelTree({
       </svg>
       {showLabel && (
         <span className="font-mono text-[11px] text-muted-foreground">
-          LV.{level} · {LABELS[level]}
+          LV.{level} · {TREE_LABELS[level]}
         </span>
       )}
     </div>
   );
 }
-
-export const TREE_LABELS = LABELS;

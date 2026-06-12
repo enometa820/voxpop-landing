@@ -3,7 +3,8 @@ import { TerminalWindow } from "../components/terminal/TerminalWindow";
 import { TerminalLog, type LogLine } from "../components/terminal/TerminalLog";
 import { AsciiProgress } from "../components/terminal/AsciiProgress";
 import { MonoLabel } from "../components/terminal/MonoLabel";
-import { PixelTree, type TreeLevel } from "../components/mascots/PixelTree";
+import { PixelTree } from "../components/mascots/PixelTree";
+import { type TreeLevel } from "../lib/tree";
 import { PixelCat } from "../components/mascots/PixelCat";
 import { weeklySignals, closet, fishTokens } from "../data/mock";
 

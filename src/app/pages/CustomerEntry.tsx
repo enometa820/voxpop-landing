@@ -9,7 +9,8 @@ import { RetroChip } from "../components/retro/RetroChip";
 import { RetroBadge } from "../components/retro/RetroBadge";
 import { RetroProgress } from "../components/retro/RetroProgress";
 import { PixelCat } from "../components/mascots/PixelCat";
-import { PixelTree, type TreeLevel } from "../components/mascots/PixelTree";
+import { PixelTree } from "../components/mascots/PixelTree";
+import { type TreeLevel } from "../lib/tree";
 import {
   fetchStoreBySlug,
   fetchStoreSlime,
