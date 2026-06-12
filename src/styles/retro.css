@@ -215,3 +215,14 @@
 }
 
 /* 깜빡이 커서는 theme.css .vox-cursor 재사용 */
+
+/* ── CTA 강조 + 비활성 안내(흐림으로 죽이지 않음) ── */
+.retro-btn--cta { letter-spacing: 0.02em; }
+.retro-btn--cta:disabled {
+  opacity: 1;                       /* 흐리게 죽이지 않음 */
+  background: #dfe8da;
+  color: #5d7367;
+  box-shadow: var(--bevel-in-thin);
+  border: 1px dashed #aebfa6;
+  text-shadow: none;
+}
