@@ -226,3 +226,8 @@
   border: 1px dashed #aebfa6;
   text-shadow: none;
 }
+
+/* ── 마스코트 숨쉬기(idle) — 발 고정, 미세 통통 ── */
+@keyframes mascot-breathe { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-2px); } }
+.mascot-breathe { animation: mascot-breathe 1.5s ease-in-out infinite; transform-origin: bottom center; }
+@media (prefers-reduced-motion: reduce) { .mascot-breathe { animation: none; } }
