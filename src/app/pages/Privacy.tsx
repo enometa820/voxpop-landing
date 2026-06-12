@@ -4,7 +4,7 @@ import { MonoLabel } from "../components/terminal/MonoLabel";
 export function Privacy() {
   return (
     <main className="mx-auto max-w-[760px] px-4 py-10 sm:px-6">
-      <MonoLabel className="text-primary">$ voxpop privacy --policy</MonoLabel>
+      <MonoLabel className="text-primary">// 개인정보 처리방침</MonoLabel>
       <h1 className="mt-4 text-foreground" style={{ fontSize: "clamp(1.6rem, 4vw, 2.2rem)", fontWeight: 800 }}>
         개인정보처리방침
       </h1>
@@ -17,7 +17,7 @@ export function Privacy() {
 
       <Section n="1" title="수집하는 정보와 목적">
         <p>서비스는 손님의 이름·전화번호·이메일 등 직접 식별 정보를 받지 않습니다. 수집 항목은 다음과 같습니다.</p>
-        <div className="mt-3 overflow-hidden rounded-lg border border-border">
+        <div className="mt-3 overflow-hidden border-bold shadow-hard-sm">
           <table className="w-full border-collapse text-[13px]">
             <thead>
               <tr className="bg-surface-raised">

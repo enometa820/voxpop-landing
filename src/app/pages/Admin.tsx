@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { Link } from "react-router";
 import { toast } from "sonner";
-import { TerminalWindow } from "../components/terminal/TerminalWindow";
+import { RetroWindow } from "../components/retro/RetroWindow";
 import { MonoLabel } from "../components/terminal/MonoLabel";
 import {
   sendMagicLink,
@@ -137,9 +137,9 @@ export function Admin() {
   if (phase === "loading") {
     return (
       <main className="mx-auto max-w-[500px] px-4 py-16">
-        <TerminalWindow title="voxpop@admin ~ %">
+        <RetroWindow title="voxpop@admin ~ %">
           <p className="text-muted-foreground">관리자 인증 확인 중<span className="vox-cursor ml-1 text-primary">█</span></p>
-        </TerminalWindow>
+        </RetroWindow>
       </main>
     );
   }
@@ -147,22 +147,22 @@ export function Admin() {
   if (phase === "signin") {
     return (
       <main className="mx-auto max-w-[440px] px-4 py-12">
-        <TerminalWindow title="voxpop — 운영자 로그인">
+        <RetroWindow title="voxpop — 운영자 로그인">
           <div className="space-y-4 py-1">
-            <MonoLabel className="text-primary">$ voxpop admin --login</MonoLabel>
+            <MonoLabel className="text-primary">// 운영자 로그인</MonoLabel>
             <p className="text-[14px] text-foreground">운영자 전용 화면입니다. 등록된 관리자 이메일로만 접근됩니다.</p>
             <input
               type="email" value={email} onChange={(e) => setEmail(e.target.value)}
               onKeyDown={(e) => e.key === "Enter" && handleSignin()}
               placeholder="관리자 이메일"
-              className="w-full rounded-lg border border-border bg-input-background px-3 py-2.5 font-mono text-[14px] text-foreground outline-none focus:border-primary"
+              className="retro-field w-full px-3 py-2.5 font-mono text-[14px]"
             />
-            <button onClick={handleSignin} className="w-full rounded-lg border border-primary bg-primary px-4 py-2.5 font-mono text-[13px] text-primary-foreground hover:opacity-95">
+            <button onClick={handleSignin} className="retro-btn retro-btn--primary w-full px-4 py-2.5 font-mono text-[13px]">
               [ 로그인 링크 받기 → ]
             </button>
             {notice && <p className={`font-mono text-[12px] ${notice.error ? "text-destructive" : "text-primary"}`}>{notice.text}</p>}
           </div>
-        </TerminalWindow>
+        </RetroWindow>
         <Link to="/" className="mt-4 block text-center font-mono text-[12px] text-muted-foreground underline-offset-4 hover:underline">← voxpop 소개</Link>
       </main>
     );
@@ -183,42 +183,40 @@ export function Admin() {
       </div>
 
       {/* 매장 등록 */}
-      <div className="mb-5 overflow-hidden rounded-xl border border-border bg-card">
-        <div className="border-b border-border px-4 py-2.5"><MonoLabel className="text-primary">// 매장 등록</MonoLabel></div>
+      <RetroWindow title="// 매장 등록" className="mb-5" bodyClassName="p-0">
         <div className="grid grid-cols-1 gap-3 px-4 py-4 sm:grid-cols-2">
           <label className="block">
             <span className="font-mono text-[11px] text-muted-foreground">매장 표시명</span>
             <input value={displayName} onChange={(e) => setDisplayName(e.target.value)} placeholder="우리 카페"
-              className="mt-1 w-full rounded-md border border-border bg-input-background px-3 py-2 font-mono text-[13px] text-foreground outline-none focus:border-primary" />
+              className="retro-field mt-1 w-full px-3 py-2 font-mono text-[13px]" />
           </label>
           <label className="block">
             <span className="font-mono text-[11px] text-muted-foreground">사장님 이메일</span>
             <input value={ownerEmail} onChange={(e) => setOwnerEmail(e.target.value)} placeholder="owner@example.com"
-              className="mt-1 w-full rounded-md border border-border bg-input-background px-3 py-2 font-mono text-[13px] text-foreground outline-none focus:border-primary" />
+              className="retro-field mt-1 w-full px-3 py-2 font-mono text-[13px]" />
           </label>
           <label className="block">
             <span className="font-mono text-[11px] text-muted-foreground">사장님 라벨 (선택)</span>
             <input value={ownerLabel} onChange={(e) => setOwnerLabel(e.target.value)} placeholder="사장 A"
-              className="mt-1 w-full rounded-md border border-border bg-input-background px-3 py-2 font-mono text-[13px] text-foreground outline-none focus:border-primary" />
+              className="retro-field mt-1 w-full px-3 py-2 font-mono text-[13px]" />
           </label>
           <div className="block">
             <span className="font-mono text-[11px] text-muted-foreground">slug (자동 생성 · 실명 금지)</span>
             <div className="mt-1 flex items-center gap-2">
-              <code className="flex-1 rounded-md border border-border bg-surface-raised px-3 py-2 font-mono text-[13px] text-foreground">{slug}</code>
-              <button onClick={() => setSlug(genSlug())} className="rounded-md border border-border bg-card px-2 py-2 font-mono text-[11px] text-muted-foreground hover:bg-surface-raised">새로</button>
+              <code className="bevel-in-thin flex-1 bg-input-background px-3 py-2 font-mono text-[13px] text-foreground">{slug}</code>
+              <button onClick={() => setSlug(genSlug())} className="retro-btn px-2.5 py-2 font-mono text-[11px] text-muted-foreground">새로</button>
             </div>
           </div>
         </div>
-        <div className="border-t border-border px-4 py-3">
-          <button onClick={handleAddStore} className="rounded-lg border border-primary bg-primary px-4 py-2 font-mono text-[13px] text-primary-foreground hover:opacity-95">
+        <div className="border-t border-border-soft px-4 py-3">
+          <button onClick={handleAddStore} className="retro-btn retro-btn--primary px-4 py-2 font-mono text-[13px]">
             [ 등록 + QR 다운로드 → ]
           </button>
         </div>
-      </div>
+      </RetroWindow>
 
       {/* 매장 목록 */}
-      <div className="mb-5 overflow-hidden rounded-xl border border-border bg-card">
-        <div className="border-b border-border px-4 py-2.5"><MonoLabel>// 매장 목록 {stores.length ? `(${stores.length})` : ""}</MonoLabel></div>
+      <RetroWindow title={`// 매장 목록 ${stores.length ? `(${stores.length})` : ""}`} className="mb-5" bodyClassName="p-0">
         <ul>
           {stores.length === 0 ? (
             <li className="px-4 py-4 font-mono text-[12px] text-muted-foreground">아직 등록된 매장이 없습니다.</li>
@@ -231,26 +229,25 @@ export function Admin() {
                   <p className="font-mono text-[10px] text-muted-foreground">{s.owner_label || ""} {s.owner_email ? `· ${s.owner_email}` : ""}</p>
                 </div>
                 <a href={storeFormUrl(s.slug)} target="_blank" rel="noreferrer" className="font-mono text-[11px] text-primary underline-offset-2 hover:underline">URL 열기</a>
-                <button onClick={() => downloadStoreQR(s.slug)} className="rounded-md border border-border bg-card px-2 py-1 font-mono text-[11px] text-muted-foreground hover:bg-surface-raised">QR PNG</button>
-                <button onClick={() => handleToggle(s)} className={`rounded-md border px-2 py-1 font-mono text-[11px] ${s.active ? "border-primary bg-primary text-primary-foreground" : "border-border bg-card text-muted-foreground"}`}>
+                <button onClick={() => downloadStoreQR(s.slug)} className="retro-btn px-2.5 py-1 font-mono text-[11px] text-muted-foreground">QR PNG</button>
+                <button onClick={() => handleToggle(s)} className={`retro-btn px-2.5 py-1 font-mono text-[11px] ${s.active ? "retro-btn--primary" : "text-muted-foreground"}`}>
                   {s.active ? "활성" : "비활성"}
                 </button>
               </li>
             ))
           )}
         </ul>
-      </div>
+      </RetroWindow>
 
       {/* 검수 */}
-      <div className="overflow-hidden rounded-xl border border-border bg-card">
-        <div className="flex flex-wrap items-center justify-between gap-2 border-b border-border px-4 py-2.5">
-          <MonoLabel>// 가림 검수 (운영자 전용)</MonoLabel>
+      <RetroWindow title="// 가림 검수 (운영자 전용)" bodyClassName="p-0">
+        <div className="flex flex-wrap items-center justify-end gap-2 border-b border-border-soft px-4 py-2.5">
           <div className="flex items-center gap-2">
-            <select value={reviewStoreId} onChange={(e) => setReviewStoreId(e.target.value)} className="rounded-md border border-border bg-card px-2 py-1 font-mono text-[12px] text-foreground">
+            <select value={reviewStoreId} onChange={(e) => setReviewStoreId(e.target.value)} className="retro-field px-2 py-1 font-mono text-[12px] text-foreground">
               <option value="">매장 선택…</option>
               {stores.map((s) => <option key={s.id} value={s.id}>{s.display_name} ({s.slug})</option>)}
             </select>
-            <button onClick={loadReview} className="rounded-md border border-primary bg-primary px-3 py-1 font-mono text-[11px] text-primary-foreground">불러오기</button>
+            <button onClick={loadReview} className="retro-btn retro-btn--primary px-3 py-1 font-mono text-[11px]">불러오기</button>
           </div>
         </div>
         <div className="px-4 py-4">
@@ -269,7 +266,7 @@ export function Admin() {
             </div>
           )}
         </div>
-      </div>
+      </RetroWindow>
     </main>
   );
 }
@@ -291,31 +288,31 @@ function ReviewCard({ item }: { item: ReviewItem }) {
   }
 
   return (
-    <div className={`rounded-lg border p-3 ${item.urgency === "high" ? "border-destructive/40 bg-destructive/5" : "border-border-soft"}`}>
+    <div className={`p-3.5 ${item.urgency === "high" ? "sticky-card sticky-card--urgent" : "sticky-card"}`}>
       <div className="flex flex-wrap items-center gap-2">
-        {item.urgency === "high" && <span className="font-mono text-[10px] text-destructive">[긴급]</span>}
-        <span className="font-mono text-[10px] text-muted-foreground">{exposure}</span>
-        <span className="font-mono text-[10px] text-primary">{REVIEW_FLAG_LABEL[flag] ?? "미검수"}</span>
-        {item.categories?.length ? <span className="border border-border px-1.5 py-0.5 font-mono text-[10px] text-muted-foreground">{item.categories.join("·")}</span> : null}
+        {item.urgency === "high" && <span className="border-bold bg-card px-1.5 py-0.5 font-mono text-[10px] font-bold text-coral">[긴급]</span>}
+        <span className={`font-mono text-[10px] ${item.urgency === "high" ? "text-coral-foreground" : "text-muted-foreground"}`}>{exposure}</span>
+        <span className={`font-mono text-[10px] ${item.urgency === "high" ? "text-coral-foreground" : "text-primary"}`}>{REVIEW_FLAG_LABEL[flag] ?? "미검수"}</span>
+        {item.categories?.length ? <span className={`border px-1.5 py-0.5 font-mono text-[10px] ${item.urgency === "high" ? "border-coral-foreground/50 text-coral-foreground" : "border-border text-muted-foreground"}`}>{item.categories.join("·")}</span> : null}
       </div>
-      <p className="mt-2 text-[14px] text-foreground"><b className="font-mono text-[11px] text-muted-foreground">가림본</b> {item.content_clean ?? "(없음)"}</p>
+      <p className={`mt-2 text-[14px] ${item.urgency === "high" ? "text-coral-foreground" : "text-foreground"}`}><b className={`font-mono text-[11px] ${item.urgency === "high" ? "text-coral-foreground/80" : "text-muted-foreground"}`}>가림본</b> {item.content_clean ?? "(없음)"}</p>
       {rawOpen && (
-        <div className="mt-2 rounded-md border border-destructive/30 bg-destructive/5 p-2">
-          <p className="font-mono text-[10px] text-destructive">운영자 전용 — 외부 공유 금지</p>
-          <p className="mt-1 text-[13px] text-foreground">{raw ?? "불러오는 중…"}</p>
+        <div className="mt-2 border-bold bg-coral p-2.5 shadow-hard-sm" style={{ borderColor: "var(--ink)" }}>
+          <p className="font-mono text-[11px] font-bold uppercase tracking-wide text-coral-foreground">⚠ 운영자 전용 — 외부 공유 절대 금지</p>
+          <p className="mt-1.5 bg-card p-2 text-[13px] text-foreground">{raw ?? "불러오는 중…"}</p>
         </div>
       )}
       <div className="mt-2 flex flex-wrap items-center gap-2">
-        <button onClick={toggleRaw} className="rounded-md border border-border bg-card px-2 py-1 font-mono text-[11px] text-muted-foreground hover:bg-surface-raised">
+        <button onClick={toggleRaw} className={`retro-btn px-2 py-1 font-mono text-[11px] ${item.urgency === "high" ? "text-foreground" : "text-muted-foreground"}`}>
           {rawOpen ? "원본 숨기기" : "원본 보기"}
         </button>
-        <span className="font-mono text-[10px] text-muted-foreground">오탐:</span>
+        <span className={`font-mono text-[10px] ${item.urgency === "high" ? "text-coral-foreground" : "text-muted-foreground"}`}>오탐:</span>
         {[
           { f: REVIEW_FLAG.ACCURATE, label: "가림 정확" },
           { f: REVIEW_FLAG.OVER, label: "과가림" },
           { f: REVIEW_FLAG.UNDER, label: "미가림" },
         ].map(({ f, label }) => (
-          <button key={f} onClick={() => setFlag(f)} className={`rounded-md border px-2 py-1 font-mono text-[10px] ${flag === f ? "border-primary bg-primary text-primary-foreground" : "border-border bg-card text-muted-foreground hover:bg-surface-raised"}`}>
+          <button key={f} onClick={() => setFlag(f)} className="retro-chip px-2 py-1 font-mono text-[10px]" data-on={flag === f}>
             {label}
           </button>
         ))}

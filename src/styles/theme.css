@@ -3,7 +3,7 @@
 :root {
   --font-size: 16px;
 
-  /* voxpop — green monotone (no pure white, no gradients) */
+  /* voxpop — green-led + pop accents (Y2K · 뉴브루탈리즘). 정본 = docs/design/brand-visual-core.md */
   --background: #e7eee3;        /* sage page background */
   --foreground: #12301d;        /* ink body text */
   --card: #f2f7ef;              /* card / terminal surface */
@@ -18,8 +18,8 @@
   --muted-foreground: #516658;  /* secondary text */
   --accent: #3e8e63;            /* bright green */
   --accent-foreground: #f2f7ef;
-  --destructive: #9a3b2f;       /* urgent (safety/hygiene) emphasis */
-  --destructive-foreground: #f2f7ef;
+  --destructive: #ff5c5c;       /* urgent — pop coral (Y2K/뉴브루탈리즘) */
+  --destructive-foreground: #ffffff;
   --border: #b2c8ab;            /* thin border */
   --border-soft: #cfdec9;       /* lighter border */
   --surface-raised: #edf3e9;
@@ -34,7 +34,29 @@
   --chart-3: #6fae8a;
   --chart-4: #516658;
   --chart-5: #9a3b2f;
-  --radius: 0.5rem;             /* softly rounded cards */
+  --radius: 0;                  /* 레트로 OS — 각진 모서리 (radius 0) */
+
+  /* ── 팝 포인트색 (Y2K · 뉴브루탈리즘 — 색=의미, 한 화면 최대 2색) ── */
+  --coral: #ff5c5c;   --coral-foreground: #ffffff;   /* 긴급 · 핫 CTA */
+  --sun: #ffe14d;     --sun-foreground: #163021;     /* 씨앗 · 보상 · 하이라이트 */
+  --lime: #7fff5b;    --lime-foreground: #163021;    /* 성장 · 좋은 · 진행 */
+  --sky: #4d7bff;     --sky-foreground: #ffffff;     /* 정보 · 링크 */
+  --pink: #ff90ff;    --pink-foreground: #163021;    /* 키치 포인트(가끔) */
+  --desktop: #36c46e;           /* 데스크탑 배경 (pop) */
+  --desktop-deep: #123d28;      /* 차분 변형 */
+  --window-face: #cfdec9;       /* 레트로 창 면 (RetroWindow body) */
+  --ink: #163021;               /* 보더 · 섀도 잉크 */
+
+  /* 의미색 alias */
+  --urgent: var(--coral);
+  --reward: var(--sun);
+  --growth: var(--lime);
+  --info: var(--sky);
+
+  /* 뉴브루탈리즘 머티리얼 토큰 */
+  --border-bold: 2px solid var(--ink);
+  --shadow-hard: 6px 6px 0 color-mix(in srgb, var(--ink) 72%, transparent);
+  --shadow-hard-sm: 4px 4px 0 color-mix(in srgb, var(--ink) 72%, transparent);
 
   --font-sans: 'Pretendard', 'Pretendard Variable', system-ui, sans-serif;
   --font-mono: 'JetBrains Mono', ui-monospace, 'SFMono-Regular', monospace;
@@ -106,6 +128,25 @@
   --color-border: var(--border);
   --color-border-soft: var(--border-soft);
   --color-surface-raised: var(--surface-raised);
+  /* 팝 포인트색 → Tailwind 유틸 (bg-coral·text-sun·border-ink·bg-lime…) */
+  --color-coral: var(--coral);
+  --color-coral-foreground: var(--coral-foreground);
+  --color-sun: var(--sun);
+  --color-sun-foreground: var(--sun-foreground);
+  --color-lime: var(--lime);
+  --color-lime-foreground: var(--lime-foreground);
+  --color-sky: var(--sky);
+  --color-sky-foreground: var(--sky-foreground);
+  --color-pink: var(--pink);
+  --color-pink-foreground: var(--pink-foreground);
+  --color-desktop: var(--desktop);
+  --color-desktop-deep: var(--desktop-deep);
+  --color-window-face: var(--window-face);
+  --color-ink: var(--ink);
+  --color-urgent: var(--urgent);
+  --color-reward: var(--reward);
+  --color-growth: var(--growth);
+  --color-info: var(--info);
   --font-sans: var(--font-sans);
   --font-mono: var(--font-mono);
   --color-input: var(--input);

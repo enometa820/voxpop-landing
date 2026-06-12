@@ -47,7 +47,7 @@ export function Story() {
             { label: "시스템", body: "위험 표현은 가리고, 감정 강도와 긴급도 신호는 보존. 맛·응대·청결 등 갈래로 분류합니다." },
             { label: "사장", body: "날 선 문장이 아니라 ‘오늘 해볼 행동’ 한 줄로 받습니다. 상처 없이 할 일을 얻습니다." },
           ].map((c) => (
-            <div key={c.label} className="rounded-lg border border-border bg-card p-4">
+            <div key={c.label} className="border-bold bg-card p-4 shadow-hard-sm">
               <p className="font-mono text-[11px] uppercase tracking-[0.1em] text-primary">{c.label}</p>
               <p className="mt-2 text-[14px] leading-relaxed text-foreground">{c.body}</p>
             </div>
@@ -87,7 +87,7 @@ export function Story() {
             { when: "다음", body: "첫 단계가 자리잡으면 같은 사장님에게 두 번째 운영 가치를 더하거나, 같은 무기명 가림·분류 엔진을 옆 시장(공공 민원·조직 내부 건의·시설 이용자·환자 경험)으로 넓힙니다." },
             { when: "지향", body: "소상공인과 작은 조직이 처음 만나는 AI 운영 전환(AX)의 입구가 되려 합니다. AI 시대의 혜택이 거대 자본만이 아니라 동네 골목까지 닿을 때까지." },
           ].map((s) => (
-            <div key={s.when} className="rounded-lg border border-border bg-card p-4">
+            <div key={s.when} className="border-bold bg-card p-4 shadow-hard-sm">
               <p className="font-mono text-[12px] text-primary" style={{ fontWeight: 700 }}>{s.when}</p>
               <p className="mt-2 text-[14px] leading-relaxed text-foreground">{s.body}</p>
             </div>
@@ -95,14 +95,14 @@ export function Story() {
         </div>
       </Block>
 
-      <section className="mt-10 rounded-xl border border-border bg-card px-5 py-8 text-center">
+      <section className="mt-10 border-bold bg-card px-5 py-8 text-center shadow-hard">
         <h2 className="text-foreground" style={{ fontWeight: 800, fontSize: "clamp(1.4rem,3vw,2rem)" }}>직접 보시겠어요?</h2>
         <p className="mx-auto mt-3 max-w-xl text-[15px] leading-relaxed text-muted-foreground">
           손님 입장으로 익명 한마디를 남기고, 사장 대시보드에서 “오늘 할 일”이 어떻게 나오는지 확인해 보세요.
         </p>
         <div className="mt-5 flex flex-wrap justify-center gap-3">
-          <a href="/s?store=u61zh7b2" className="rounded-lg border border-primary bg-primary px-4 py-2 font-mono text-[13px] text-primary-foreground hover:opacity-95">[ 손님 화면 체험 → ]</a>
-          <Link to="/owner" className="rounded-lg border border-border bg-card px-4 py-2 font-mono text-[13px] text-foreground hover:bg-surface-raised">[ 사장 대시보드 ]</Link>
+          <a href="/s?store=u61zh7b2" className="retro-btn retro-btn--primary px-4 py-2 font-mono text-[13px]">[ 손님 화면 체험 → ]</a>
+          <Link to="/owner" className="retro-btn px-4 py-2 font-mono text-[13px] text-foreground">[ 사장 대시보드 ]</Link>
         </div>
       </section>
 

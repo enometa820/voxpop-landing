@@ -328,7 +328,7 @@ export function CustomerEntry() {
               animate={{ y: 0, opacity: 1 }}
               transition={{ delay: 0.15 }}
             >
-              <RetroBadge tone="primary" className="px-3 py-1 text-[13px]">+1 적립!</RetroBadge>
+              <RetroBadge tone="default" className="border-bold bg-reward text-sun-foreground shadow-hard-sm px-3 py-1 text-[13px]">🌱 +1 적립!</RetroBadge>
             </motion.div>
             <p className="text-[15px] leading-relaxed text-foreground">읽고 진짜 바뀝니다. 고마워요.</p>
             <p className="font-mono text-[12px] text-muted-foreground">
@@ -342,7 +342,7 @@ export function CustomerEntry() {
 
             {/* 영수증 링크 */}
             {receiptUrl && (
-              <div className="bevel-in w-full bg-[color:var(--bevel-light)] p-3 text-left">
+              <div className="sticky-card w-full p-3 text-left">
                 <p className="font-mono text-[11px] text-muted-foreground">
                   사장님 답이 궁금하면 이 링크를 저장하세요
                 </p>
@@ -375,12 +375,12 @@ export function CustomerEntry() {
   // mode === "form"
   return (
     <main className="mx-auto max-w-[440px] px-4 py-8">
-      <div className="bevel-in-thin mb-4 bg-secondary px-3 py-2 font-mono text-[11px] text-muted-foreground">
+      <div className="sticky-card mb-4 px-3 py-2 font-mono text-[11px] text-foreground">
         <span className="text-primary">●</span> 이름·번호 안 받아요 · 욕설·개인정보 자동 가림
       </div>
 
       {revisitToken && (
-        <div className="bevel-out-thin mb-4 flex items-center justify-between gap-2 bg-surface-raised px-3 py-2">
+        <div className="sticky-card mb-4 flex items-center justify-between gap-2 px-3 py-2">
           <Link
             to={`/s?store=${encodeURIComponent(slug)}&token=${encodeURIComponent(revisitToken)}`}
             className="font-mono text-[12px] text-primary underline-offset-2 hover:underline"
@@ -451,8 +451,8 @@ export function CustomerEntry() {
           </motion.div>
         )}
 
-        {/* 한마디 (선택) */}
-        {rating > 0 && (
+        {/* 한마디 (선택) — 별점 전에도 항상 열림 */}
+        {(
           <div className="mt-5">
             <p className="font-mono text-[12px] text-muted-foreground">한마디 (선택)</p>
             <RetroTextarea
@@ -484,11 +484,11 @@ export function CustomerEntry() {
       </RetroWindow>
 
       {/* 매장 나무 */}
-      <div className="bevel-out mt-5 flex flex-col items-center gap-2 bg-surface-raised px-4 py-5">
+      <div className="sticky-card mt-5 flex flex-col items-center gap-2 px-4 py-5">
         <div className="w-20">
           <PixelTree level={treeLevel} cell={6} />
         </div>
-        <RetroProgress value={treeLevel} max={6} label="나무 성장 단계" className="w-full max-w-[220px]" />
+        <RetroProgress value={treeLevel} max={6} label="나무 성장 단계" className="retro-progress--growth w-full max-w-[220px]" />
         <p className="font-mono text-[11px] text-muted-foreground">
           이 가게의 나무 · 한마디가 쌓일수록 자랍니다
         </p>

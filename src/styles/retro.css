@@ -31,7 +31,7 @@
 /* Y2K 하드 오프셋 섀도 — 블러 0의 통짜 그림자 (2026-06-12 Y2K 키트 차용) */
 .retro-window {
   border-radius: 0;
-  box-shadow: var(--bevel-out), 6px 6px 0 color-mix(in srgb, var(--bevel-dark) 72%, transparent);
+  box-shadow: var(--bevel-out), var(--shadow-hard);
 }
 .bevel-in { border-radius: 0; box-shadow: var(--bevel-in); }
 .bevel-out-thin { border-radius: 0; box-shadow: var(--bevel-out-thin); }
@@ -178,6 +178,40 @@
   box-shadow: var(--bevel-in-thin);
   background: var(--secondary);
   color: var(--muted-foreground);
+}
+
+/* ── 데스크탑 배경 (full-screen OS 컨텍스트) ───────── */
+.retro-desktop { background: var(--desktop); }
+.retro-desktop--deep { background: var(--desktop-deep); }
+
+/* ── 스티커 카드 (뉴브루탈리즘: 밝은 블록 + 두꺼운 보더 + 하드섀도) ── */
+.sticky-card {
+  border-radius: 0;
+  border: var(--border-bold);
+  box-shadow: var(--shadow-hard-sm);
+  background: var(--card);
+  color: var(--foreground);
+}
+.sticky-card--urgent { background: var(--coral); color: var(--coral-foreground); }
+.sticky-card--good   { background: var(--lime);  color: var(--lime-foreground); }
+.sticky-card--reward { background: var(--sun);   color: var(--sun-foreground); }
+.sticky-card--info   { background: var(--sky);   color: var(--sky-foreground); }
+
+/* ── 머티리얼 유틸 ───────────────────────────────── */
+.shadow-hard { box-shadow: var(--shadow-hard); }
+.shadow-hard-sm { box-shadow: var(--shadow-hard-sm); }
+.border-bold { border: var(--border-bold); }
+
+/* ── 프로그레스 색 변형 (성장 = 라임) ────────────── */
+.retro-progress__fill--growth,
+.retro-progress--growth .retro-progress__fill {
+  height: 100%;
+  background-image: repeating-linear-gradient(
+    to right,
+    var(--growth) 0 8px,
+    transparent 8px 11px
+  );
+  transition: width 0.4s steps(8, end);
 }
 
 /* 깜빡이 커서는 theme.css .vox-cursor 재사용 */

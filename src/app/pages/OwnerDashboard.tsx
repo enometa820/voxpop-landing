@@ -63,6 +63,21 @@ function saveStatusMap(map: Record<string, OwnerStatus>) {
   try { localStorage.setItem(OWNER_STATUS_KEY, JSON.stringify(map)); } catch { /* 무시 */ }
 }
 
+// ── 체험 모드(데모): ?demo 일 때 인증 없이 보여주는 가짜 매장 ──
+const DEMO_STORE: Store = { id: "demo", slug: "demo-cafe", display_name: "데모 카페" };
+function buildDemoFeedback(): Feedback[] {
+  const now = Date.now();
+  const at = (min: number) => new Date(now - min * 60000).toISOString();
+  return [
+    { id: "d1", stores: DEMO_STORE, store_id: "demo", content_clean: "화장실에 휴지가 없어서 좀 불편했어요. 그것만 빼면 커피는 좋아요.", content_polished: "화장실 비품(휴지·비누)이 부족했던 점이 아쉬웠다는 의견이에요. 커피 맛은 만족하셨습니다.", sentiment_score: -0.45, urgency: "high", categories: ["청결"], created_at: at(7), owner_status: "new" },
+    { id: "d2", stores: DEMO_STORE, store_id: "demo", content_clean: "점심에 사람 많을 때 얼마나 기다려야 하는지 몰라서 답답했어요.", content_polished: "피크타임 대기 시간 안내가 없어 불편하셨다는 의견이에요.", sentiment_score: -0.1, urgency: "mid", categories: ["대기"], created_at: at(70), owner_status: "new" },
+    { id: "d3", stores: DEMO_STORE, store_id: "demo", content_clean: "사장님이 너무 친절하세요. 단골 됩니다 :)", content_polished: "사장님의 친절한 응대에 만족해 단골이 되겠다는 칭찬이에요.", sentiment_score: 0.7, urgency: "low", categories: ["친절"], created_at: at(180), owner_status: "acted" },
+    { id: "d4", stores: DEMO_STORE, store_id: "demo", content_clean: "라떼 맛있어요. 다만 오늘 아메리카노는 살짝 연했어요.", content_polished: "라떼는 맛있었지만 아메리카노 농도가 연했다는 의견이에요.", sentiment_score: 0.2, urgency: "low", categories: ["맛"], created_at: at(1500), owner_status: "seen" },
+  ];
+}
+const DEMO_RESPONSES: Record<string, OwnerResponse[]> = { d3: [{ id: "dr1", feedback_id: "d3", body: "따뜻한 한마디 감사해요! 더 좋은 커피로 보답할게요.", seen_by_customer: true }] };
+const DEMO_SLIME = { growth_points: 18, stage: 2 };
+
 export function OwnerDashboard() {
   const [phase, setPhase] = useState<"loading" | "signin" | "dashboard">("loading");
   const [email, setEmail] = useState("");
@@ -78,9 +93,23 @@ export function OwnerDashboard() {
   const [responses, setResponses] = useState<Record<string, OwnerResponse[]>>({});
   const [trendWindow, setTrendWindow] = useState<"7d" | "24h">("7d");
 
+  const demo = new URLSearchParams(location.search).has("demo");
+
   useEffect(() => { void loadDashboard(); }, []);
 
+  function loadDemo() {
+    setStores([DEMO_STORE]);
+    setSelectedStoreId(DEMO_STORE.id);
+    setFeedback(buildDemoFeedback());
+    setResponses(DEMO_RESPONSES);
+    setSlimeRow(DEMO_SLIME);
+    setSlimeActions([{ id: "da1" }]);
+    setUserEmail("체험 모드");
+    setPhase("dashboard");
+  }
+
   async function loadDashboard() {
+    if (demo) { loadDemo(); return; }
     try {
       const session = await getCurrentSession();
       if (!session) { setPhase("signin"); return; }
@@ -149,6 +178,7 @@ export function OwnerDashboard() {
   }
 
   async function handleSignout() {
+    if (demo) { location.href = "/"; return; }
     await signOut();
     location.reload();
   }
@@ -191,6 +221,7 @@ export function OwnerDashboard() {
     map[id] = status;
     saveStatusMap(map);
     setFeedback((prev) => prev.map((f) => (f.id === id ? { ...f, owner_status: status } : f)));
+    if (demo) return;
     const item = feedback.find((f) => f.id === id);
     const storeId = item?.stores?.id ?? selectedStoreId;
     if (!storeId) return;
@@ -199,6 +230,13 @@ export function OwnerDashboard() {
 
   async function handleResolve(item: Feedback) {
     if (!selectedStoreId) return;
+    if (demo) {
+      setSlimeActions((p) => [{ id: "da-" + item.id }, ...p]);
+      setSlimeRow((r) => ({ ...(r || {}), growth_points: (r?.growth_points ?? 0) + 1 }));
+      await setStatus(item.id, "acted");
+      toast.success("조치로 기록했어요. (체험 모드 — 실제 저장은 안 돼요)");
+      return;
+    }
     try {
       const action = await insertStoreAction(selectedStoreId, item.id, "resolved");
       const nextActions = [action, ...slimeActions];
@@ -223,6 +261,11 @@ export function OwnerDashboard() {
     if (!text) return;
     const storeId = item.stores?.id || selectedStoreId;
     if (!storeId) return;
+    if (demo) {
+      setResponses((prev) => ({ ...prev, [item.id]: [...(prev[item.id] || []), { id: "dr-" + item.id + (prev[item.id]?.length || 0), feedback_id: item.id, body: text, seen_by_customer: false }] }));
+      toast.success("답을 보냈어요. (체험 모드 — 실제로는 전송되지 않아요)");
+      return;
+    }
     try {
       const saved = await insertOwnerResponse(item.id, storeId, text, "comment");
       setResponses((prev) => ({ ...prev, [item.id]: [...(prev[item.id] || []), saved as OwnerResponse] }));
@@ -238,7 +281,7 @@ export function OwnerDashboard() {
   if (phase === "loading") {
     return (
       <main className="mx-auto max-w-[500px] px-4 py-16">
-        <TerminalWindow title="voxpop@store ~ %">
+        <TerminalWindow title="voxpop — 사장님 화면">
           <p className="text-muted-foreground">
             대시보드를 불러오는 중<span className="vox-cursor ml-1 text-primary">█</span>
           </p>
@@ -252,7 +295,7 @@ export function OwnerDashboard() {
       <main className="mx-auto max-w-[440px] px-4 py-12">
         <TerminalWindow title="voxpop — 사장 로그인">
           <div className="space-y-4 py-1">
-            <MonoLabel className="text-primary">$ voxpop login --magic-link</MonoLabel>
+            <MonoLabel className="text-primary">// 사장 로그인</MonoLabel>
             <p className="text-[14px] leading-relaxed text-foreground">
               이메일로 로그인 링크를 보내드려요. 비밀번호 없이 링크만 누르면 대시보드가 열려요.
             </p>
@@ -291,6 +334,12 @@ export function OwnerDashboard() {
 
   return (
     <main className="mx-auto max-w-[1100px] px-4 py-6">
+      {demo && (
+        <div className="mb-4 flex flex-wrap items-center gap-2 border-bold shadow-hard-sm bg-sun px-4 py-2.5 text-sun-foreground">
+          <span className="border-2 border-ink bg-card px-1.5 py-0.5 font-mono text-[11px] font-bold">체험 모드</span>
+          <span className="font-mono text-[12px]">데모 매장이에요 — 실제 손님 한마디가 아니고, 바꿔도 저장되지 않아요. 실제 서비스 모습만 둘러보세요.</span>
+        </div>
+      )}
       {/* 헤더 */}
       <div className="mb-5 flex flex-wrap items-center justify-between gap-3 border-b border-border pb-4">
         <div className="flex items-center gap-2">
@@ -318,11 +367,11 @@ export function OwnerDashboard() {
         </div>
       </div>
 
-      {/* 긴급 배너 */}
+      {/* 긴급 배너 — 코랄 스티커 알림 (한 화면 포인트 1색 = 코랄) */}
       {urgentList.length > 0 && (
-        <div className="mb-5 flex items-center gap-3 rounded-lg border border-destructive/40 bg-destructive/5 px-4 py-3">
-          <span className="font-mono text-[12px] text-destructive">[긴급 {urgentList.length}]</span>
-          <p className="font-mono text-[12px] text-foreground">
+        <div className="mb-5 flex items-center gap-3 border-bold shadow-hard-sm bg-coral px-4 py-3 text-coral-foreground">
+          <span className="border-2 border-ink bg-card px-1.5 py-0.5 font-mono text-[12px] text-coral">[긴급 {urgentList.length}]</span>
+          <p className="font-mono text-[12px] text-coral-foreground">
             아직 확인하지 않은 긴급 한마디가 있어요. 안전·위생 신호일 수 있으니 먼저 확인해주세요.
           </p>
         </div>
@@ -330,7 +379,7 @@ export function OwnerDashboard() {
 
       {/* 온보딩 (첫 한마디 없음) */}
       {noFeedback && (
-        <div className="mb-5 rounded-xl border border-border bg-card px-5 py-6">
+        <div className="mb-5 border-bold shadow-hard-sm bg-card px-5 py-6">
           <MonoLabel className="text-primary">// 첫 한마디를 기다리는 중</MonoLabel>
           <p className="mt-2 text-[14px] text-muted-foreground">
             QR 포스터를 붙여 손님의 첫 목소리를 받아보세요.
@@ -340,7 +389,7 @@ export function OwnerDashboard() {
               href={`/s?store=${encodeURIComponent(selectedStore.slug)}`}
               target="_blank"
               rel="noreferrer"
-              className="mt-3 inline-block rounded-lg border border-primary bg-primary px-3 py-1.5 font-mono text-[12px] text-primary-foreground"
+              className="mt-3 inline-block border-2 border-ink bg-primary px-3 py-1.5 font-mono text-[12px] text-primary-foreground shadow-hard-sm"
             >
               [ 직접 폼 열어보기 → ]
             </a>
@@ -352,13 +401,17 @@ export function OwnerDashboard() {
         {/* 왼쪽: 매장 나무 + 신호 */}
         <div className="space-y-5 lg:col-span-1">
           {/* 매장 나무 */}
-          <div className="overflow-hidden rounded-xl border border-border bg-card shadow-[0_8px_24px_-16px_rgba(12,36,23,0.35)]">
-            <div className="border-b border-border px-4 py-2.5"><MonoLabel>// 매장 나무</MonoLabel></div>
+          <div className="overflow-hidden border-bold shadow-hard-sm bg-card">
+            <div className="border-b-2 border-ink px-4 py-2.5"><MonoLabel>// 매장 나무</MonoLabel></div>
             <div className="flex flex-col items-center gap-3 px-4 py-6">
               <div className="w-28">
                 <PixelTree level={treeLevel} health={unresolvedRisk > 0 ? "wilting" : "healthy"} cell={8} />
               </div>
-              <AsciiProgress value={Math.round((slimeState?.growthProgress ?? 0) * 10)} max={10} label={slimeState?.stageName || "새싹"} />
+              {/* 성장 단계 = 씨앗/보상 신호 → 선옐로(reward) 배지 */}
+              <span className="inline-block border-2 border-ink bg-reward px-2 py-0.5 font-mono text-[11px] text-sun-foreground shadow-hard-sm">
+                ★ {slimeState?.stageName || "새싹"}
+              </span>
+              <AsciiProgress value={Math.round((slimeState?.growthProgress ?? 0) * 10)} max={10} label={slimeState?.stageName || "새싹"} className="[&_.text-primary]:text-lime" />
               <p className="rounded-md border border-border-soft bg-surface-raised px-3 py-2 text-center font-mono text-[12px] text-foreground">
                 {bubble}
               </p>
@@ -374,8 +427,8 @@ export function OwnerDashboard() {
           </div>
 
           {/* 신호 (카테고리) */}
-          <div className="overflow-hidden rounded-xl border border-border bg-card shadow-[0_8px_24px_-16px_rgba(12,36,23,0.35)]">
-            <div className="flex items-center justify-between border-b border-border px-4 py-2.5">
+          <div className="overflow-hidden border-bold shadow-hard-sm bg-card">
+            <div className="flex items-center justify-between border-b-2 border-ink px-4 py-2.5">
               <MonoLabel>// 신호 (카테고리)</MonoLabel>
               <div className="flex gap-1 font-mono text-[10px]">
                 {(["7d", "24h"] as const).map((w) => (
@@ -413,8 +466,8 @@ export function OwnerDashboard() {
           </div>
 
           {/* 반복 신호 */}
-          <div className="overflow-hidden rounded-xl border border-border bg-card shadow-[0_8px_24px_-16px_rgba(12,36,23,0.35)]">
-            <div className="border-b border-border px-4 py-2.5"><MonoLabel>// 반복 신호</MonoLabel></div>
+          <div className="overflow-hidden border-bold shadow-hard-sm bg-card">
+            <div className="border-b-2 border-ink px-4 py-2.5"><MonoLabel>// 반복 신호</MonoLabel></div>
             <div className="space-y-2 px-4 py-4">
               {repeats.length === 0 ? (
                 <p className="font-mono text-[12px] text-muted-foreground">아직 반복 신호는 없어요.</p>
@@ -444,10 +497,12 @@ export function OwnerDashboard() {
 
         {/* 오른쪽: 오늘 볼 것 + 한마디 섹션 */}
         <div className="space-y-5 lg:col-span-2">
-          <div className={`overflow-hidden rounded-xl border bg-card shadow-[0_8px_24px_-16px_rgba(12,36,23,0.35)] ${todayAction.kind === "urgent" ? "border-destructive/40" : "border-border"}`}>
-            <div className="border-b border-border px-4 py-2.5"><MonoLabel className="text-primary">[ 오늘 볼 것 ]</MonoLabel></div>
+          <div className={`overflow-hidden border-bold shadow-hard-sm bg-card ${todayAction.kind === "urgent" ? "border-coral" : ""}`}>
+            <div className={`border-b-2 px-4 py-2.5 ${todayAction.kind === "urgent" ? "border-coral bg-coral text-coral-foreground" : "border-ink"}`}>
+              <MonoLabel className={todayAction.kind === "urgent" ? "text-coral-foreground" : "text-primary"}>[ 오늘 볼 것 ]</MonoLabel>
+            </div>
             <div className="space-y-1.5 px-4 py-4 text-[14px] leading-relaxed">
-              <p className="text-foreground"><b className="mr-1 font-mono text-[12px] text-primary">오늘</b>{todayAction.title}</p>
+              <p className="text-foreground"><b className={`mr-1 font-mono text-[12px] ${todayAction.kind === "urgent" ? "text-coral" : "text-primary"}`}>오늘</b>{todayAction.title}</p>
               <p className="text-muted-foreground"><b className="mr-1 font-mono text-[12px]">근거</b>{todayAction.reason}</p>
               <p className="text-muted-foreground"><b className="mr-1 font-mono text-[12px]">다음</b>{todayAction.next}</p>
             </div>
@@ -479,19 +534,40 @@ function FeedbackSection({
   onReply: (item: Feedback, body: string) => void;
 }) {
   return (
-    <div className="overflow-hidden rounded-xl border border-border bg-card shadow-[0_8px_24px_-16px_rgba(12,36,23,0.35)]">
-      <div className="flex items-center justify-between border-b border-border px-4 py-2.5">
+    <div className="overflow-hidden border-bold shadow-hard-sm bg-card">
+      <div className="flex items-center justify-between border-b-2 border-ink px-4 py-2.5">
         <MonoLabel>// {title} {count ? `(${count})` : ""}</MonoLabel>
       </div>
       <ul>
         {items.length === 0 ? (
           <li className="px-4 py-4 font-mono text-[12px] text-muted-foreground">{empty}</li>
         ) : (
-          items.map((item, i) => (
-            <li key={item.id} className={`px-4 py-4 ${i < items.length - 1 ? "border-b border-border-soft" : ""} ${isUrgentFeedback(item) && isOpenFeedback(item) ? "bg-destructive/5" : ""}`}>
-              <FeedbackCard item={item} responses={responses[item.id] || []} selectedStoreId={selectedStoreId} onStatus={onStatus} onResolve={onResolve} onReply={onReply} />
-            </li>
-          ))
+          items.map((item, i) => {
+            // 감정별 스티커 카드 — 카드 1장에 포인트 1색 (긴급=코랄·좋은=라임·일반=기본)
+            // 감정색은 상단 띠로만 (본문은 card 면에 두어 고대비 유지)
+            const urgentOpen = isUrgentFeedback(item) && isOpenFeedback(item);
+            const stripCls = urgentOpen
+              ? "bg-coral"
+              : isPositiveFeedback(item)
+                ? "bg-lime"
+                : "bg-border-soft";
+            const stripLabel = urgentOpen ? "긴급" : isPositiveFeedback(item) ? "좋은" : "";
+            const stripText = urgentOpen ? "text-coral-foreground" : "text-lime-foreground";
+            return (
+              <li key={item.id} className={`px-4 py-4 ${i < items.length - 1 ? "border-b border-border-soft" : ""}`}>
+                <div className="sticky-card overflow-hidden">
+                  {stripLabel && (
+                    <div className={`flex items-center gap-2 border-b-2 border-ink px-3 py-1 ${stripCls} ${stripText}`}>
+                      <span className="font-mono text-[10px] font-bold tracking-wide">● {stripLabel}</span>
+                    </div>
+                  )}
+                  <div className="px-3.5 py-3">
+                    <FeedbackCard item={item} responses={responses[item.id] || []} selectedStoreId={selectedStoreId} onStatus={onStatus} onResolve={onResolve} onReply={onReply} />
+                  </div>
+                </div>
+              </li>
+            );
+          })
         )}
       </ul>
     </div>

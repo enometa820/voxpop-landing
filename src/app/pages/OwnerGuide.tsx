@@ -36,7 +36,7 @@ export function OwnerGuide() {
 
   return (
     <main className="mx-auto max-w-[920px] px-4 py-10 sm:px-6">
-      <MonoLabel className="text-primary">$ voxpop guide --owner</MonoLabel>
+      <MonoLabel className="text-primary">// 사장님 가이드</MonoLabel>
       <div className="mt-4 grid grid-cols-1 gap-6 lg:grid-cols-[1fr_320px]">
         <div>
           <p className="font-mono text-[12px] uppercase tracking-[0.1em] text-primary">사장님 가이드</p>
@@ -52,7 +52,7 @@ export function OwnerGuide() {
         </div>
 
         {/* 매장 카드 */}
-        <aside className="rounded-xl border border-border bg-card p-4">
+        <aside className="border-bold bg-card p-4 shadow-hard">
           <p className="font-mono text-[11px] text-muted-foreground">현재 매장</p>
           <p className="mt-1 text-[16px] text-foreground" style={{ fontWeight: 700 }}>{storeName}</p>
           <div className="mt-4 space-y-1">
@@ -61,11 +61,11 @@ export function OwnerGuide() {
               {slug ? customerUrl : "데모로 손님 화면 미리보기"}
             </a>
             <div className="flex flex-wrap gap-2 pt-1">
-              <button onClick={() => copy("cust", customerUrl)} className="rounded-md border border-border bg-card px-2 py-1 font-mono text-[11px] text-muted-foreground hover:bg-surface-raised">
+              <button onClick={() => copy("cust", customerUrl)} className="retro-btn px-2.5 py-1 font-mono text-[11px] text-muted-foreground">
                 {copied === "cust" ? "복사됨" : "손님 링크 복사"}
               </button>
               {slug && (
-                <button onClick={() => downloadStoreQR(slug)} className="rounded-md border border-primary bg-primary px-2 py-1 font-mono text-[11px] text-primary-foreground">
+                <button onClick={() => downloadStoreQR(slug)} className="retro-btn retro-btn--primary px-2.5 py-1 font-mono text-[11px]">
                   매장 QR 받기
                 </button>
               )}
@@ -74,7 +74,7 @@ export function OwnerGuide() {
           <div className="mt-4 space-y-1">
             <p className="font-mono text-[11px] text-muted-foreground">사장님 대시보드</p>
             <a href={ownerUrl} className="block truncate font-mono text-[12px] text-primary underline-offset-2 hover:underline">{ownerUrl}</a>
-            <button onClick={() => copy("own", ownerUrl)} className="mt-1 rounded-md border border-border bg-card px-2 py-1 font-mono text-[11px] text-muted-foreground hover:bg-surface-raised">
+            <button onClick={() => copy("own", ownerUrl)} className="retro-btn mt-1 px-2.5 py-1 font-mono text-[11px] text-muted-foreground">
               {copied === "own" ? "복사됨" : "대시보드 링크 복사"}
             </button>
           </div>
@@ -135,7 +135,7 @@ export function OwnerGuide() {
             </li>
           ))}
         </ul>
-        <div className="mt-5 rounded-lg border border-border bg-surface-raised p-4">
+        <div className="mt-5 border-bold bg-surface-raised p-4 shadow-hard-sm">
           <p className="font-mono text-[12px] text-foreground" style={{ fontWeight: 700 }}>손님에게 말할 때는 이렇게 짧게</p>
           <p className="mt-2 text-[14px] leading-relaxed text-foreground">
             “혹시 오늘 불편했거나 좋았던 점 있으면 QR로 한마디만 남겨주세요. 이름은 안 받고, 공개 리뷰로 올라가지 않고,
@@ -143,7 +143,7 @@ export function OwnerGuide() {
           </p>
           <button
             onClick={() => copy("phrase", "혹시 오늘 불편했거나 좋았던 점 있으면 QR로 한마디만 남겨주세요. 이름은 안 받고, 공개 리뷰로 올라가지 않고, 사장님에게만 전달됩니다.")}
-            className="mt-3 rounded-md border border-border bg-card px-2.5 py-1 font-mono text-[11px] text-muted-foreground hover:bg-surface-raised"
+            className="retro-btn mt-3 px-2.5 py-1 font-mono text-[11px] text-muted-foreground"
           >
             {copied === "phrase" ? "복사됨" : "안내 문구 복사"}
           </button>
@@ -160,7 +160,7 @@ export function OwnerGuide() {
             { q: "돈은 언제 내나요?", a: "7일 베타에서는 결제가 목적이 아닙니다. 계속 둘 이유가 있는지 먼저 확인합니다." },
             { q: "여러 기기에서 상태가 같나요?", a: "처리 상태는 매장 로그인 계정 기준으로 저장돼 기기·세션과 무관하게 일관됩니다." },
           ].map((f) => (
-            <div key={f.q} className="rounded-lg border border-border bg-card p-4">
+            <div key={f.q} className="border-bold bg-card p-4 shadow-hard-sm">
               <p className="text-[14px] text-foreground" style={{ fontWeight: 700 }}>{f.q}</p>
               <p className="mt-1.5 text-[13px] leading-relaxed text-muted-foreground">{f.a}</p>
             </div>
@@ -190,9 +190,9 @@ function Block({ cmd, title, children }: { cmd: string; title: string; children:
 
 function Card({ title, children, alert }: { title: string; children: React.ReactNode; alert?: boolean }) {
   return (
-    <div className={`rounded-lg border bg-card p-4 ${alert ? "border-destructive/40" : "border-border"}`}>
-      <p className={`text-[14px] ${alert ? "text-destructive" : "text-foreground"}`} style={{ fontWeight: 700 }}>{title}</p>
-      <p className="mt-2 text-[13px] leading-relaxed text-muted-foreground">{children}</p>
+    <div className={`p-4 ${alert ? "sticky-card sticky-card--urgent" : "border-bold bg-card shadow-hard-sm"}`}>
+      <p className={`text-[14px] ${alert ? "text-coral-foreground" : "text-foreground"}`} style={{ fontWeight: 700 }}>{title}</p>
+      <p className={`mt-2 text-[13px] leading-relaxed ${alert ? "text-coral-foreground/90" : "text-muted-foreground"}`}>{children}</p>
     </div>
   );
 }
