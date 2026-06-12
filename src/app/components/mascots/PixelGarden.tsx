@@ -1,4 +1,4 @@
-import { PixelTree, type TreeHealth } from "./PixelTree";
+import { type TreeHealth } from "./PixelTree";
 import { type TreeLevel, TREE_LABELS } from "../../lib/tree";
 import { TREE_FOOT_INSET, CAT_FOOT_INSET } from "../../lib/mascotAnchors";
 import { footOffsetPx } from "../../lib/stageLayout";
@@ -48,13 +48,23 @@ export function PixelGarden({
             borderTop: "3px solid #9fb389",
           }}
         />
-        {/* 나무 — 흙 밑선이 땅에 */}
-        <div
+        {/* 나무 — 흙 밑선이 땅에. 무대에선 height 기준 렌더(직접 img — PixelTree는 width:100% 계약이라 무대 부적합) */}
+        <img
+          src={`/mascot/tree-${level}.png`}
+          alt={`매장 나무 LV.${level} ${TREE_LABELS[level]}${health === "wilting" ? " (시듦)" : ""}`}
           className="absolute left-1/2"
-          style={{ bottom: treeBottom, transform: "translateX(-58%)", height: TREE_H, zIndex: 1 }}
-        >
-          <PixelTree level={level} health={health} className="h-full w-auto" />
-        </div>
+          style={{
+            bottom: treeBottom,
+            transform: "translateX(-58%)",
+            height: TREE_H,
+            width: "auto",
+            zIndex: 1,
+            imageRendering: "pixelated",
+            opacity: health === "wilting" ? 0.62 : 1,
+            filter: health === "wilting" ? "grayscale(0.45) brightness(0.92)" : undefined,
+            transition: "opacity 0.35s, filter 0.35s",
+          }}
+        />
         {/* 고양이 — 발 밑선이 같은 땅에 (배치 B: 나무 곁에 바짝) + 숨쉬기 애니메이션 */}
         <div
           role="img"
