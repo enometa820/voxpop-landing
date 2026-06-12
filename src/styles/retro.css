@@ -1,0 +1,177 @@
+/**
+ * voxpop retro OS — "녹색 윈도우 95" (2026-06-11 컨셉 정본)
+ * 베벨 = box-shadow inset 2겹: 위·왼쪽 밝은 띠, 아래·오른쪽 어두운 띠.
+ * 버튼·창 = 튀어나옴(outset) / 입력칸·트랙 = 눌림(inset). 모서리 radius 0.
+ * 색은 theme.css 녹색 모노톤 재사용, 베벨 전용 4색만 추가.
+ */
+
+:root {
+  --bevel-light: #f7faf5;     /* 바깥 밝은 띠 (위·왼쪽) */
+  --bevel-dark: #163021;      /* 바깥 어두운 띠 (아래·오른쪽) */
+  --bevel-mid-light: #dce8d6; /* 안쪽 밝은 띠 */
+  --bevel-mid-dark: #5d7a66;  /* 안쪽 어두운 띠 */
+
+  --bevel-out: inset -1px -1px 0 var(--bevel-dark),
+    inset 1px 1px 0 var(--bevel-light),
+    inset -2px -2px 0 var(--bevel-mid-dark),
+    inset 2px 2px 0 var(--bevel-mid-light);
+  --bevel-in: inset 1px 1px 0 var(--bevel-mid-dark),
+    inset -1px -1px 0 var(--bevel-light),
+    inset 2px 2px 0 var(--bevel-dark),
+    inset -2px -2px 0 var(--bevel-mid-light);
+  --bevel-out-thin: inset -1px -1px 0 var(--bevel-dark),
+    inset 1px 1px 0 var(--bevel-light);
+  --bevel-in-thin: inset 1px 1px 0 var(--bevel-mid-dark),
+    inset -1px -1px 0 var(--bevel-light);
+}
+
+/* ── 제네릭 베벨 ─────────────────────────────────── */
+.bevel-out { border-radius: 0; box-shadow: var(--bevel-out); }
+.bevel-in { border-radius: 0; box-shadow: var(--bevel-in); }
+.bevel-out-thin { border-radius: 0; box-shadow: var(--bevel-out-thin); }
+.bevel-in-thin { border-radius: 0; box-shadow: var(--bevel-in-thin); }
+
+/* Win95식 포커스 — 점선 사각(글로우 금지) */
+.retro-focus:focus-visible {
+  outline: 1px dotted var(--foreground);
+  outline-offset: -4px;
+}
+
+/* ── 버튼 ────────────────────────────────────────── */
+.retro-btn {
+  border-radius: 0;
+  border: none;
+  background: var(--secondary);
+  color: var(--foreground);
+  box-shadow: var(--bevel-out);
+  user-select: none;
+  cursor: pointer;
+}
+.retro-btn:hover:not(:disabled) { background: var(--surface-raised); filter: brightness(1.02); }
+.retro-btn:active:not(:disabled),
+.retro-btn[data-pressed="true"] {
+  box-shadow: var(--bevel-in);
+}
+.retro-btn:active:not(:disabled) > * { transform: translate(1px, 1px); }
+.retro-btn:focus-visible { outline: 1px dotted var(--foreground); outline-offset: -4px; }
+.retro-btn:disabled {
+  cursor: not-allowed;
+  color: var(--muted-foreground);
+  opacity: 0.55;
+  text-shadow: 1px 1px 0 var(--bevel-light);
+}
+.retro-btn--primary {
+  background: var(--primary);
+  color: var(--primary-foreground);
+}
+.retro-btn--primary:hover:not(:disabled) { background: var(--primary); filter: brightness(1.06); }
+.retro-btn--primary:focus-visible { outline-color: var(--primary-foreground); }
+.retro-btn--danger {
+  background: var(--destructive);
+  color: var(--destructive-foreground);
+}
+.retro-btn--danger:focus-visible { outline-color: var(--destructive-foreground); }
+
+/* ── 입력칸 (눌림) ───────────────────────────────── */
+.retro-field {
+  border-radius: 0;
+  border: none;
+  background: var(--bevel-light);
+  color: var(--foreground);
+  box-shadow: var(--bevel-in);
+  outline: none;
+}
+.retro-field:focus,
+.retro-field:focus-within {
+  outline: 1px dotted var(--muted-foreground);
+  outline-offset: -5px;
+}
+.retro-field::placeholder { color: var(--muted-foreground); opacity: 0.65; }
+
+/* ── 칩(토글 버튼) ───────────────────────────────── */
+.retro-chip {
+  border-radius: 0;
+  border: none;
+  background: var(--secondary);
+  color: var(--muted-foreground);
+  box-shadow: var(--bevel-out-thin);
+  cursor: pointer;
+  user-select: none;
+}
+.retro-chip:hover { color: var(--foreground); }
+.retro-chip[data-on="true"] {
+  background: var(--primary);
+  color: var(--primary-foreground);
+  box-shadow: var(--bevel-in-thin);
+}
+.retro-chip:focus-visible { outline: 1px dotted var(--foreground); outline-offset: -3px; }
+
+/* ── 체크박스·라디오 ─────────────────────────────── */
+.retro-check-box,
+.retro-radio-box {
+  border-radius: 0;
+  background: var(--bevel-light);
+  box-shadow: var(--bevel-in-thin);
+  flex: none;
+}
+
+/* ── 프로그레스 (세그먼트 블록) ──────────────────── */
+.retro-progress {
+  border-radius: 0;
+  background: var(--input-background);
+  box-shadow: var(--bevel-in-thin);
+  overflow: hidden;
+}
+.retro-progress__fill {
+  height: 100%;
+  background-image: repeating-linear-gradient(
+    to right,
+    var(--primary) 0 8px,
+    transparent 8px 11px
+  );
+  transition: width 0.4s steps(8, end);
+}
+
+/* ── 타이틀바 ────────────────────────────────────── */
+.retro-titlebar {
+  background: var(--primary);
+  color: var(--primary-foreground);
+  border-radius: 0;
+}
+.retro-titlebtn {
+  border-radius: 0;
+  background: var(--secondary);
+  color: var(--foreground);
+  box-shadow: var(--bevel-out-thin);
+  user-select: none;
+  line-height: 1;
+}
+.retro-titlebtn:active { box-shadow: var(--bevel-in-thin); }
+
+/* ── 탭 (폴더 탭) ────────────────────────────────── */
+.retro-tab {
+  border-radius: 0;
+  background: var(--secondary);
+  color: var(--muted-foreground);
+  box-shadow: inset 1px 1px 0 var(--bevel-light), inset -1px 0 0 var(--bevel-dark);
+  cursor: pointer;
+  position: relative;
+}
+.retro-tab[data-on="true"] {
+  background: var(--card);
+  color: var(--foreground);
+  margin-bottom: -2px;
+  padding-bottom: calc(0.5rem + 2px);
+  z-index: 1;
+}
+.retro-tab:focus-visible { outline: 1px dotted var(--foreground); outline-offset: -3px; }
+
+/* ── 상태바 ──────────────────────────────────────── */
+.retro-status-cell {
+  border-radius: 0;
+  box-shadow: var(--bevel-in-thin);
+  background: var(--secondary);
+  color: var(--muted-foreground);
+}
+
+/* 깜빡이 커서는 theme.css .vox-cursor 재사용 */

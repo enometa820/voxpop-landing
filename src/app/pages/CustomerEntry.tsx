@@ -1,9 +1,13 @@
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Link, useSearchParams } from "react-router";
 import confetti from "canvas-confetti";
 import { motion } from "motion/react";
-import { TerminalWindow } from "../components/terminal/TerminalWindow";
-import { MonoLabel } from "../components/terminal/MonoLabel";
+import { RetroWindow } from "../components/retro/RetroWindow";
+import { RetroButton } from "../components/retro/RetroButton";
+import { RetroTextarea } from "../components/retro/RetroField";
+import { RetroChip } from "../components/retro/RetroChip";
+import { RetroBadge } from "../components/retro/RetroBadge";
+import { RetroProgress } from "../components/retro/RetroProgress";
 import { PixelCat } from "../components/mascots/PixelCat";
 import { PixelTree, type TreeLevel } from "../components/mascots/PixelTree";
 import {
@@ -195,11 +199,11 @@ export function CustomerEntry() {
   if (mode === "loading") {
     return (
       <main className="mx-auto max-w-[440px] px-4 py-16">
-        <TerminalWindow title="voxpop">
-          <p className="text-muted-foreground">
+        <RetroWindow title="voxpop.exe">
+          <p className="font-mono text-[13px] text-muted-foreground">
             매장 정보를 불러오는 중<span className="vox-cursor ml-1 text-primary">█</span>
           </p>
-        </TerminalWindow>
+        </RetroWindow>
       </main>
     );
   }
@@ -207,7 +211,7 @@ export function CustomerEntry() {
   if (mode === "invalid") {
     return (
       <main className="mx-auto max-w-[440px] px-4 py-12">
-        <TerminalWindow title="voxpop — 잘못된 링크">
+        <RetroWindow title="voxpop.exe — 잘못된 링크">
           <div className="flex flex-col items-center gap-3 py-3 text-center">
             <div className="w-20 opacity-70">
               <PixelCat expression="sleepy" cell={6} />
@@ -222,30 +226,30 @@ export function CustomerEntry() {
               ← voxpop 소개
             </Link>
           </div>
-        </TerminalWindow>
+        </RetroWindow>
       </main>
     );
   }
 
   if (mode === "thread") {
+    const replyCount = thread?.responses?.length ?? 0;
     return (
       <main className="mx-auto max-w-[560px] px-4 py-8">
-        <div className="mb-4 flex items-center justify-between">
-          <MonoLabel className="text-primary">$ voxpop thread --mine</MonoLabel>
-          <span className="font-mono text-[11px] text-muted-foreground">영수증 링크 전용</span>
-        </div>
-        <TerminalWindow title={`${store?.display_name || "voxpop"} ── 내 한마디 + 사장님 답`}>
+        <RetroWindow
+          title={`voxpop.exe — ${store?.display_name || "우리가게"} 내 한마디`}
+          status={["영수증 링크 전용 · 무기명", threadFailed ? "조회 실패" : `사장님 답 ${replyCount}개`]}
+        >
           {threadFailed ? (
-            <div className="space-y-3 py-1 text-[14px] leading-relaxed text-muted-foreground">
+            <div className="space-y-4 py-1 text-[14px] leading-relaxed text-muted-foreground">
               <p>
                 이 링크로 한마디를 찾을 수 없어요. 다른 기기에서 저장된 링크이거나 링크 일부가
                 잘렸을 수 있어요. voxpop은 무기명이라 링크 없이는 찾아드릴 수 없어요.
               </p>
               <Link
                 to={`/s?store=${encodeURIComponent(slug)}`}
-                className="inline-block rounded-lg border border-primary bg-primary px-4 py-2 font-mono text-[13px] text-primary-foreground"
+                className="retro-btn retro-btn--primary inline-block px-4 py-2 font-mono text-[13px]"
               >
-                [ 새 한마디 남기기 → ]
+                <span className="inline-flex items-center gap-1.5">새 한마디 남기기 →</span>
               </Link>
             </div>
           ) : (
@@ -258,7 +262,7 @@ export function CustomerEntry() {
                   </div>
                   <span className="font-mono text-[11px] text-muted-foreground">익명 고양이</span>
                 </div>
-                <div className="ml-0 rounded-2xl rounded-tl-sm border border-border bg-surface-raised px-3.5 py-3 text-[14px] leading-relaxed text-foreground shadow-sm">
+                <div className="bevel-in bg-surface-raised px-3.5 py-3 text-[14px] leading-relaxed text-foreground">
                   {thread?.feedback?.content_clean || "한마디를 찾을 수 없어요."}
                 </div>
               </div>
@@ -272,7 +276,7 @@ export function CustomerEntry() {
                       </div>
                       <span className="font-mono text-[11px] text-muted-foreground">사장님</span>
                     </div>
-                    <div className="ml-6 rounded-2xl rounded-tr-sm border border-primary/40 bg-card px-3.5 py-3 text-[14px] leading-relaxed text-foreground shadow-sm">
+                    <div className="bevel-out ml-6 bg-card px-3.5 py-3 text-[14px] leading-relaxed text-foreground">
                       <span className="mr-1 font-mono text-primary">→</span>
                       {r.body}
                     </div>
@@ -283,20 +287,18 @@ export function CustomerEntry() {
                   아직 사장님 답이 없어요. 사장님이 답을 남기면 이 링크에서 볼 수 있어요.
                 </p>
               )}
-              <div className="border-t border-border-soft pt-3">
-                <p className="font-mono text-[11px] leading-relaxed text-muted-foreground">
-                  › 이 대화는 영수증 링크로만 열려요. 사장님은 누가 썼는지 끝까지 모릅니다.
-                  <span className="vox-cursor ml-1 text-primary">█</span>
-                </p>
-              </div>
+              <p className="font-mono text-[11px] leading-relaxed text-muted-foreground">
+                › 이 대화는 영수증 링크로만 열려요. 사장님은 누가 썼는지 끝까지 모릅니다.
+                <span className="vox-cursor ml-1 text-primary">█</span>
+              </p>
             </div>
           )}
-        </TerminalWindow>
+        </RetroWindow>
         <Link
           to={`/s?store=${encodeURIComponent(slug)}`}
-          className="mt-5 block rounded-lg border border-primary bg-primary px-4 py-2.5 text-center font-mono text-[13px] text-primary-foreground shadow-sm transition-all hover:-translate-y-0.5 hover:opacity-95"
+          className="retro-btn retro-btn--primary mt-5 block px-4 py-2.5 text-center font-mono text-[13px]"
         >
-          [ 한마디 더 남기기 → ]
+          <span className="inline-flex w-full items-center justify-center gap-1.5">한마디 더 남기기 →</span>
         </Link>
         <Link to="/" className="mt-3 block text-center font-mono text-[12px] text-muted-foreground underline-offset-4 hover:underline">
           ← voxpop 소개
@@ -308,7 +310,10 @@ export function CustomerEntry() {
   if (mode === "done") {
     return (
       <main className="mx-auto max-w-[440px] px-4 py-10">
-        <TerminalWindow title="voxpop — 완료">
+        <RetroWindow
+          title="voxpop.exe — 전달 완료"
+          status={["무기명으로 전달됨", "사장님에게만 보여요"]}
+        >
           <div className="flex flex-col items-center gap-4 py-2 text-center">
             <motion.div
               initial={{ scale: 0.6, rotate: -6 }}
@@ -318,14 +323,13 @@ export function CustomerEntry() {
             >
               <PixelCat expression="happy" cell={8} />
             </motion.div>
-            <motion.p
+            <motion.div
               initial={{ y: 8, opacity: 0 }}
               animate={{ y: 0, opacity: 1 }}
               transition={{ delay: 0.15 }}
-              className="font-mono text-[15px] text-primary"
             >
-              {"><>"} +1 적립!
-            </motion.p>
+              <RetroBadge tone="primary" className="px-3 py-1 text-[13px]">+1 적립!</RetroBadge>
+            </motion.div>
             <p className="text-[15px] leading-relaxed text-foreground">읽고 진짜 바뀝니다. 고마워요.</p>
             <p className="font-mono text-[12px] text-muted-foreground">
               → 사장님은 누가 썼는지 끝까지 모릅니다.
@@ -338,7 +342,7 @@ export function CustomerEntry() {
 
             {/* 영수증 링크 */}
             {receiptUrl && (
-              <div className="w-full rounded-lg border border-border bg-surface-raised p-3 text-left">
+              <div className="bevel-in w-full bg-[color:var(--bevel-light)] p-3 text-left">
                 <p className="font-mono text-[11px] text-muted-foreground">
                   사장님 답이 궁금하면 이 링크를 저장하세요
                 </p>
@@ -349,13 +353,9 @@ export function CustomerEntry() {
                   >
                     내 한마디에 사장님 답 보기
                   </Link>
-                  <button
-                    type="button"
-                    onClick={copyReceipt}
-                    className="shrink-0 rounded-md border border-border bg-card px-2 py-1 font-mono text-[11px] text-muted-foreground hover:bg-surface-raised"
-                  >
+                  <RetroButton onClick={copyReceipt} className="shrink-0 px-2 py-1 text-[11px]">
                     {copied ? "복사됨!" : "링크 복사"}
-                  </button>
+                  </RetroButton>
                 </div>
                 <p className="mt-2 font-mono text-[10px] leading-relaxed text-muted-foreground/70">
                   이름·연락처 없이 이 링크로만 본인 한마디의 답을 볼 수 있어요.
@@ -367,7 +367,7 @@ export function CustomerEntry() {
               홈으로
             </Link>
           </div>
-        </TerminalWindow>
+        </RetroWindow>
       </main>
     );
   }
@@ -375,12 +375,12 @@ export function CustomerEntry() {
   // mode === "form"
   return (
     <main className="mx-auto max-w-[440px] px-4 py-8">
-      <div className="mb-4 rounded-lg border border-border bg-card px-3 py-2 font-mono text-[11px] text-muted-foreground shadow-sm">
+      <div className="bevel-in-thin mb-4 bg-secondary px-3 py-2 font-mono text-[11px] text-muted-foreground">
         <span className="text-primary">●</span> 이름·번호 안 받아요 · 욕설·개인정보 자동 가림
       </div>
 
       {revisitToken && (
-        <div className="mb-4 flex items-center justify-between gap-2 rounded-lg border border-primary/40 bg-surface-raised px-3 py-2">
+        <div className="bevel-out-thin mb-4 flex items-center justify-between gap-2 bg-surface-raised px-3 py-2">
           <Link
             to={`/s?store=${encodeURIComponent(slug)}&token=${encodeURIComponent(revisitToken)}`}
             className="font-mono text-[12px] text-primary underline-offset-2 hover:underline"
@@ -390,7 +390,7 @@ export function CustomerEntry() {
           <button
             type="button"
             onClick={() => setRevisitToken(null)}
-            className="font-mono text-[11px] text-muted-foreground hover:text-foreground"
+            className="retro-focus font-mono text-[11px] text-muted-foreground hover:text-foreground"
             aria-label="배지 닫기"
           >
             ✕
@@ -398,13 +398,15 @@ export function CustomerEntry() {
         </div>
       )}
 
-      <TerminalWindow title={`voxpop@${store?.display_name || "우리가게"} — 한마디`}>
+      <RetroWindow
+        title={`voxpop.exe — ${store?.display_name || "우리가게"}`}
+        status={["무기명 전송", "자동 가림 ON"]}
+      >
         <div className="flex flex-col items-center gap-2 py-1 text-center">
           <div className="w-24">
             <PixelCat expression={catExpr} cell={8} />
           </div>
           <p className="text-[16px] text-foreground" style={{ fontWeight: 700 }}>오늘 어떠셨어요?</p>
-          <p className="font-mono text-[11px] text-muted-foreground">$ rate --stars</p>
         </div>
 
         {/* 별점 */}
@@ -417,7 +419,7 @@ export function CustomerEntry() {
               onMouseEnter={() => setHover(n)}
               onMouseLeave={() => setHover(0)}
               aria-label={`${n}점`}
-              className="px-1 text-2xl leading-none transition-transform hover:scale-110"
+              className="retro-focus px-1 text-2xl leading-none transition-transform hover:scale-110"
             >
               <span className={n <= display ? "text-primary" : "text-border"}>
                 {n <= display ? "★" : "☆"}
@@ -434,25 +436,17 @@ export function CustomerEntry() {
         {/* 후속 칩 (1~3점) */}
         {rating > 0 && shouldAskFollowUp({ rating }) && (
           <motion.div initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: "auto" }} className="mt-5">
-            <MonoLabel>// 아쉬운 점이 있었나요?</MonoLabel>
+            <p className="font-mono text-[12px] text-muted-foreground">어떤 점이 아쉬우셨어요? (선택)</p>
             <div className="mt-2 flex flex-wrap gap-2">
-              {FOLLOW_UP_CHIPS.map((c: { label: string; category: string }) => {
-                const on = category === c.category;
-                return (
-                  <button
-                    key={c.category}
-                    type="button"
-                    onClick={() => toggleChip(c.category)}
-                    className={`rounded-full border px-3 py-1.5 font-mono text-[12px] transition-colors ${
-                      on
-                        ? "border-primary bg-primary text-primary-foreground"
-                        : "border-border bg-card text-muted-foreground hover:bg-surface-raised"
-                    }`}
-                  >
-                    {on ? "› " : ""}{c.label}
-                  </button>
-                );
-              })}
+              {FOLLOW_UP_CHIPS.map((c: { label: string; category: string }) => (
+                <RetroChip
+                  key={c.category}
+                  on={category === c.category}
+                  onClick={() => toggleChip(c.category)}
+                >
+                  {c.label}
+                </RetroChip>
+              ))}
             </div>
           </motion.div>
         )}
@@ -460,41 +454,41 @@ export function CustomerEntry() {
         {/* 한마디 (선택) */}
         {rating > 0 && (
           <div className="mt-5">
-            <MonoLabel>// 한마디 (선택)</MonoLabel>
-            <textarea
+            <p className="font-mono text-[12px] text-muted-foreground">한마디 (선택)</p>
+            <RetroTextarea
               value={note}
               onChange={(e) => setNote(e.target.value)}
               rows={3}
               maxLength={500}
-              placeholder={'$ echo "..."  — 위험한 말·개인정보는 자동으로 가려져요'}
-              className="mt-2 w-full resize-none rounded-lg border border-border bg-input-background px-3 py-2 font-mono text-[13px] text-foreground outline-none transition-colors placeholder:text-muted-foreground/60 focus:border-primary"
+              placeholder="남기고 싶은 한마디가 있다면 적어 주세요. 위험한 말·개인정보는 자동으로 가려져요."
+              className="mt-2"
             />
             <p className="text-right font-mono text-[10px] text-muted-foreground/70">{note.length} / 500</p>
           </div>
         )}
 
         {error && (
-          <p className="mt-3 rounded-md border border-destructive/30 bg-destructive/5 px-3 py-2 font-mono text-[12px] text-destructive">
+          <p className="bevel-in-thin mt-3 bg-secondary px-3 py-2 font-mono text-[12px] text-destructive">
             {error}
           </p>
         )}
 
-        <button
-          type="button"
+        <RetroButton
+          variant="primary"
           onClick={submit}
           disabled={rating === 0 || submitting}
-          className="mt-4 w-full rounded-lg border border-primary bg-primary px-4 py-2.5 font-mono text-[13px] text-primary-foreground shadow-sm transition-all hover:opacity-95 disabled:cursor-not-allowed disabled:opacity-40 disabled:hover:opacity-40"
+          className="mt-4 w-full py-2.5"
         >
-          {submitting ? "전달 중..." : "[ 사장님에게 전달하기 ]"}
-          {rating > 0 && !submitting && <span className="vox-cursor ml-1">█</span>}
-        </button>
-      </TerminalWindow>
+          {submitting ? "전달 중..." : "사장님에게 전달하기"}
+        </RetroButton>
+      </RetroWindow>
 
       {/* 매장 나무 */}
-      <div className="mt-5 flex flex-col items-center gap-2 rounded-lg border border-border bg-surface-raised py-5">
+      <div className="bevel-out mt-5 flex flex-col items-center gap-2 bg-surface-raised px-4 py-5">
         <div className="w-20">
           <PixelTree level={treeLevel} cell={6} />
         </div>
+        <RetroProgress value={treeLevel} max={6} label="나무 성장 단계" className="w-full max-w-[220px]" />
         <p className="font-mono text-[11px] text-muted-foreground">
           이 가게의 나무 · 한마디가 쌓일수록 자랍니다
         </p>
