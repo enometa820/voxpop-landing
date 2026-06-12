@@ -4,7 +4,8 @@ import { toast } from "sonner";
 import { TerminalWindow } from "../components/terminal/TerminalWindow";
 import { MonoLabel } from "../components/terminal/MonoLabel";
 import { AsciiProgress } from "../components/terminal/AsciiProgress";
-import { PixelTree } from "../components/mascots/PixelTree";
+import { PixelGarden } from "../components/mascots/PixelGarden";
+import { TREE_LABELS } from "../lib/tree";
 import {
   sendMagicLink,
   getCurrentSession,
@@ -404,14 +405,14 @@ export function OwnerDashboard() {
           <div className="overflow-hidden border-bold shadow-hard-sm bg-card">
             <div className="border-b-2 border-ink px-4 py-2.5"><MonoLabel>// 매장 나무</MonoLabel></div>
             <div className="flex flex-col items-center gap-3 px-4 py-6">
-              <div className="w-28">
-                <PixelTree level={treeLevel} health={unresolvedRisk > 0 ? "wilting" : "healthy"} cell={8} />
+              <div className="w-32">
+                <PixelGarden level={treeLevel} health={unresolvedRisk > 0 ? "wilting" : "healthy"} mood={slimeState?.mood} cell={8} />
               </div>
               {/* 성장 단계 = 씨앗/보상 신호 → 선옐로(reward) 배지 */}
               <span className="inline-block border-2 border-ink bg-reward px-2 py-0.5 font-mono text-[11px] text-sun-foreground shadow-hard-sm">
-                ★ {slimeState?.stageName || "새싹"}
+                ★ {TREE_LABELS[treeLevel]}
               </span>
-              <AsciiProgress value={Math.round((slimeState?.growthProgress ?? 0) * 10)} max={10} label={slimeState?.stageName || "새싹"} className="[&_.text-primary]:text-lime" />
+              <AsciiProgress value={Math.round((slimeState?.growthProgress ?? 0) * 10)} max={10} label={TREE_LABELS[treeLevel]} className="[&_.text-primary]:text-lime" />
               <p className="rounded-md border border-border-soft bg-surface-raised px-3 py-2 text-center font-mono text-[12px] text-foreground">
                 {bubble}
               </p>
@@ -609,12 +610,29 @@ function FeedbackCard({
         <span className="ml-auto font-mono text-[10px] text-muted-foreground/70">{formatTime(item.created_at)}</span>
       </div>
 
-      <p className="mt-2 text-[14px] leading-relaxed text-foreground">{item.content_polished || item.content_clean}</p>
-      {masked && (
-        <p className="mt-1 font-mono text-[10px] text-muted-foreground/70">
-          device=null · ip=hashed · {item.pii_removed ? "개인정보" : ""}{item.pii_removed && item.profanity_removed ? "·" : ""}{item.profanity_removed ? "욕설" : ""} 자동 가림 · 원본은 사장님 화면에 노출 안 함
-        </p>
-      )}
+      {/* 손님 목소리 — 전면, 인용 스타일 (content_clean = 가린 원문 = 진짜 한마디) */}
+      <div className="mt-2 space-y-2">
+        <div>
+          <div className="font-mono text-[11px] text-muted-foreground">💬 손님 한마디</div>
+          <p className="mt-1 border-l-2 border-ink/30 pl-2 text-[14px] leading-relaxed text-foreground">
+            "{item.content_clean ?? "(내용 없음)"}"
+          </p>
+          {masked && (
+            <p className="mt-1 font-mono text-[10px] text-muted-foreground/70">
+              {item.pii_removed ? "개인정보" : ""}{item.pii_removed && item.profanity_removed ? "·" : ""}{item.profanity_removed ? "욕설" : ""} 자동 가림 · 원본은 사장님 화면에 노출 안 함
+            </p>
+          )}
+        </div>
+        {/* AI 정리 — 보조. 손님 원문이 길 때만 polished 요약 노출(짧으면 생략) */}
+        <div className="border-t border-border pt-2">
+          <div className="font-mono text-[11px] text-muted-foreground">
+            🤖 AI 정리 · {cats[0] ?? "기타"}{item.urgency === "high" ? " · 긴급" : ""}
+          </div>
+          {item.content_polished && (item.content_clean?.length ?? 0) > 40 && (
+            <p className="mt-1 text-[13px] text-muted-foreground">{item.content_polished}</p>
+          )}
+        </div>
+      </div>
 
       {/* 상태 컨트롤 */}
       <div className="mt-3 flex flex-wrap items-center gap-1.5">
