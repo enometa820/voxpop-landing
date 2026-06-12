@@ -27,12 +27,10 @@ export function PixelGarden({
   const catCell = Math.max(3, Math.round(cell * 0.6));
 
   return (
-    <div className={`relative inline-flex flex-col items-center ${className}`}>
+    <div className={`inline-flex items-end justify-center gap-1.5 ${className}`}>
       <PixelTree level={level} health={health} cell={cell} showLabel={showLabel} />
-      <div className="pointer-events-none absolute bottom-0 right-0 flex items-end gap-0.5">
-        <span className="mb-1 font-mono text-[10px] text-lime select-none" aria-hidden>
-          ✦
-        </span>
+      <div className="flex flex-col items-center select-none pb-2" aria-hidden>
+        <span className="mb-0.5 font-mono text-[10px] text-lime">✦</span>
         <PixelCat expression={catExpr} cell={catCell} />
       </div>
     </div>
