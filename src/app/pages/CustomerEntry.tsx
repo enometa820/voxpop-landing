@@ -10,6 +10,7 @@ import { RetroBadge } from "../components/retro/RetroBadge";
 import { RetroProgress } from "../components/retro/RetroProgress";
 import { PixelCat } from "../components/mascots/PixelCat";
 import { PixelTree } from "../components/mascots/PixelTree";
+import { PixelGarden } from "../components/mascots/PixelGarden";
 import { type TreeLevel } from "../lib/tree";
 import {
   fetchStoreBySlug,
@@ -375,7 +376,8 @@ export function CustomerEntry() {
 
   // mode === "form"
   return (
-    <main className="mx-auto max-w-[440px] px-4 py-8">
+    <div className="retro-desktop min-h-screen">
+      <main className="mx-auto max-w-[440px] px-4 py-8">
       <div className="sticky-card mb-4 px-3 py-2 font-mono text-[11px] text-foreground">
         <span className="text-primary">●</span> 이름·번호 안 받아요 · 욕설·개인정보 자동 가림
       </div>
@@ -484,10 +486,10 @@ export function CustomerEntry() {
         </RetroButton>
       </RetroWindow>
 
-      {/* 매장 나무 */}
+      {/* 매장 나무 — 고양이가 가꾸는 합성 씬 */}
       <div className="sticky-card mt-5 flex flex-col items-center gap-2 px-4 py-5">
-        <div className="w-20">
-          <PixelTree level={treeLevel} cell={6} />
+        <div className="w-24">
+          <PixelGarden level={treeLevel} cell={6} />
         </div>
         <RetroProgress value={treeLevel} max={6} label="나무 성장 단계" className="retro-progress--growth w-full max-w-[220px]" />
         <p className="font-mono text-[11px] text-muted-foreground">
@@ -498,6 +500,7 @@ export function CustomerEntry() {
       <Link to="/" className="mt-4 block text-center font-mono text-[12px] text-muted-foreground underline-offset-4 hover:underline">
         ← voxpop 소개
       </Link>
-    </main>
+      </main>
+    </div>
   );
 }
