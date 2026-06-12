@@ -10,132 +10,162 @@ import {
 } from "./pixelGrid";
 
 /**
- * High-res pixel-art customer cat mascot, monotone green with shading.
+ * High-res pixel-art customer cat mascot — sleek black cat.
+ * 60×62 grid with layered shading (base + 2 highlights + 2 shadows).
  * 3 expressions (default / sleepy / happy) + unlockable costumes.
  */
 
 export type CatExpression = "default" | "sleepy" | "happy";
 export type CatCostume = "none" | "ribbon" | "beret" | "tuxedo" | "crown";
 
-const W = 30;
-const H = 31;
+const W = 60;
+const H = 62;
 
 const COLORS: Record<string, string> = {
-  D: "#050806", // outline (더 진한 검정)
-  b: "#15201a", // body — 그린블랙(브랜드 잉크 틴트)
-  B: "#0a0d0b", // body shadow
-  h: "#39413a", // body highlight (차콜, 위-왼쪽 광원)
-  w: "#f3f7ef", // chest / muzzle / socks — 크림(턱시도 시크)
-  W: "#d8e0d2", // soft chest shade
+  D: "#050806", // outline
+  b: "#1d2823", // body base (그린블랙 — 셰이딩 보이게 살짝 밝게)
+  B: "#121a15", // body shadow
+  V: "#0a0e0b", // deep shadow
+  h: "#37433b", // body highlight (차콜, 위-왼쪽 광원)
+  H: "#4d5d52", // bright highlight speck
+  w: "#f3f7ef", // chest / muzzle / socks — 크림
+  W: "#d2ddcb", // chest shade
   e: "#ffe14d", // eyes — 선옐로 황금눈
+  E: "#caa400", // eye lower shade
   i: "#ffffff", // eye shine
+  p: "#241d05", // pupil
   r: "#ff5c5c", // nose / inner ear — 코랄
-  R: "#c96a5f", // ribbon (코스튬 유지)
-  j: "#26402f", // cloth (beret / tuxedo)
+  q: "#d8474a", // inner ear shade
+  R: "#e0555f", // ribbon
+  S: "#b23a47", // ribbon shade
+  j: "#243a2c", // cloth (beret / tuxedo)
   J: "#3c5c45", // cloth highlight
-  g: "#caa24a", // gold (crown)
-  G: "#e6cf86", // gold highlight
+  g: "#e0b94a", // gold
+  G: "#fff0b0", // gold highlight
+  x: "#9c7a28", // gold shade
 };
 
 function buildBody(g: Grid) {
-  // tail (behind body)
+  // tail (behind body) — 복슬한 꼬리
   [
-    [26, 25, 2.5, 3],
-    [27, 21, 2.5, 3],
-    [27, 17, 2.3, 3],
-    [26, 14, 2.2, 2.5],
+    [52, 50, 5, 6],
+    [54, 42, 5, 6],
+    [54, 33, 4.6, 6],
+    [51, 26, 4.2, 5],
   ].forEach(([x, y, rx, ry]) => fillEllipse(g, x, y, rx, ry, "b"));
+  // 꼬리 끝 하이라이트
+  fillEllipse(g, 51, 25, 2.6, 3, "h", "b");
 
   // body
-  fillEllipse(g, 15, 23, 9, 7, "b");
+  fillEllipse(g, 30, 46, 18, 14, "b");
   // head
-  fillEllipse(g, 15, 12, 8, 7, "b");
+  fillEllipse(g, 30, 24, 16, 14, "b");
 
   // ears
-  fillTriangle(g, 8, 2, 5, 9, 12, 8, "b");
-  fillTriangle(g, 22, 2, 18, 8, 25, 9, "b");
-  // inner ears
-  fillTriangle(g, 8, 4, 6.5, 8, 11, 8, "r");
-  fillTriangle(g, 22, 4, 19, 8, 23.5, 8, "r");
+  fillTriangle(g, 16, 3, 10, 18, 25, 15, "b");
+  fillTriangle(g, 44, 3, 35, 15, 50, 18, "b");
+  // inner ears (coral + shade)
+  fillTriangle(g, 16, 7, 12, 16, 22, 15, "r");
+  fillTriangle(g, 44, 7, 38, 15, 48, 16, "r");
+  fillTriangle(g, 17, 11, 14, 16, 21, 15, "q");
+  fillTriangle(g, 43, 11, 39, 15, 46, 16, "q");
 
-  // shading — light source upper-left
-  fillEllipse(g, 18, 15, 6, 6, "B", "b"); // head lower-right shadow
-  fillEllipse(g, 18, 26, 7, 5, "B", "b"); // body lower-right shadow
-  fillEllipse(g, 11, 8, 4.5, 4, "h", "b"); // head highlight
-  fillEllipse(g, 10, 19, 4, 4, "h", "b"); // body highlight
+  // ── shading: light source upper-left ──
+  // head shadows (lower-right), two depths
+  fillEllipse(g, 37, 30, 12, 12, "B", "b");
+  fillEllipse(g, 41, 34, 8, 8, "V", "b");
+  // body shadows
+  fillEllipse(g, 37, 52, 14, 10, "B", "b");
+  fillEllipse(g, 41, 56, 9, 7, "V", "b");
+  // head highlights (upper-left), two brightness
+  fillEllipse(g, 22, 15, 9, 8, "h", "b");
+  fillEllipse(g, 19, 12, 4.5, 4.5, "H", "h");
+  // body highlights
+  fillEllipse(g, 20, 38, 8, 8, "h", "b");
+  fillEllipse(g, 17, 35, 4, 4, "H", "h");
 
-  // chest fluff + muzzle
-  fillEllipse(g, 15, 25, 5.5, 5, "w");
-  fillEllipse(g, 15, 15, 4.5, 3, "w");
-  fillEllipse(g, 16, 27, 4, 3, "W", "w"); // chest shade
+  // chest fluff + muzzle (cream)
+  fillEllipse(g, 30, 50, 11, 10, "w");
+  fillEllipse(g, 30, 30, 9, 6, "w");
+  fillEllipse(g, 33, 54, 8, 6, "W", "w"); // chest shade lower-right
+  fillEllipse(g, 27, 47, 5, 5, "w"); // chest highlight bloom
 
   // front paws / socks
-  fillEllipse(g, 10, 29, 3, 2.2, "w");
-  fillEllipse(g, 20, 29, 3, 2.2, "w");
+  fillEllipse(g, 20, 58, 6, 4.4, "w");
+  fillEllipse(g, 40, 58, 6, 4.4, "w");
+  fillEllipse(g, 22, 59, 3, 2.4, "W", "w");
+  fillEllipse(g, 42, 59, 3, 2.4, "W", "w");
 }
 
 function drawFace(g: Grid, expr: CatExpression) {
   if (expr === "sleepy") {
-    line(g, 9, 13, 13, 13, "e");
-    line(g, 9, 14, 12, 14, "e");
-    line(g, 17, 13, 21, 13, "e");
-    line(g, 18, 14, 21, 14, "e");
+    line(g, 18, 26, 27, 26, "D", 2);
+    line(g, 33, 26, 42, 26, "D", 2);
   } else if (expr === "happy") {
-    line(g, 9, 14, 11, 12, "e");
-    line(g, 11, 12, 13, 14, "e");
-    line(g, 17, 14, 19, 12, "e");
-    line(g, 19, 12, 21, 14, "e");
+    // 위로 휜 웃는 눈
+    line(g, 18, 28, 22, 23, "e", 2);
+    line(g, 22, 23, 27, 28, "e", 2);
+    line(g, 33, 28, 38, 23, "e", 2);
+    line(g, 38, 23, 42, 28, "e", 2);
   } else {
-    fillEllipse(g, 11, 12, 2, 2.6, "e");
-    fillEllipse(g, 19, 12, 2, 2.6, "e");
-    setPx(g, 10, 11, "i");
-    setPx(g, 18, 11, "i");
-    setPx(g, 11, 13, "i");
-    setPx(g, 19, 13, "i");
+    // 큰 황금 눈 + 동공 + 하이라이트
+    fillEllipse(g, 22, 24, 4.6, 5.6, "e");
+    fillEllipse(g, 38, 24, 4.6, 5.6, "e");
+    fillEllipse(g, 22, 27, 4.2, 2.4, "E", "e"); // 아래 음영
+    fillEllipse(g, 38, 27, 4.2, 2.4, "E", "e");
+    fillEllipse(g, 23, 25, 2.4, 3.2, "p"); // 동공
+    fillEllipse(g, 39, 25, 2.4, 3.2, "p");
+    fillEllipse(g, 20.5, 21.5, 1.6, 1.6, "i"); // 하이라이트
+    fillEllipse(g, 36.5, 21.5, 1.6, 1.6, "i");
   }
-  // nose + mouth
-  fillTriangle(g, 14, 16, 16, 16, 15, 17.5, "r");
-  line(g, 15, 17, 15, 18, "e");
-  line(g, 15, 18, 13, 19, "e");
-  line(g, 15, 18, 17, 19, "e");
+  // nose
+  fillTriangle(g, 27, 32, 33, 32, 30, 35.5, "r");
+  setPx(g, 29, 33, "i");
+  // mouth
+  line(g, 30, 35, 30, 37, "D");
+  line(g, 30, 37, 26, 39, "D");
+  line(g, 30, 37, 34, 39, "D");
+  // whiskers
+  line(g, 14, 33, 23, 34, "W");
+  line(g, 14, 36, 23, 36, "W");
+  line(g, 37, 34, 46, 33, "W");
+  line(g, 37, 36, 46, 36, "W");
 }
 
 function drawCostume(g: Grid, costume: CatCostume) {
   switch (costume) {
     case "ribbon": {
-      fillTriangle(g, 7, 3, 10, 6, 7, 9, "R");
-      fillTriangle(g, 13, 3, 10, 6, 13, 9, "R");
-      fillEllipse(g, 10, 6, 1.4, 1.4, "r");
-      setPx(g, 8, 4, "G");
-      setPx(g, 12, 4, "G");
+      fillTriangle(g, 13, 5, 21, 11, 13, 17, "R");
+      fillTriangle(g, 27, 5, 21, 11, 27, 17, "R");
+      fillTriangle(g, 14, 8, 20, 11, 14, 14, "S");
+      fillEllipse(g, 21, 11, 2.6, 2.6, "S");
+      fillEllipse(g, 21, 11, 1.4, 1.4, "G");
       break;
     }
     case "beret": {
-      fillEllipse(g, 13, 5, 7.5, 3.2, "j");
-      fillEllipse(g, 11, 4, 4, 1.6, "J", "j");
-      setPx(g, 7, 3, "j");
-      setPx(g, 6, 3, "j");
+      fillEllipse(g, 27, 8, 15, 6, "j");
+      fillEllipse(g, 22, 6, 8, 3.5, "J", "j");
+      fillEllipse(g, 14, 5, 2, 2, "j");
       break;
     }
     case "tuxedo": {
-      fillEllipse(g, 15, 26, 5, 5, "j");
-      fillTriangle(g, 15, 21, 11, 30, 19, 30, "w");
+      fillEllipse(g, 30, 52, 10, 10, "j");
+      fillTriangle(g, 30, 42, 22, 60, 38, 60, "w");
       // bowtie
-      fillTriangle(g, 12, 18, 15, 20, 12, 22, "j");
-      fillTriangle(g, 18, 18, 15, 20, 18, 22, "j");
-      fillEllipse(g, 15, 20, 1.2, 1.4, "D");
+      fillTriangle(g, 24, 36, 30, 40, 24, 44, "j");
+      fillTriangle(g, 36, 36, 30, 40, 36, 44, "j");
+      fillEllipse(g, 30, 40, 2.2, 2.6, "D");
       break;
     }
     case "crown": {
-      fillRect(g, 9, 4, 21, 5, "g");
-      fillTriangle(g, 9, 5, 11, 1, 13, 5, "g");
-      fillTriangle(g, 13, 5, 15, 0, 17, 5, "g");
-      fillTriangle(g, 17, 5, 19, 1, 21, 5, "g");
-      setPx(g, 11, 2, "G");
-      setPx(g, 15, 1, "G");
-      setPx(g, 19, 2, "G");
-      setPx(g, 12, 5, "G");
-      setPx(g, 18, 5, "G");
+      fillRect(g, 18, 8, 42, 11, "g");
+      fillTriangle(g, 18, 9, 22, 2, 26, 9, "g");
+      fillTriangle(g, 26, 9, 30, 0, 34, 9, "g");
+      fillTriangle(g, 34, 9, 38, 2, 42, 9, "g");
+      fillRect(g, 18, 10, 42, 11, "x", "g");
+      setPx(g, 22, 3, "G");
+      setPx(g, 30, 1, "G");
+      setPx(g, 38, 3, "G");
       break;
     }
     default:
@@ -159,7 +189,7 @@ function catGrid(expr: CatExpression, costume: CatCostume): Grid {
 export function PixelCat({
   expression = "default",
   costume = "none",
-  cell = 6,
+  cell = 4,
   className = "",
 }: {
   expression?: CatExpression;

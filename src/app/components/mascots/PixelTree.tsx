@@ -9,29 +9,32 @@ import {
 import { type TreeLevel, TREE_LABELS } from "../../lib/tree";
 
 /**
- * High-res pixel-art store tree mascot, monotone green with shading.
+ * High-res pixel-art store tree mascot — 68×76 grid with layered shading.
  * 6 growth levels: 씨앗 → 새싹 → 줄기 → 앙상한 나무 → 푸른 나무 → 열매(최종).
  * Owner-only `health="wilting"` fades/droops — never dead.
  */
 
 export type TreeHealth = "healthy" | "wilting";
 
-const W = 34;
-const H = 38;
-const CX = 17;
+const W = 68;
+const H = 76;
+const CX = 34;
 
 const COLORS: Record<string, string> = {
   D: "#0c2417", // outline
   l: "#1b6b42", // leaf base
   L: "#3e8e63", // leaf light
   h: "#7fc39a", // leaf highlight
+  B: "#62ad84", // bright speck
   m: "#155737", // leaf shadow
+  n: "#0e3f28", // deep leaf shadow
   k: "#3a2f22", // trunk
   K: "#5a4a36", // trunk light
+  t: "#27201780", // trunk shadow
   s: "#b2c8ab", // soil
   S: "#9bb394", // soil dark
-  f: "#e0483a", // fruit base (빨강)
-  F: "#ff7a4d", // fruit highlight (주황)
+  f: "#e0483a", // fruit base
+  F: "#ff7a4d", // fruit highlight
   v: "#b8322a", // fruit shadow
 };
 
@@ -43,105 +46,107 @@ type Spec = {
   trunkW: number;
   blobs: Blob[];
   branches: Branch[];
-  coins: [number, number][]; // LV6: 열매 위치
+  coins: [number, number][];
 };
 
 const SPECS: Record<TreeLevel, Spec> = {
   1: {
-    // 씨앗 — 흙 위로 막 튼 작은 싹 끝
-    trunkTop: 30,
-    trunkW: 1,
-    blobs: [[17, 29, 2.4, 1.8]],
+    // 씨앗 — 흙 위로 막 튼 작은 싹
+    trunkTop: 60,
+    trunkW: 2,
+    blobs: [[34, 58, 5, 3.6]],
     branches: [],
     coins: [],
   },
   2: {
-    // (옛 1 새싹)
-    trunkTop: 27,
-    trunkW: 1,
+    // 새싹
+    trunkTop: 54,
+    trunkW: 2,
     blobs: [
-      [13, 26, 3.6, 2.7],
-      [21, 26, 3.6, 2.7],
-      [17, 24, 3, 2.4],
+      [26, 52, 7.2, 5.4],
+      [42, 52, 7.2, 5.4],
+      [34, 48, 6, 4.8],
     ],
     branches: [],
     coins: [],
   },
   3: {
-    // (옛 2 어린싹 → 줄기)
-    trunkTop: 19,
-    trunkW: 1,
+    // 줄기
+    trunkTop: 38,
+    trunkW: 2,
     blobs: [
-      [17, 16, 5, 4],
-      [11, 19, 4, 3.5],
-      [23, 19, 4, 3.5],
+      [34, 32, 10, 8],
+      [22, 38, 8, 7],
+      [46, 38, 8, 7],
     ],
     branches: [],
     coins: [],
   },
   4: {
-    // (옛 3 묘목 → 앙상한 나무)
-    trunkTop: 17,
-    trunkW: 2,
+    // 앙상한 나무
+    trunkTop: 34,
+    trunkW: 4,
     blobs: [
-      [17, 13, 7, 5.5],
-      [10, 16, 5, 4.5],
-      [24, 16, 5, 4.5],
-      [17, 18, 6, 4],
+      [34, 26, 14, 11],
+      [20, 32, 10, 9],
+      [48, 32, 10, 9],
+      [34, 36, 12, 8],
     ],
     branches: [
-      [17, 22, 10, 17],
-      [17, 22, 24, 17],
+      [34, 44, 20, 34],
+      [34, 44, 48, 34],
     ],
     coins: [],
   },
   5: {
-    // (옛 4 나무 → 푸른 나무)
-    trunkTop: 15,
-    trunkW: 3,
+    // 푸른 나무
+    trunkTop: 30,
+    trunkW: 6,
     blobs: [
-      [17, 11, 9, 7],
-      [8, 15, 6, 6],
-      [26, 15, 6, 6],
-      [17, 17, 8, 5.5],
-      [12, 9, 5, 4.5],
-      [22, 9, 5, 4.5],
+      [34, 22, 18, 14],
+      [16, 30, 12, 12],
+      [52, 30, 12, 12],
+      [34, 34, 16, 11],
+      [24, 18, 10, 9],
+      [44, 18, 10, 9],
     ],
     branches: [
-      [17, 24, 9, 17],
-      [17, 24, 25, 17],
+      [34, 48, 18, 34],
+      [34, 48, 50, 34],
     ],
     coins: [],
   },
   6: {
-    // (옛 5 금전수 → 열매) — coins 위치를 열매로 재사용
-    trunkTop: 13,
-    trunkW: 4,
+    // 열매
+    trunkTop: 26,
+    trunkW: 8,
     blobs: [
-      [17, 10, 10, 8],
-      [7, 14, 7, 6.5],
-      [27, 14, 7, 6.5],
-      [17, 16, 9, 6],
-      [11, 8, 6, 5],
-      [23, 8, 6, 5],
+      [34, 20, 20, 16],
+      [14, 28, 14, 13],
+      [54, 28, 14, 13],
+      [34, 32, 18, 12],
+      [22, 16, 12, 10],
+      [46, 16, 12, 10],
     ],
     branches: [
-      [17, 26, 8, 18],
-      [17, 26, 26, 18],
-      [17, 28, 13, 22],
-      [17, 28, 21, 22],
+      [34, 52, 16, 36],
+      [34, 52, 52, 36],
+      [34, 56, 26, 44],
+      [34, 56, 42, 44],
     ],
     coins: [
-      [8, 18],
-      [26, 18],
-      [12, 22],
-      [22, 22],
-      [17, 24],
-      [6, 13],
-      [28, 13],
+      [16, 36],
+      [52, 36],
+      [24, 44],
+      [44, 44],
+      [34, 48],
+      [12, 26],
+      [56, 26],
     ],
   },
 };
+
+const LABELS = TREE_LABELS;
 
 const SPARKLES: Record<TreeLevel, [number, number][]> = {
   1: [],
@@ -150,57 +155,57 @@ const SPARKLES: Record<TreeLevel, [number, number][]> = {
   4: [],
   5: [],
   6: [
-    [4, 6],
-    [30, 9],
-    [17, 2],
-    [2, 16],
+    [8, 12],
+    [60, 18],
+    [34, 4],
+    [4, 32],
   ],
 };
 
 function buildTree(level: TreeLevel): Grid {
   const g = makeGrid(W, H);
   const spec = SPECS[level];
-  const groundY = H - 5;
+  const groundY = H - 9;
 
   // trunk
   const halfL = Math.floor(spec.trunkW / 2);
   const halfR = Math.ceil(spec.trunkW / 2) - 1;
   fillRect(g, CX - halfL, spec.trunkTop, CX + halfR, groundY, "k");
-  // light edge on the left of the trunk
+  // light edge (left) + shadow edge (right)
   fillRect(g, CX - halfL, spec.trunkTop, CX - halfL, groundY, "K", "k");
+  if (spec.trunkW >= 4) fillRect(g, CX + halfR, spec.trunkTop, CX + halfR, groundY, "t", "k");
 
   // branches
   spec.branches.forEach(([x0, y0, x1, y1]) =>
-    line(g, x0, y0, x1, y1, "k", level >= 4 ? 2 : 1),
+    line(g, x0, y0, x1, y1, "k", level >= 4 ? 3 : 2),
   );
 
   // canopy fill
   spec.blobs.forEach(([cx, cy, rx, ry]) => fillEllipse(g, cx, cy, rx, ry, "l"));
 
-  // shading layered light source from the upper-left:
-  // light wash over the upper-left, bright highlight speck, then a shadow
-  // crescent painted only onto leaf base still showing at the lower-right.
+  // layered shading — light upper-left, two highlight tiers + two shadow tiers
   spec.blobs.forEach(([cx, cy, rx, ry]) => {
-    fillEllipse(g, cx - rx * 0.26, cy - ry * 0.3, rx * 0.7, ry * 0.7, "L", "l");
-    fillEllipse(g, cx - rx * 0.42, cy - ry * 0.46, rx * 0.32, ry * 0.32, "h", "L");
-    fillEllipse(g, cx + rx * 0.34, cy + ry * 0.36, rx * 0.66, ry * 0.66, "m", "l");
+    fillEllipse(g, cx - rx * 0.24, cy - ry * 0.28, rx * 0.72, ry * 0.72, "L", "l");
+    fillEllipse(g, cx - rx * 0.4, cy - ry * 0.44, rx * 0.4, ry * 0.4, "h", "L");
+    fillEllipse(g, cx - rx * 0.46, cy - ry * 0.5, rx * 0.18, ry * 0.18, "B", "h");
+    fillEllipse(g, cx + rx * 0.32, cy + ry * 0.34, rx * 0.66, ry * 0.66, "m", "l");
+    fillEllipse(g, cx + rx * 0.46, cy + ry * 0.48, rx * 0.32, ry * 0.32, "n", "m");
   });
 
-  // LV6 fruits (옛 금전수 동전 → 빨강·주황 열매)
+  // LV6 fruits (빨강·주황 열매)
   spec.coins.forEach(([cx, cy]) => {
-    fillEllipse(g, cx, cy, 2, 2, "f");
-    setPx(g, cx, cy - 1, "F", "f");
-    setPx(g, cx - 1, cy, "F", "f");
-    setPx(g, cx + 1, cy + 1, "v", "f");
+    fillEllipse(g, cx, cy, 3.4, 3.4, "f");
+    fillEllipse(g, cx - 1, cy - 1, 1.8, 1.8, "F", "f");
+    fillEllipse(g, cx + 1.4, cy + 1.4, 1.6, 1.6, "v", "f");
   });
 
   // outline silhouette
   outline(g, "D");
 
-  // soil mound (drawn after outline so it reads as ground)
-  for (let x = CX - 7; x <= CX + 7; x++) {
+  // soil mound (after outline so it reads as ground)
+  for (let x = CX - 14; x <= CX + 14; x++) {
     const edge = Math.abs(x - CX);
-    const top = groundY + 1 + (edge > 5 ? 1 : 0);
+    const top = groundY + 1 + (edge > 10 ? 2 : edge > 6 ? 1 : 0);
     for (let y = top; y < H; y++) {
       setPx(g, x, y, (x + y) % 3 === 0 ? "S" : "s");
     }
@@ -224,7 +229,7 @@ function treeGrid(level: TreeLevel) {
 export function PixelTree({
   level = 1,
   health = "healthy",
-  cell = 6,
+  cell = 4,
   className = "",
   showLabel = false,
 }: {
@@ -251,7 +256,7 @@ export function PixelTree({
           transition: "opacity 0.35s, transform 0.35s",
         }}
         role="img"
-        aria-label={`매장 나무 LV.${level} ${TREE_LABELS[level]}${
+        aria-label={`매장 나무 LV.${level} ${LABELS[level]}${
           wilting ? " (시듦)" : ""
         }`}
       >
@@ -259,7 +264,7 @@ export function PixelTree({
           row.map((ch, x) => {
             if (ch === ".") return null;
             let fill = COLORS[ch];
-            if (wilting && "lLhm".includes(ch)) fill = "#86a085";
+            if (wilting && "lLhmnB".includes(ch)) fill = "#86a085";
             return (
               <rect
                 key={`${x}-${y}`}
@@ -277,7 +282,7 @@ export function PixelTree({
             key={`sp-${i}`}
             x={x * cell}
             y={y * cell + cell * 1.6}
-            fontSize={cell * 2}
+            fontSize={cell * 3.5}
             fill="#ffe14d"
             fontFamily="monospace"
           >
@@ -287,7 +292,7 @@ export function PixelTree({
       </svg>
       {showLabel && (
         <span className="font-mono text-[11px] text-muted-foreground">
-          LV.{level} · {TREE_LABELS[level]}
+          LV.{level} · {LABELS[level]}
         </span>
       )}
     </div>
