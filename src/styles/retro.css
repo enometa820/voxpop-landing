@@ -27,6 +27,12 @@
 
 /* ── 제네릭 베벨 ─────────────────────────────────── */
 .bevel-out { border-radius: 0; box-shadow: var(--bevel-out); }
+
+/* Y2K 하드 오프셋 섀도 — 블러 0의 통짜 그림자 (2026-06-12 Y2K 키트 차용) */
+.retro-window {
+  border-radius: 0;
+  box-shadow: var(--bevel-out), 6px 6px 0 color-mix(in srgb, var(--bevel-dark) 72%, transparent);
+}
 .bevel-in { border-radius: 0; box-shadow: var(--bevel-in); }
 .bevel-out-thin { border-radius: 0; box-shadow: var(--bevel-out-thin); }
 .bevel-in-thin { border-radius: 0; box-shadow: var(--bevel-in-thin); }

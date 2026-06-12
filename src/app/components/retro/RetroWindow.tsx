@@ -11,6 +11,7 @@ export function RetroWindow({
   className = "",
   bodyClassName = "",
   status,
+  shadow = true,
 }: {
   title?: string;
   children: ReactNode;
@@ -18,9 +19,13 @@ export function RetroWindow({
   bodyClassName?: string;
   /** 창 하단 상태바 셀들 (선택) */
   status?: ReactNode[];
+  /** Y2K 하드 오프셋 섀도 (중첩 창이면 끄기) */
+  shadow?: boolean;
 }) {
   return (
-    <section className={cn("bevel-out bg-card p-[3px]", className)}>
+    <section
+      className={cn(shadow ? "retro-window" : "bevel-out", "bg-card p-[3px]", className)}
+    >
       <header className="retro-titlebar flex h-7 items-center gap-2 pl-2 pr-1">
         <span className="truncate font-mono text-[12px] font-bold tracking-tight">
           {title}
