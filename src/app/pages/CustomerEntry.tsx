@@ -202,7 +202,7 @@ export function CustomerEntry() {
     return (
       <main className="mx-auto max-w-[440px] px-4 py-16">
         <RetroWindow title="voxpop.exe">
-          <p className="font-mono text-[13px] text-muted-foreground">
+          <p className="font-mono text-body text-muted-foreground">
             매장 정보를 불러오는 중<span className="vox-cursor ml-1 text-primary">█</span>
           </p>
         </RetroWindow>
@@ -218,13 +218,13 @@ export function CustomerEntry() {
             <div className="w-20 opacity-70">
               <PixelCat expression="sleepy" cell={6} />
             </div>
-            <p className="text-[15px] text-foreground" style={{ fontWeight: 700 }}>
+            <p className="text-body-lg text-foreground" style={{ fontWeight: 700 }}>
               매장 정보를 찾을 수 없어요
             </p>
-            <p className="font-mono text-[12px] text-muted-foreground">
+            <p className="font-mono text-body text-muted-foreground">
               QR 코드를 다시 확인해 주세요.
             </p>
-            <Link to="/" className="mt-2 font-mono text-[12px] text-primary underline-offset-4 hover:underline">
+            <Link to="/" className="mt-2 font-mono text-body text-primary underline-offset-4 hover:underline">
               ← voxpop 소개
             </Link>
           </div>
@@ -242,14 +242,14 @@ export function CustomerEntry() {
           status={["영수증 링크 전용 · 무기명", threadFailed ? "조회 실패" : `사장님 답 ${replyCount}개`]}
         >
           {threadFailed ? (
-            <div className="space-y-4 py-1 text-[14px] leading-relaxed text-muted-foreground">
+            <div className="space-y-4 py-1 text-body-lg leading-relaxed text-muted-foreground">
               <p>
                 이 링크로 한마디를 찾을 수 없어요. 다른 기기에서 저장된 링크이거나 링크 일부가
                 잘렸을 수 있어요. voxpop은 무기명이라 링크 없이는 찾아드릴 수 없어요.
               </p>
               <Link
                 to={`/s?store=${encodeURIComponent(slug)}`}
-                className="retro-btn retro-btn--primary inline-block px-4 py-2 font-mono text-[13px]"
+                className="retro-btn retro-btn--primary inline-block px-4 py-2 font-mono text-body"
               >
                 <span className="inline-flex items-center gap-1.5">새 한마디 남기기 →</span>
               </Link>
@@ -262,9 +262,9 @@ export function CustomerEntry() {
                   <div className="w-7 shrink-0">
                     <PixelCat expression="default" cell={4} />
                   </div>
-                  <span className="font-mono text-[11px] text-muted-foreground">익명 고양이</span>
+                  <span className="font-mono text-caption text-muted-foreground">익명 고양이</span>
                 </div>
-                <div className="bevel-in bg-surface-raised px-3.5 py-3 text-[14px] leading-relaxed text-foreground">
+                <div className="bevel-in bg-surface-raised px-3.5 py-3 text-body-lg leading-relaxed text-foreground">
                   {thread?.feedback?.content_clean || "한마디를 찾을 수 없어요."}
                 </div>
               </div>
@@ -276,20 +276,20 @@ export function CustomerEntry() {
                       <div className="w-7 shrink-0">
                         <PixelTree level={treeLevel} cell={3} />
                       </div>
-                      <span className="font-mono text-[11px] text-muted-foreground">사장님</span>
+                      <span className="font-mono text-caption text-muted-foreground">사장님</span>
                     </div>
-                    <div className="bevel-out ml-6 bg-card px-3.5 py-3 text-[14px] leading-relaxed text-foreground">
+                    <div className="bevel-out ml-6 bg-card px-3.5 py-3 text-body-lg leading-relaxed text-foreground">
                       <span className="mr-1 font-mono text-primary">→</span>
                       {r.body}
                     </div>
                   </div>
                 ))
               ) : (
-                <p className="font-mono text-[13px] text-muted-foreground">
+                <p className="font-mono text-body text-muted-foreground">
                   아직 사장님 답이 없어요. 사장님이 답을 남기면 이 링크에서 볼 수 있어요.
                 </p>
               )}
-              <p className="font-mono text-[11px] leading-relaxed text-muted-foreground">
+              <p className="font-mono text-caption leading-relaxed text-muted-foreground">
                 › 이 대화는 영수증 링크로만 열려요. 사장님은 누가 썼는지 끝까지 모릅니다.
                 <span className="vox-cursor ml-1 text-primary">█</span>
               </p>
@@ -298,11 +298,11 @@ export function CustomerEntry() {
         </RetroWindow>
         <Link
           to={`/s?store=${encodeURIComponent(slug)}`}
-          className="retro-btn retro-btn--primary mt-5 block px-4 py-2.5 text-center font-mono text-[13px]"
+          className="retro-btn retro-btn--primary mt-5 block px-4 py-2.5 text-center font-mono text-body"
         >
           <span className="inline-flex w-full items-center justify-center gap-1.5">한마디 더 남기기 →</span>
         </Link>
-        <Link to="/" className="mt-3 block text-center font-mono text-[12px] text-muted-foreground underline-offset-4 hover:underline">
+        <Link to="/" className="mt-3 block text-center font-mono text-body text-muted-foreground underline-offset-4 hover:underline">
           ← voxpop 소개
         </Link>
       </main>
@@ -330,10 +330,10 @@ export function CustomerEntry() {
               animate={{ y: 0, opacity: 1 }}
               transition={{ delay: 0.15 }}
             >
-              <RetroBadge tone="default" className="border-bold bg-reward text-sun-foreground shadow-hard-sm px-3 py-1 text-[13px]">🌱 +1 적립!</RetroBadge>
+              <RetroBadge tone="default" className="border-bold bg-reward text-sun-foreground shadow-hard-sm px-3 py-1 text-body">🌱 +1 적립!</RetroBadge>
             </motion.div>
-            <p className="text-[15px] leading-relaxed text-foreground">읽고 진짜 바뀝니다. 고마워요.</p>
-            <p className="font-mono text-[12px] text-muted-foreground">
+            <p className="text-body-lg leading-relaxed text-foreground">읽고 진짜 바뀝니다. 고마워요.</p>
+            <p className="font-mono text-body text-muted-foreground">
               → 사장님은 누가 썼는지 끝까지 모릅니다.
             </p>
 
@@ -345,27 +345,27 @@ export function CustomerEntry() {
             {/* 영수증 링크 */}
             {receiptUrl && (
               <div className="sticky-card w-full p-3 text-left">
-                <p className="font-mono text-[11px] text-muted-foreground">
+                <p className="font-mono text-caption text-muted-foreground">
                   사장님 답이 궁금하면 이 링크를 저장하세요
                 </p>
                 <div className="mt-2 flex items-center gap-2">
                   <Link
                     to={`/s?store=${encodeURIComponent(slug)}&token=${encodeURIComponent(receiptUrl.split("token=")[1] || "")}`}
-                    className="flex-1 truncate font-mono text-[12px] text-primary underline-offset-2 hover:underline"
+                    className="flex-1 truncate font-mono text-body text-primary underline-offset-2 hover:underline"
                   >
                     내 한마디에 사장님 답 보기
                   </Link>
-                  <RetroButton onClick={copyReceipt} className="shrink-0 px-2 py-1 text-[11px]">
+                  <RetroButton onClick={copyReceipt} className="shrink-0 px-2 py-1 text-caption">
                     {copied ? "복사됨!" : "링크 복사"}
                   </RetroButton>
                 </div>
-                <p className="mt-2 font-mono text-[10px] leading-relaxed text-muted-foreground/70">
+                <p className="mt-2 font-mono text-caption leading-relaxed text-muted-foreground/70">
                   이름·연락처 없이 이 링크로만 본인 한마디의 답을 볼 수 있어요.
                 </p>
               </div>
             )}
 
-            <Link to="/" className="mt-1 font-mono text-[12px] text-muted-foreground underline-offset-4 hover:underline">
+            <Link to="/" className="mt-1 font-mono text-body text-muted-foreground underline-offset-4 hover:underline">
               홈으로
             </Link>
           </div>
@@ -378,7 +378,7 @@ export function CustomerEntry() {
   return (
     <div className="retro-desktop min-h-screen">
       <main className="mx-auto max-w-[440px] px-4 py-8">
-      <div className="sticky-card mb-4 px-3 py-2 font-mono text-[11px] text-foreground">
+      <div className="sticky-card mb-4 px-3 py-2 font-mono text-caption text-foreground">
         <span className="text-primary">●</span> 이름·번호 안 받아요 · 욕설·개인정보 자동 가림
       </div>
 
@@ -386,14 +386,14 @@ export function CustomerEntry() {
         <div className="sticky-card mb-4 flex items-center justify-between gap-2 px-3 py-2">
           <Link
             to={`/s?store=${encodeURIComponent(slug)}&token=${encodeURIComponent(revisitToken)}`}
-            className="font-mono text-[12px] text-primary underline-offset-2 hover:underline"
+            className="font-mono text-body text-primary underline-offset-2 hover:underline"
           >
             › 지난 한마디에 사장님 답 보기
           </Link>
           <button
             type="button"
             onClick={() => setRevisitToken(null)}
-            className="retro-focus font-mono text-[11px] text-muted-foreground hover:text-foreground"
+            className="retro-focus font-mono text-caption text-muted-foreground hover:text-foreground"
             aria-label="배지 닫기"
           >
             ✕
@@ -409,7 +409,7 @@ export function CustomerEntry() {
           <div className="w-24">
             <PixelCat expression={catExpr} cell={8} />
           </div>
-          <p className="text-[16px] text-foreground" style={{ fontWeight: 700 }}>오늘 어떠셨어요?</p>
+          <p className="text-title-sm text-foreground" style={{ fontWeight: 700 }}>오늘 어떠셨어요?</p>
         </div>
 
         {/* 별점 */}
@@ -430,7 +430,7 @@ export function CustomerEntry() {
             </button>
           ))}
         </div>
-        <p className="mt-1 text-center font-mono text-[11px]" style={{ color: error && rating < 1 ? "var(--destructive)" : undefined }}>
+        <p className="mt-1 text-center font-mono text-caption" style={{ color: error && rating < 1 ? "var(--destructive)" : undefined }}>
           <span className="text-muted-foreground">
             {rating ? RATING_HINTS[rating] : "별을 눌러 평가해 주세요"}
           </span>
@@ -439,7 +439,7 @@ export function CustomerEntry() {
         {/* 후속 칩 (1~3점) */}
         {rating > 0 && shouldAskFollowUp({ rating }) && (
           <motion.div initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: "auto" }} className="mt-5">
-            <p className="font-mono text-[12px] text-muted-foreground">어떤 점이 아쉬우셨어요? (선택)</p>
+            <p className="font-mono text-body text-muted-foreground">어떤 점이 아쉬우셨어요? (선택)</p>
             <div className="mt-2 flex flex-wrap gap-2">
               {FOLLOW_UP_CHIPS.map((c: { label: string; category: string }) => (
                 <RetroChip
@@ -457,7 +457,7 @@ export function CustomerEntry() {
         {/* 한마디 (선택) — 별점 전에도 항상 열림 */}
         {(
           <div className="mt-5">
-            <p className="font-mono text-[12px] text-muted-foreground">한마디 (선택)</p>
+            <p className="font-mono text-body text-muted-foreground">한마디 (선택)</p>
             <RetroTextarea
               value={note}
               onChange={(e) => setNote(e.target.value)}
@@ -466,23 +466,24 @@ export function CustomerEntry() {
               placeholder="남기고 싶은 한마디가 있다면 적어 주세요. 위험한 말·개인정보는 자동으로 가려져요."
               className="mt-2"
             />
-            <p className="text-right font-mono text-[10px] text-muted-foreground/70">{note.length} / 500</p>
+            <p className="text-right font-mono text-caption text-muted-foreground/70">{note.length} / 500</p>
           </div>
         )}
 
         {error && (
-          <p className="bevel-in-thin mt-3 bg-secondary px-3 py-2 font-mono text-[12px] text-destructive">
+          <p className="bevel-in-thin mt-3 bg-secondary px-3 py-2 font-mono text-body text-destructive">
             {error}
           </p>
         )}
 
         <RetroButton
           variant="primary"
+          cta
           onClick={submit}
           disabled={rating === 0 || submitting}
           className="mt-4 w-full py-2.5"
         >
-          {submitting ? "전달 중..." : "사장님에게 전달하기"}
+          {rating === 0 ? "먼저 별점을 매겨주세요" : submitting ? "보내는 중…" : "사장님에게 전달하기 →"}
         </RetroButton>
       </RetroWindow>
 
@@ -492,12 +493,12 @@ export function CustomerEntry() {
           <PixelGarden level={treeLevel} cell={6} />
         </div>
         <RetroProgress value={treeLevel} max={6} label="나무 성장 단계" className="retro-progress--growth w-full max-w-[220px]" />
-        <p className="font-mono text-[11px] text-muted-foreground">
+        <p className="font-mono text-caption text-muted-foreground">
           이 가게의 나무 · 한마디가 쌓일수록 자랍니다
         </p>
       </div>
 
-      <Link to="/" className="mt-4 block text-center font-mono text-[12px] text-muted-foreground underline-offset-4 hover:underline">
+      <Link to="/" className="mt-4 block text-center font-mono text-body text-muted-foreground underline-offset-4 hover:underline">
         ← voxpop 소개
       </Link>
       </main>
