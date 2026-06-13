@@ -371,8 +371,8 @@ export function OwnerDashboard() {
       {/* 긴급 배너 — 코랄 스티커 알림 (한 화면 포인트 1색 = 코랄) */}
       {urgentList.length > 0 && (
         <div className="mb-5 flex items-center gap-3 border-bold shadow-hard-sm bg-coral px-4 py-3 text-coral-foreground">
-          <span className="border-2 border-ink bg-card px-1.5 py-0.5 font-mono text-[12px] text-coral">[긴급 {urgentList.length}]</span>
-          <p className="font-mono text-[12px] text-coral-foreground">
+          <span className="whitespace-nowrap border-2 border-ink bg-card px-1.5 py-0.5 font-mono text-caption text-coral">[긴급 {urgentList.length}]</span>
+          <p className="font-mono text-body text-coral-foreground">
             아직 확인하지 않은 긴급 한마디가 있어요. 안전·위생 신호일 수 있으니 먼저 확인해주세요.
           </p>
         </div>

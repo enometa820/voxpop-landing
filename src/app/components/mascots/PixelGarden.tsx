@@ -60,8 +60,8 @@ export function PixelGarden({
             width: "auto",
             zIndex: 1,
             imageRendering: "pixelated",
-            opacity: health === "wilting" ? 0.62 : 1,
-            filter: health === "wilting" ? "grayscale(0.45) brightness(0.92)" : undefined,
+            opacity: health === "wilting" ? 0.82 : 1,
+            filter: health === "wilting" ? "grayscale(0.25) brightness(0.97)" : undefined,
             transition: "opacity 0.35s, filter 0.35s",
           }}
         />
