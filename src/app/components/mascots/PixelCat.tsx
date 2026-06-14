@@ -1,6 +1,6 @@
 /**
- * 손님 고양이 마스코트 — Figma 정교 픽셀아트 9포즈 시트(public/mascot/cat-sheet.png).
- * 절차생성 폐기, Figma export 채택(2026-06-12). 3×3 시트를 background-position으로 슬라이스.
+ * 손님 고양이 마스코트 — higgsfield 생성 정교 픽셀아트 9포즈 시트(public/mascot/cat-sheet.png).
+ * 절차생성 폐기, higgsfield 생성 PNG 채택(2026-06-13). 3×3 시트를 background-position으로 슬라이스.
  * 코스튬은 로드맵(시트 베이스엔 없음).
  */
 

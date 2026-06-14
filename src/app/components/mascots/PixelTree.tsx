@@ -1,8 +1,8 @@
 import { type TreeLevel, TREE_LABELS } from "../../lib/tree";
 
 /**
- * 매장 나무 마스코트 — Figma 정교 픽셀아트 에셋(public/mascot/tree-N.png).
- * 6단계: 씨앗→새싹→줄기→앙상한→푸른→열매. 절차생성 폐기, Figma export 채택(2026-06-12).
+ * 매장 나무 마스코트 — higgsfield 생성 정교 픽셀아트 에셋(public/mascot/tree-N.png).
+ * 6단계: 씨앗→새싹→줄기→앙상한→푸른→열매. 절차생성 폐기, higgsfield 생성 PNG 채택(2026-06-13).
  * Owner-only health="wilting" → 흐리게/탈색(시듦, never dead).
  */
 
