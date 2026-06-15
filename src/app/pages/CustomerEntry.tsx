@@ -505,7 +505,7 @@ export function CustomerEntry() {
                 onMouseEnter={() => setHover(n)}
                 onMouseLeave={() => setHover(0)}
                 aria-label={`${n}점`}
-                className="retro-focus px-1 text-4xl leading-none transition-transform"
+                className="retro-focus flex min-h-[44px] min-w-[44px] items-center justify-center px-2 py-1.5 text-4xl leading-none transition-transform"
                 style={{
                   color: on ? "var(--sun)" : "var(--card)",
                   textShadow: "1.5px 1.5px 0 var(--ink), -1.5px -1.5px 0 var(--ink), 1.5px -1.5px 0 var(--ink), -1.5px 1.5px 0 var(--ink)",

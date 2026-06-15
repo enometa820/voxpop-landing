@@ -29,7 +29,7 @@ jobs:
       # 각 라우트 디렉토리에 index.html을 두면 /s/?store=·/owner/ 등이 정상 200. 그 외 미지정 경로는 404.html(앱 셸)이 받아 React NotFound로.
       - run: |
           cp dist/index.html dist/404.html
-          for r in s owner admin story privacy owner-guide; do
+          for r in s owner admin story privacy owner-guide thread; do
             mkdir -p "dist/$r"
             cp dist/index.html "dist/$r/index.html"
           done

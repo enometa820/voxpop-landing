@@ -545,9 +545,9 @@ export function OwnerDashboard() {
               <MonoLabel className={todayAction.kind === "urgent" ? "text-coral-foreground" : "text-sun-foreground"}>[ 오늘 볼 것 ]</MonoLabel>
             </div>
             <div className="space-y-1.5 px-4 py-4 text-body-lg leading-relaxed">
-              <p className="text-foreground"><b className={`mr-1 font-mono text-body ${todayAction.kind === "urgent" ? "text-coral" : "text-primary"}`}>오늘</b>{todayAction.title}</p>
-              <p className="text-muted-foreground"><b className="mr-1 font-mono text-body">근거</b>{todayAction.reason}</p>
-              <p className="text-muted-foreground"><b className="mr-1 font-mono text-body">다음</b>{todayAction.next}</p>
+              <p className="text-foreground"><b className={`mr-1 font-mono text-body ${todayAction.kind === "urgent" ? "text-coral" : "text-primary"}`}>오늘:</b>{" "}{todayAction.title}</p>
+              <p className="text-muted-foreground"><b className="mr-1 font-mono text-body">근거:</b>{" "}{todayAction.reason}</p>
+              <p className="text-muted-foreground"><b className="mr-1 font-mono text-body">다음:</b>{" "}{todayAction.next}</p>
             </div>
           </div>
 
