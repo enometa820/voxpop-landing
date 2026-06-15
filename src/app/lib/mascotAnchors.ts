@@ -8,13 +8,19 @@ export const TREE_FOOT_INSET: Record<number, number> = {
   "6": 0
 };
 export const CAT_FOOT_INSET: Record<string, number> = {
-  "0,0": 0.0327,
-  "1,0": 0.0327,
-  "2,0": 0.0327,
-  "0,1": 0,
-  "1,1": 0.2059,
-  "2,1": 0.183,
-  "0,2": 0.3758,
-  "1,2": 0.3791,
-  "2,2": 0.3562
+  "default": 0.0219,
+  "happy": 0.0219,
+  "loaf": 0.1437,
+  "jump": 0.0719,
+  "surprised": 0.0219,
+  "love": 0.0219,
+  "sad": 0.0219,
+  "wave": 0.0219,
+  "write": 0.0219,
+  "think": 0.0219,
+  "bow": 0.1187,
+  "angry": 0.0219,
+  "celebrate": 0.0719,
+  "sleepy": 0.1437,
+  "wink": 0.0219
 };

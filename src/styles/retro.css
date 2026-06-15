@@ -52,8 +52,9 @@
   box-shadow: var(--bevel-out);
   user-select: none;
   cursor: pointer;
+  transition: filter 0.12s, transform 0.12s, box-shadow 0.12s;
 }
-.retro-btn:hover:not(:disabled) { background: var(--surface-raised); filter: brightness(1.02); }
+.retro-btn:hover:not(:disabled) { background: var(--surface-raised); filter: brightness(1.07); }
 .retro-btn:active:not(:disabled),
 .retro-btn[data-pressed="true"] {
   box-shadow: var(--bevel-in);
@@ -70,13 +71,40 @@
   background: var(--primary);
   color: var(--primary-foreground);
 }
-.retro-btn--primary:hover:not(:disabled) { background: var(--primary); filter: brightness(1.06); }
+.retro-btn--primary:hover:not(:disabled) { background: var(--primary); filter: brightness(1.1); }
 .retro-btn--primary:focus-visible { outline-color: var(--primary-foreground); }
 .retro-btn--danger {
   background: var(--destructive);
   color: var(--destructive-foreground);
 }
 .retro-btn--danger:focus-visible { outline-color: var(--destructive-foreground); }
+
+/* ── 팝색 버튼 (raw 팝색 + 잉크 보더로 직접 만든 클릭 버튼 공통 hover/active) ──
+   retro-btn 베벨을 안 쓰고 bg-coral/bg-sun/bg-lime/bg-primary 등 + border-bold + 하드섀도로
+   조립한 버튼·링크에 부여. 기본은 색·보더·섀도를 컴포넌트가 들고, 여기선 모션·밝기만 더한다. */
+.pop-btn {
+  cursor: pointer;
+  transition: filter 0.12s, transform 0.12s, box-shadow 0.12s;
+}
+.pop-btn:hover:not(:disabled):not([aria-disabled="true"]) {
+  filter: brightness(1.07);
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-hard);
+}
+.pop-btn:active:not(:disabled):not([aria-disabled="true"]) {
+  filter: brightness(1.02);
+  transform: translateY(1px);
+  box-shadow: var(--shadow-hard-sm);
+}
+.pop-btn:disabled,
+.pop-btn[aria-disabled="true"] { cursor: not-allowed; }
+/* 작은 칩형(섀도 약한) 버튼은 hover에서도 작은 섀도 유지 */
+.pop-btn--sm:hover:not(:disabled):not([aria-disabled="true"]) { box-shadow: var(--shadow-hard-sm); }
+
+@media (prefers-reduced-motion: reduce) {
+  .pop-btn:hover:not(:disabled):not([aria-disabled="true"]),
+  .pop-btn:active:not(:disabled):not([aria-disabled="true"]) { transform: none; }
+}
 
 /* ── 입력칸 (눌림) ───────────────────────────────── */
 .retro-field {
@@ -103,8 +131,10 @@
   box-shadow: var(--bevel-out-thin);
   cursor: pointer;
   user-select: none;
+  transition: filter 0.12s, transform 0.12s, color 0.12s, box-shadow 0.12s;
 }
-.retro-chip:hover { color: var(--foreground); }
+.retro-chip:hover { color: var(--foreground); filter: brightness(1.07); }
+.retro-chip:active { transform: translateY(1px); }
 .retro-chip[data-on="true"] {
   background: var(--primary);
   color: var(--primary-foreground);
@@ -151,7 +181,10 @@
   box-shadow: var(--bevel-out-thin);
   user-select: none;
   line-height: 1;
+  cursor: pointer;
+  transition: filter 0.12s, box-shadow 0.12s;
 }
+.retro-titlebtn:hover { filter: brightness(1.07); }
 .retro-titlebtn:active { box-shadow: var(--bevel-in-thin); }
 
 /* ── 탭 (폴더 탭) ────────────────────────────────── */
@@ -162,7 +195,9 @@
   box-shadow: inset 1px 1px 0 var(--bevel-light), inset -1px 0 0 var(--bevel-dark);
   cursor: pointer;
   position: relative;
+  transition: filter 0.12s, color 0.12s;
 }
+.retro-tab:hover:not([data-on="true"]) { color: var(--foreground); filter: brightness(1.07); }
 .retro-tab[data-on="true"] {
   background: var(--card);
   color: var(--foreground);
@@ -196,6 +231,9 @@
 .sticky-card--good   { background: var(--lime);  color: var(--lime-foreground); }
 .sticky-card--reward { background: var(--sun);   color: var(--sun-foreground); }
 .sticky-card--info   { background: var(--sky);   color: var(--sky-foreground); }
+.sticky-card--play   { background: var(--grape); color: var(--grape-foreground); }
+.sticky-card--fresh  { background: var(--aqua);  color: var(--aqua-foreground); }
+.sticky-card--pink   { background: var(--pink);  color: var(--pink-foreground); }
 
 /* ── 머티리얼 유틸 ───────────────────────────────── */
 .shadow-hard { box-shadow: var(--shadow-hard); }
@@ -230,4 +268,68 @@
 /* ── 마스코트 숨쉬기(idle) — 발 고정, 미세 통통 ── */
 @keyframes mascot-breathe { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-2px); } }
 .mascot-breathe { animation: mascot-breathe 1.5s ease-in-out infinite; transform-origin: bottom center; }
-@media (prefers-reduced-motion: reduce) { .mascot-breathe { animation: none; } }
+
+/* ── 마스코트 동작 모음 (PixelCat anim prop) — 정본 .claude/skills/voxpop-design/tokens/retro.css ── */
+/* 진폭 좁게·속도 느리게 — 차분한 idle 모션(2026-06-15 사용자: 너무 빠르고 넓음). 좌우 큰 이동 제거 */
+@keyframes mascot-bounce { 0%, 100% { transform: translateY(0) scaleY(1); } 40% { transform: translateY(-9%) scaleY(1.03); } 60% { transform: translateY(0) scaleY(0.97); } }
+@keyframes mascot-wiggle { 0%, 100% { transform: rotate(-2.5deg); } 50% { transform: rotate(2.5deg); } }
+@keyframes mascot-spin { to { transform: rotate(360deg); } }
+@keyframes mascot-walk { 0% { transform: translateY(0) rotate(-1.5deg); } 100% { transform: translateY(-1.5px) rotate(1.5deg); } }
+@keyframes mascot-hop { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-11%); } }
+@keyframes mascot-sway { 0%,100% { transform: rotate(-3.5deg) translateY(0); } 50% { transform: rotate(3.5deg) translateY(-2%); } }
+@keyframes mascot-squash { 0%,100% { transform: scale(1,1); } 35% { transform: scale(1.06,0.94); } 65% { transform: scale(0.97,1.04); } }
+@keyframes mascot-shake { 0%,100% { transform: translateX(0) rotate(0); } 25% { transform: translateX(-3%) rotate(-1.5deg); } 75% { transform: translateX(3%) rotate(1.5deg); } }
+@keyframes mascot-pounce { 0%,20% { transform: translateY(0) scaleY(1); } 38% { transform: translateY(3%) scaleY(0.9); } 55% { transform: translateY(-16%) scaleY(1.05); } 72%,100% { transform: translateY(0) scaleY(1); } }
+.mascot-bounce { animation: mascot-bounce 1.3s ease-in-out infinite; }
+.mascot-hop    { animation: mascot-hop 1.7s ease-in-out infinite; }
+.mascot-sway   { animation: mascot-sway 2.4s ease-in-out infinite; }
+.mascot-spin   { animation: mascot-spin 3s steps(8) infinite; }
+.mascot-squash { animation: mascot-squash 1.4s ease-in-out infinite; }
+.mascot-shake  { animation: mascot-shake 1.1s ease-in-out infinite; }
+.mascot-pounce { animation: mascot-pounce 2s ease-in-out infinite; }
+.mascot-wiggle { animation: mascot-wiggle 1s ease-in-out infinite; }
+.mascot-walk   { animation: mascot-walk 0.9s steps(2) infinite; }
+[class*="mascot-"] { transform-origin: bottom center; }
+
+/* ── 하이퍼팝 장식 ───────────────────────────────────── */
+/* 마퀴 배너 — 무한 흐르는 텍스트 띠 (★ ANONYMOUS ▚ NO NAME ▚ …). 콘텐츠를 2번 이어 붙여 -50% 이동 */
+.vox-marquee { overflow: hidden; white-space: nowrap; }
+.vox-marquee__track { display: inline-block; will-change: transform; animation: vox-marquee 14s linear infinite; }
+@keyframes vox-marquee { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+
+/* 디더 스파클 — 카드·창 모서리에 살짝 회전시켜 포인트로. 통통 반짝 */
+@keyframes vox-sparkle { 0%,100% { transform: scale(1) rotate(var(--spin,0deg)); opacity: 0.9; } 50% { transform: scale(1.18) rotate(var(--spin,0deg)); opacity: 1; } }
+.vox-sparkle { image-rendering: pixelated; animation: vox-sparkle 1.8s ease-in-out infinite; pointer-events: none; }
+
+/* 점 패턴 데스크탑 — 텍스처 강화 */
+.retro-desktop-dots {
+  background-color: var(--desktop);
+  background-image: radial-gradient(var(--primary) 1px, transparent 1px);
+  background-size: 20px 20px;
+}
+.retro-desktop-dots--deep {
+  background-color: var(--desktop-deep);
+  background-image: radial-gradient(color-mix(in srgb, var(--card) 16%, transparent) 1px, transparent 1px);
+  background-size: 20px 20px;
+}
+
+/* 고대비 잉크 타이틀바 (창 이름을 검정 바에) */
+.retro-titlebar--ink { background: var(--ink); color: var(--card); }
+
+/* 디스플레이 타이포 (큰 모노 헤드라인, 코드아트 헤더용) */
+.text-display-mono {
+  font-family: var(--font-mono);
+  font-size: var(--text-display);
+  line-height: var(--lh-display);
+  font-weight: 800;
+  letter-spacing: -0.02em;
+}
+
+/* 스티커 라벨 — 똑바로(기울임 금지, 사용자 취향 2026-06-15). 회전 없이 포인트만 */
+.vox-sticker { display: inline-block; transform: none; }
+.vox-sticker--r { transform: none; }
+
+@media (prefers-reduced-motion: reduce) {
+  .mascot-breathe, .vox-cursor, [class*="mascot-"],
+  .vox-marquee__track, .vox-sparkle { animation: none; }
+}

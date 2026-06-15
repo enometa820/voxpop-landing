@@ -1,47 +1,54 @@
+import type { CSSProperties } from "react";
+
 /**
- * 손님 고양이 마스코트 — higgsfield 생성 정교 픽셀아트 9포즈 시트(public/mascot/cat-sheet.png).
- * 절차생성 폐기, higgsfield 생성 PNG 채택(2026-06-13). 3×3 시트를 background-position으로 슬라이스.
- * 코스튬은 로드맵(시트 베이스엔 없음).
+ * 손님 고양이 마스코트 — 검정 void 픽셀 고양이 15포즈(개별 투명 PNG, public/mascot/cats/cat-{expression}.png).
+ * 무기명 손님의 화신(이름 대신 익명의 검정 고양이). higgsfield 생성, work/blackcat → 320px 승격(2026-06-15).
+ * 표정 15종 + 동작 anim(retro.css mascot-* keyframes). 크기는 부모 박스가 정함(width:100%) — size 주면 px 고정.
+ * 코스튬은 로드맵(미사용). 옛 3×3 시트(cat-sheet.png)는 폐기.
  */
-
-export type CatExpression = "default" | "sleepy" | "happy";
+export type CatExpression =
+  | "default" | "happy" | "loaf" | "jump" | "surprised" | "love"
+  | "sad" | "wave" | "write" | "think" | "bow" | "angry"
+  | "celebrate" | "sleepy" | "wink";
 export type CatCostume = "none" | "ribbon" | "beret" | "tuxedo" | "crown";
-
-// 9포즈 3×3 [col,row]:
-// (0,0)기본 (1,0)웃음 (2,0)놀람 / (0,1)점프 (1,1)걷기 (2,1)잠 / (0,2)윙크 (1,2)앉음옆 (2,2)앉음정면
-const POSE: Record<CatExpression, [number, number]> = {
-  default: [2, 2], // 앉음 정면 — 마스코트 기본
-  happy: [0, 2], // 윙크/웃음
-  sleepy: [2, 1], // 잠
-};
+export type CatAnim =
+  | "breathe" | "bounce" | "hop" | "sway" | "wiggle"
+  | "squash" | "shake" | "pounce" | "spin" | "walk";
 
 export function PixelCat({
   expression = "default",
   costume = "none",
-  cell = 4,
+  anim,
+  breathe = false,
+  size,
+  cell,
   className = "",
+  style,
 }: {
   expression?: CatExpression;
   costume?: CatCostume;
+  anim?: CatAnim;
+  breathe?: boolean;
+  size?: number | string;
   cell?: number;
   className?: string;
+  style?: CSSProperties;
 }) {
-  void costume; // 시트 베이스엔 코스튬 미포함 (코스튬은 로드맵)
-  const [col, row] = POSE[expression];
+  void costume; // 코스튬은 로드맵(시트 베이스엔 미포함)
+  void cell; // (구) 픽셀 그리드 — 폐기. 폭은 부모 박스가 정함
+  const animClass = anim ? `mascot-${anim}` : breathe ? "mascot-breathe" : "";
 
   return (
-    <div
-      role="img"
-      aria-label={`손님 고양이 (${expression})`}
-      className={className}
+    <img
+      src={`/mascot/cats/cat-${expression}.png`}
+      alt={`손님 고양이 (${expression})`}
+      className={`${animClass} ${className}`.trim()}
       style={{
-        width: "100%",
-        aspectRatio: "1 / 1",
-        backgroundImage: "url(/mascot/cat-sheet.png)",
-        backgroundSize: "300% 300%",
-        backgroundPosition: `${col * 50}% ${row * 50}%`,
-        backgroundRepeat: "no-repeat",
+        width: size != null ? (typeof size === "number" ? `${size}px` : size) : "100%",
+        height: "auto",
+        display: "block",
         imageRendering: "pixelated",
+        ...style,
       }}
     />
   );

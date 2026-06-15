@@ -1,3 +1,4 @@
+import type { ReactNode } from "react";
 import { Link } from "react-router";
 import { TerminalWindow } from "../components/terminal/TerminalWindow";
 import { TerminalLog, type LogLine } from "../components/terminal/TerminalLog";
@@ -25,7 +26,7 @@ const features: {
   title: string;
   body: string;
   meta: string;
-  variant: "" | "info" | "good";
+  variant: "info" | "pink" | "good";
 }[] = [
   {
     n: "01",
@@ -39,7 +40,7 @@ const features: {
     title: "자동 가림",
     body: "욕설·개인정보는 가리고, 가게가 고칠 수 있는 신호만 또렷하게 살립니다.",
     meta: "mask=on · pii=stripped",
-    variant: "",
+    variant: "pink",
   },
   {
     n: "03",
@@ -49,6 +50,17 @@ const features: {
     variant: "good",
   },
 ];
+
+const featureVariantCls: Record<string, string> = {
+  info: "sticky-card--info",
+  pink: "sticky-card--pink",
+  good: "sticky-card--good",
+};
+const featureFg: Record<string, string> = {
+  info: "text-sky-foreground",
+  pink: "text-pink-foreground",
+  good: "text-lime-foreground",
+};
 
 const treeStages: { level: TreeLevel; count: number }[] = [
   { level: 1, count: 1 },
@@ -91,6 +103,83 @@ function SectionLabel({
   );
 }
 
+/** 살짝 기울인 스티커 — 키치/팝 포인트 라벨. */
+function Sticker({
+  children,
+  tone = "ink",
+  rotate = "l",
+  className = "",
+}: {
+  children: ReactNode;
+  tone?: "ink" | "sun" | "coral" | "lime" | "sky" | "pink" | "grape" | "card";
+  rotate?: "l" | "r";
+  className?: string;
+}) {
+  const tones: Record<string, string> = {
+    ink: "bg-ink text-card",
+    sun: "bg-sun text-sun-foreground",
+    coral: "bg-coral text-coral-foreground",
+    lime: "bg-lime text-lime-foreground",
+    sky: "bg-sky text-sky-foreground",
+    pink: "bg-pink text-pink-foreground",
+    grape: "bg-grape text-grape-foreground",
+    card: "bg-card text-foreground",
+  };
+  return (
+    <span
+      className={`inline-flex items-center gap-1.5 border-2 border-ink px-2.5 py-1 font-mono text-[11px] font-bold shadow-hard-sm ${
+        rotate === "l" ? "vox-sticker" : "vox-sticker--r"
+      } ${tones[tone]} ${className}`}
+    >
+      {children}
+    </span>
+  );
+}
+
+/** 코드아트 헤더 — 터미널 프롬프트 풍 큰 헤드라인. */
+function CodeHead({
+  children,
+  className = "",
+}: {
+  children: ReactNode;
+  className?: string;
+}) {
+  return (
+    <span className={`text-display-mono ${className}`}>
+      <span className="text-primary">&gt;_ </span>
+      {children}
+      <span className="vox-cursor ml-0.5 text-coral">█</span>
+    </span>
+  );
+}
+
+const marqueeChips = [
+  { t: "★ 무기명 100%", c: "text-sun" },
+  { t: "이름 없음", c: "text-coral" },
+  { t: "번호 없음", c: "text-lime" },
+  { t: "위치 없음", c: "text-sky" },
+  { t: "솔직한 한마디", c: "text-pink" },
+];
+
+function HeroMarquee() {
+  return (
+    <div className="vox-marquee border-y-2 border-ink bg-ink py-2">
+      <div className="vox-marquee__track">
+        {[0, 1].map((rep) => (
+          <span key={rep} className="font-mono text-[12px] font-bold tracking-[0.04em]">
+            {marqueeChips.map((m, i) => (
+              <span key={i}>
+                <span className={m.c}>{m.t}</span>
+                <span className="text-card"> ▚ </span>
+              </span>
+            ))}
+          </span>
+        ))}
+      </div>
+    </div>
+  );
+}
+
 export function Landing() {
   return (
     <main className="mx-4 my-5 max-w-[1200px] overflow-hidden rounded-2xl border border-border shadow-[0_24px_70px_-34px_rgba(12,36,23,0.45)] sm:mx-6 sm:my-7 lg:mx-auto">
@@ -122,17 +211,24 @@ export function Landing() {
 
       {/* HERO */}
       <section id="about" className="grid grid-cols-1 lg:grid-cols-2">
-        <div className="border-b border-border px-4 py-10 sm:px-6 sm:py-14 lg:border-b-0 lg:border-r">
-          <MonoLabel className="text-primary">
-            OPEN FEEDBACK · 사장님만 보는 비공개 채널
-          </MonoLabel>
+        <div className="relative border-b border-border px-4 py-10 sm:px-6 sm:py-14 lg:border-b-0 lg:border-r">
+          <span className="vox-sparkle absolute right-6 top-8 text-[22px] text-sun" aria-hidden>
+            ✦
+          </span>
+          <div className="flex flex-wrap gap-2">
+            <Sticker tone="coral" rotate="l">
+              🔒 무기명 · 비공개 채널
+            </Sticker>
+            <Sticker tone="lime" rotate="r">
+              사장님만 봐요
+            </Sticker>
+          </div>
           <h1
-            className="mt-5 leading-[1.12] tracking-[-0.01em] text-foreground"
+            className="mt-6 leading-[1.1] tracking-[-0.01em] text-foreground"
             style={{ fontSize: "clamp(2rem, 5vw, 3.25rem)", fontWeight: 800 }}
           >
-            손님의 한마디로,
-            <br />
-            가게가 자랍니다.
+            <CodeHead className="block">손님의 한마디로,</CodeHead>
+            <span className="mt-1 block">가게가 자랍니다.</span>
           </h1>
           <p className="mt-5 max-w-md text-[15px] leading-relaxed text-muted-foreground">
             공개 리뷰엔 못 남기는 솔직한 한마디를, 손님이 매장 QR로 무기명 남깁니다.
@@ -166,23 +262,36 @@ export function Landing() {
           <div className="mt-6 flex flex-wrap gap-3">
             <Link
               to="/s?store=u61zh7b2"
-              className="border-bold bg-primary px-4 py-2 font-mono text-[13px] text-primary-foreground shadow-hard-sm transition-all hover:-translate-y-0.5 hover:translate-x-0 active:translate-x-[2px] active:translate-y-[2px] active:shadow-none"
+              className="pop-btn border-bold bg-coral px-5 py-2.5 font-mono text-[13px] font-bold text-coral-foreground shadow-hard"
             >
-              [ 손님 화면 체험 ]
+              [ 손님 화면 체험 → ]
             </Link>
             <Link
               to="/owner?demo=1"
-              className="border-bold bg-card px-4 py-2 font-mono text-[13px] text-foreground shadow-hard-sm transition-all hover:-translate-y-0.5 active:translate-x-[2px] active:translate-y-[2px] active:shadow-none"
+              className="pop-btn pop-btn--sm border-bold bg-card px-5 py-2.5 font-mono text-[13px] text-foreground shadow-hard-sm"
             >
               [ 사장 대시보드 체험 ]
             </Link>
           </div>
         </div>
 
-        <div className="flex items-center justify-center bg-desktop px-4 py-12 sm:px-6">
-          <div className="sticky-card sticky-card--good flex w-full max-w-xs flex-col items-center gap-5 p-6">
+        <div className="relative flex items-center justify-center bg-desktop retro-desktop-dots px-4 py-12 sm:px-6">
+          <span className="vox-sparkle absolute left-8 top-10 text-[20px] text-coral" aria-hidden>
+            ✧
+          </span>
+          <span
+            className="vox-sparkle absolute bottom-12 right-10 text-[18px] text-sky"
+            style={{ animationDelay: "0.6s" }}
+            aria-hidden
+          >
+            ◆
+          </span>
+          <div className="sticky-card sticky-card--good relative flex w-full max-w-xs flex-col items-center gap-5 p-6">
+            <Sticker tone="sun" rotate="r" className="absolute -right-3 -top-3 z-10">
+              🌱 +6
+            </Sticker>
             <div className="w-40 sm:w-52">
-              <PixelTree level={4} cell={10} />
+              <PixelTree level={4} />
             </div>
             <AsciiProgress value={8} max={10} label="LV.4" />
             <p className="text-center font-mono text-[12px]">
@@ -191,6 +300,9 @@ export function Landing() {
           </div>
         </div>
       </section>
+
+      {/* MARQUEE BAND */}
+      <HeroMarquee />
 
       {/* PROBLEM (honest, verified numbers) */}
       <section className="border-t border-border bg-card px-4 py-10 sm:px-6">
@@ -212,17 +324,20 @@ export function Landing() {
       </section>
 
       {/* HOW IT WORKS */}
-      <section className="retro-desktop border-t-2 border-ink px-4 py-10 sm:px-6">
-        <MonoLabel className="text-primary-foreground">// 어떻게 작동하나</MonoLabel>
+      <section className="retro-desktop retro-desktop-dots--deep border-t-2 border-ink px-4 py-10 sm:px-6">
+        <div className="flex flex-wrap items-center gap-3">
+          <MonoLabel className="text-primary-foreground">// 어떻게 작동하나</MonoLabel>
+          <Sticker tone="sun" rotate="r">QR → 한마디 → 오늘 할 일</Sticker>
+        </div>
         <div className="mt-5 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
           {[
-            { n: "01", t: "QR 스캔", d: "손님이 테이블 QR을 찍고 익명 폼에 들어옵니다. 이름·번호·위치는 받지 않아요." },
-            { n: "02", t: "솔직한 한마디", d: "공개 리뷰엔 못 쓰는 진짜 속마음을 무기명으로 남깁니다. 욕설·개인정보·위험 표현은 한국어 엔진이 자동으로 가립니다." },
-            { n: "03", t: "오늘 할 일", d: "쌓인 한마디가 사장님에겐 오늘 바로 고칠 한 줄 액션으로 정리됩니다. 매출 과장 대신 실행만." },
-            { n: "04", t: "자라고, 닿고", d: "사장이 조치하면 매장 나무가 자라고, 스레드 링크로 손님은 사장의 답을 받습니다 — 누가 썼는지는 끝까지 비공개." },
+            { n: "01", t: "QR 스캔", d: "손님이 테이블 QR을 찍고 익명 폼에 들어옵니다. 이름·번호·위치는 받지 않아요.", badge: "bg-sky text-sky-foreground" },
+            { n: "02", t: "솔직한 한마디", d: "공개 리뷰엔 못 쓰는 진짜 속마음을 무기명으로 남깁니다. 욕설·개인정보·위험 표현은 한국어 엔진이 자동으로 가립니다.", badge: "bg-coral text-coral-foreground" },
+            { n: "03", t: "오늘 할 일", d: "쌓인 한마디가 사장님에겐 오늘 바로 고칠 한 줄 액션으로 정리됩니다. 매출 과장 대신 실행만.", badge: "bg-sun text-sun-foreground" },
+            { n: "04", t: "자라고, 닿고", d: "사장이 조치하면 매장 나무가 자라고, 스레드 링크로 손님은 사장의 답을 받습니다 — 누가 썼는지는 끝까지 비공개.", badge: "bg-lime text-lime-foreground" },
           ].map((s) => (
-            <div key={s.n} className="sticky-card flex flex-col px-5 py-6">
-              <span className="flex h-8 w-9 items-center justify-center border-2 border-ink bg-sun font-mono text-[12px] font-bold text-sun-foreground shadow-hard-sm">
+            <div key={s.n} className="sticky-card flex flex-col px-5 py-6 transition-transform hover:-translate-y-1">
+              <span className={`flex h-9 w-10 items-center justify-center border-2 border-ink font-mono text-[12px] font-bold shadow-hard-sm ${s.badge}`}>
                 {s.n}
               </span>
               <h3 className="mt-4 text-foreground" style={{ fontWeight: 700 }}>{s.t}</h3>
@@ -271,47 +386,35 @@ export function Landing() {
       </section>
 
       {/* FEATURES */}
-      <section className="grid grid-cols-1 gap-4 border-t-2 border-ink bg-surface-raised px-4 py-8 sm:px-6 md:grid-cols-3">
-        {features.map((f) => {
-          const onAccent = f.variant === "info";
-          return (
-            <div
-              key={f.n}
-              className={`sticky-card px-5 py-8 transition-transform hover:-translate-y-0.5 ${
-                f.variant === "info"
-                  ? "sticky-card--info"
-                  : f.variant === "good"
-                    ? "sticky-card--good"
-                    : ""
-              }`}
-            >
-              <span
-                className={`inline-flex border-2 border-ink px-2 py-0.5 font-mono text-[12px] font-bold ${
-                  onAccent ? "bg-card text-foreground" : "bg-primary text-primary-foreground"
-                }`}
+      <section className="border-t-2 border-ink bg-surface-raised px-4 py-8 sm:px-6">
+        <div className="mb-5 flex flex-wrap items-center gap-3">
+          <MonoLabel>// 무엇이 다른가</MonoLabel>
+          <Sticker tone="grape" rotate="l">noise=0 · 실행만</Sticker>
+        </div>
+        <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
+          {features.map((f) => {
+            const fg = featureFg[f.variant];
+            return (
+              <div
+                key={f.n}
+                className={`sticky-card px-5 py-8 transition-transform hover:-translate-y-1 ${featureVariantCls[f.variant]}`}
               >
-                [{f.n}]
-              </span>
-              <h3 className="mt-4" style={{ fontWeight: 700 }}>
-                {f.title}
-              </h3>
-              <p
-                className={`mt-2 text-[14px] leading-relaxed ${
-                  onAccent ? "text-coral-foreground/90" : "text-muted-foreground"
-                }`}
-              >
-                {f.body}
-              </p>
-              <p
-                className={`mt-5 border-t-2 border-ink/30 pt-3 font-mono text-[11px] ${
-                  onAccent ? "text-coral-foreground/80" : "text-muted-foreground/80"
-                }`}
-              >
-                {f.meta}
-              </p>
-            </div>
-          );
-        })}
+                <span className="inline-flex border-2 border-ink bg-card px-2 py-0.5 font-mono text-[12px] font-bold text-foreground shadow-hard-sm">
+                  [{f.n}]
+                </span>
+                <h3 className={`mt-4 ${fg}`} style={{ fontWeight: 700 }}>
+                  {f.title}
+                </h3>
+                <p className={`mt-2 text-[14px] leading-relaxed ${fg}/90`}>
+                  {f.body}
+                </p>
+                <p className={`mt-5 border-t-2 border-ink/30 pt-3 font-mono text-[11px] ${fg}/80`}>
+                  {f.meta}
+                </p>
+              </div>
+            );
+          })}
+        </div>
       </section>
 
       {/* TREE GROWTH STRIP */}
@@ -355,8 +458,11 @@ export function Landing() {
         <SectionLabel cmd="// 옷장">손님 고양이 꾸미기</SectionLabel>
         <div className="grid grid-cols-1 lg:grid-cols-2">
           <div className="flex flex-col items-center justify-center gap-4 border-b border-border bg-surface-raised px-4 py-10 lg:border-b-0 lg:border-r">
-            <div className="w-32">
-              <PixelCat expression="happy" costume="ribbon" cell={9} />
+            <div className="relative w-32">
+              <Sticker tone="pink" rotate="r" className="absolute -right-4 -top-2 z-10">
+                {"><>"} +1
+              </Sticker>
+              <PixelCat expression="happy" anim="sway" />
             </div>
             <p className="text-center font-mono text-[12px] text-muted-foreground">
               QR을 찍으면 익명 고양이가 됩니다.
@@ -399,21 +505,40 @@ export function Landing() {
       </section>
 
       {/* CTA */}
-      <section className="border-t-2 border-ink bg-desktop px-4 py-14 text-center sm:px-6">
+      <section className="relative border-t-2 border-ink bg-desktop retro-desktop-dots px-4 py-14 text-center sm:px-6">
+        <span className="vox-sparkle absolute left-10 top-10 text-[22px] text-pink" aria-hidden>
+          ✶
+        </span>
+        <span
+          className="vox-sparkle absolute bottom-10 right-12 text-[20px] text-sun"
+          style={{ animationDelay: "0.4s" }}
+          aria-hidden
+        >
+          ✦
+        </span>
         <div className="sticky-card mx-auto max-w-2xl px-6 py-10">
-          <h2 className="text-foreground" style={{ fontWeight: 800, fontSize: "clamp(1.5rem,3.5vw,2.25rem)" }}>
-            오늘부터, 솔직한 한마디를 받아보세요.
+          <div className="mx-auto mb-5 w-24">
+            <PixelCat expression="wave" anim="hop" />
+          </div>
+          <h2 className="text-foreground">
+            <CodeHead className="leading-tight">오늘부터, 솔직한 한마디를</CodeHead>
+            <span
+              className="mt-2 block text-foreground"
+              style={{ fontWeight: 800, fontSize: "clamp(1.5rem,3.5vw,2.25rem)" }}
+            >
+              받아보세요.
+            </span>
           </h2>
-          <div className="mt-6 flex flex-wrap justify-center gap-3">
+          <div className="mt-7 flex flex-wrap justify-center gap-3">
             <Link
               to="/s?store=u61zh7b2"
-              className="border-bold bg-coral px-5 py-2.5 font-mono text-[13px] font-bold text-coral-foreground shadow-hard-sm transition-all hover:-translate-y-0.5 active:translate-x-[2px] active:translate-y-[2px] active:shadow-none"
+              className="pop-btn border-bold bg-coral px-6 py-3 font-mono text-[14px] font-bold text-coral-foreground shadow-hard"
             >
               [ 손님 화면 체험 → ]
             </Link>
             <Link
               to="/story"
-              className="border-bold bg-card px-5 py-2.5 font-mono text-[13px] text-foreground shadow-hard-sm transition-all hover:-translate-y-0.5 active:translate-x-[2px] active:translate-y-[2px] active:shadow-none"
+              className="pop-btn pop-btn--sm border-bold bg-card px-6 py-3 font-mono text-[14px] text-foreground shadow-hard-sm"
             >
               [ 우리 이야기 보기 ]
             </Link>

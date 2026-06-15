@@ -30,16 +30,16 @@ for (let lv = 1; lv <= 6; lv++) {
   trees[lv] = +((H - 1 - by) / H).toFixed(4);   // 밑면 여백 비율
 }
 
-// 고양이 3×3 시트: [col,row] 9칸
-const { data: cd, W: CW, H: CH } = await rawOf(path.join(PUB, "cat-sheet.png"));
-const cw = Math.floor(CW / 3), ch = Math.floor(CH / 3);
+// 고양이 개별 PNG (public/mascot/cats/cat-{expression}.png) — 표정명 키로 밑면 여백 비율 측정
+const CAT_EXPRS = [
+  "default", "happy", "loaf", "jump", "surprised", "love", "sad",
+  "wave", "write", "think", "bow", "angry", "celebrate", "sleepy", "wink",
+];
 const cats = {};
-for (let row = 0; row < 3; row++) {
-  for (let col = 0; col < 3; col++) {
-    const x0 = col * cw, y0 = row * ch;
-    const by = await bottomOpaqueY(cd, CW, CH, x0, y0, x0 + cw, y0 + ch);
-    cats[`${col},${row}`] = +(((y0 + ch - 1) - by) / ch).toFixed(4);
-  }
+for (const expr of CAT_EXPRS) {
+  const { data, W, H } = await rawOf(path.join(PUB, "cats", `cat-${expr}.png`));
+  const by = await bottomOpaqueY(data, W, H, 0, 0, W, H);
+  cats[expr] = +((H - 1 - by) / H).toFixed(4);
 }
 
 const outPath = fileURLToPath(new URL("../src/app/lib/mascotAnchors.ts", import.meta.url));

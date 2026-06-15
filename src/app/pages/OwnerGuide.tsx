@@ -1,8 +1,42 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, type ReactNode } from "react";
 import { Link, useSearchParams } from "react-router";
 import { MonoLabel } from "../components/terminal/MonoLabel";
+import { PixelCat } from "../components/mascots/PixelCat";
 import { fetchStoreBySlug } from "../../lib/supabase-client.js";
 import { downloadStoreQR, storeFormUrl } from "../lib/qr";
+
+/** 살짝 기울인 스티커 — 키치/팝 포인트 라벨. */
+function Sticker({
+  children,
+  tone = "ink",
+  rotate = "l",
+  className = "",
+}: {
+  children: ReactNode;
+  tone?: "ink" | "sun" | "coral" | "lime" | "sky" | "pink" | "grape" | "card";
+  rotate?: "l" | "r";
+  className?: string;
+}) {
+  const tones: Record<string, string> = {
+    ink: "bg-ink text-card",
+    sun: "bg-sun text-sun-foreground",
+    coral: "bg-coral text-coral-foreground",
+    lime: "bg-lime text-lime-foreground",
+    sky: "bg-sky text-sky-foreground",
+    pink: "bg-pink text-pink-foreground",
+    grape: "bg-grape text-grape-foreground",
+    card: "bg-card text-foreground",
+  };
+  return (
+    <span
+      className={`inline-flex items-center gap-1.5 border-2 border-ink px-2.5 py-1 font-mono text-[11px] font-bold shadow-hard-sm ${
+        rotate === "l" ? "vox-sticker" : "vox-sticker--r"
+      } ${tones[tone]} ${className}`}
+    >
+      {children}
+    </span>
+  );
+}
 
 export function OwnerGuide() {
   const [params] = useSearchParams();
@@ -36,14 +70,24 @@ export function OwnerGuide() {
 
   return (
     <main className="mx-auto max-w-[920px] px-4 py-10 sm:px-6">
-      <MonoLabel className="text-primary">// 사장님 가이드</MonoLabel>
+      <div className="flex flex-wrap items-center gap-3">
+        <MonoLabel className="text-primary">// 사장님 가이드</MonoLabel>
+        <Sticker tone="lime" rotate="r">7일 베타</Sticker>
+      </div>
       <div className="mt-4 grid grid-cols-1 gap-6 lg:grid-cols-[1fr_320px]">
-        <div>
-          <p className="font-mono text-[12px] uppercase tracking-[0.1em] text-primary">사장님 가이드</p>
-          <h1 className="mt-2 text-foreground" style={{ fontSize: "clamp(1.7rem, 4.5vw, 2.6rem)", fontWeight: 800, lineHeight: 1.2 }}>
-            사장님이 7일 동안
-            <br />
-            Voxpop을 써보는 법
+        <div className="relative">
+          <div className="flex flex-wrap items-center gap-3">
+            <div className="w-16 shrink-0">
+              <PixelCat expression="wave" anim="sway" />
+            </div>
+            <Sticker tone="coral" rotate="l">🔒 사장님에게만 전달</Sticker>
+          </div>
+          <h1 className="mt-3 text-foreground" style={{ fontSize: "clamp(1.7rem, 4.5vw, 2.6rem)", fontWeight: 800, lineHeight: 1.2 }}>
+            <span className="text-display-mono block">
+              <span className="text-primary">&gt;_ </span>사장님이 7일 동안
+              <span className="vox-cursor ml-0.5 text-coral">█</span>
+            </span>
+            <span className="mt-1 block">Voxpop을 써보는 법</span>
           </h1>
           <p className="mt-4 text-[15px] leading-relaxed text-muted-foreground">
             Voxpop은 공개 리뷰를 늘리는 도구가 아닙니다. 손님이 공개 악평으로 쓰기 전, 사장님에게만 안전하게 남긴
@@ -96,11 +140,17 @@ export function OwnerGuide() {
       <Block cmd="// 7일 베타 사용 흐름" title="결제가 아니라 ‘한 번 굴러가는지’">
         <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
           {[
-            { n: "1", t: "10분 본인 테스트", b: "손님용 링크로 사장님이 직접 한마디를 남기고, 대시보드에서 정리본이 보이는지 확인합니다." },
-            { n: "2", t: "QR 한 곳에 비치", b: "계산대, 픽업대, 테이블 중 손님이 자연스럽게 볼 수 있는 한 곳에 둡니다." },
-            { n: "3", t: "7일 동안 확인", b: "응답 수보다 중요한 건 사장님이 대시보드를 보고 계속 둘 이유가 생기는지입니다." },
+            { n: "1", t: "10분 본인 테스트", b: "손님용 링크로 사장님이 직접 한마디를 남기고, 대시보드에서 정리본이 보이는지 확인합니다.", badge: "bg-sky text-sky-foreground" },
+            { n: "2", t: "QR 한 곳에 비치", b: "계산대, 픽업대, 테이블 중 손님이 자연스럽게 볼 수 있는 한 곳에 둡니다.", badge: "bg-sun text-sun-foreground" },
+            { n: "3", t: "7일 동안 확인", b: "응답 수보다 중요한 건 사장님이 대시보드를 보고 계속 둘 이유가 생기는지입니다.", badge: "bg-lime text-lime-foreground" },
           ].map((s) => (
-            <Card key={s.n} title={`${s.n}. ${s.t}`}>{s.b}</Card>
+            <div key={s.n} className="border-bold bg-card p-4 shadow-hard-sm transition-transform hover:-translate-y-1">
+              <span className={`flex h-9 w-9 items-center justify-center border-2 border-ink font-mono text-[15px] font-bold shadow-hard-sm ${s.badge}`}>
+                {s.n}
+              </span>
+              <p className="mt-3 text-[14px] text-foreground" style={{ fontWeight: 700 }}>{s.t}</p>
+              <p className="mt-2 text-[13px] leading-relaxed text-muted-foreground">{s.b}</p>
+            </div>
           ))}
         </div>
       </Block>
@@ -130,8 +180,11 @@ export function OwnerGuide() {
             "손님에게 억지로 부탁하지 않고 자연 응답을 봅니다.",
             "7일 뒤 계속 둘 이유가 있는지 함께 확인합니다.",
           ].map((t, i) => (
-            <li key={i} className="flex gap-2 border-b border-border-soft py-3 text-[14px] text-muted-foreground last:border-b-0">
-              <span className="font-mono text-primary">✓</span> {t}
+            <li key={i} className="flex items-center gap-3 border-b border-border-soft py-3 text-[14px] text-foreground last:border-b-0">
+              <span className="flex h-7 w-7 shrink-0 items-center justify-center border-2 border-ink bg-lime font-mono text-[12px] font-bold text-lime-foreground shadow-hard-sm">
+                {i + 1}
+              </span>
+              <span>{t}</span>
             </li>
           ))}
         </ul>
@@ -178,17 +231,20 @@ export function OwnerGuide() {
   );
 }
 
-function Block({ cmd, title, children }: { cmd: string; title: string; children: React.ReactNode }) {
+function Block({ cmd, title, children }: { cmd: string; title: string; children: ReactNode }) {
   return (
-    <section className="mt-10 border-t border-border pt-8">
+    <section className="mt-10 border-t-2 border-ink pt-8">
       <MonoLabel>{cmd}</MonoLabel>
-      <h2 className="mt-3 text-foreground" style={{ fontSize: "clamp(1.2rem, 2.6vw, 1.7rem)", fontWeight: 800 }}>{title}</h2>
+      <h2 className="mt-3 flex items-start gap-3 text-foreground" style={{ fontSize: "clamp(1.2rem, 2.6vw, 1.7rem)", fontWeight: 800 }}>
+        <span aria-hidden className="mt-1 inline-block h-5 w-2.5 shrink-0 border-2 border-ink bg-sun shadow-hard-sm" />
+        <span>{title}</span>
+      </h2>
       <div className="mt-4">{children}</div>
     </section>
   );
 }
 
-function Card({ title, children, alert }: { title: string; children: React.ReactNode; alert?: boolean }) {
+function Card({ title, children, alert }: { title: string; children: ReactNode; alert?: boolean }) {
   return (
     <div className={`p-4 ${alert ? "sticky-card sticky-card--urgent" : "border-bold bg-card shadow-hard-sm"}`}>
       <p className={`text-[14px] ${alert ? "text-coral-foreground" : "text-foreground"}`} style={{ fontWeight: 700 }}>{title}</p>

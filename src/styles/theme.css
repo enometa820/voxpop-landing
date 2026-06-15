@@ -18,8 +18,8 @@
   --muted-foreground: #516658;  /* secondary text */
   --accent: #3e8e63;            /* bright green */
   --accent-foreground: #f2f7ef;
-  --destructive: #ff5c5c;       /* urgent — pop coral (Y2K/뉴브루탈리즘) */
-  --destructive-foreground: #ffffff;
+  --destructive: var(--coral);  /* urgent — pop coral (하이퍼팝) */
+  --destructive-foreground: var(--coral-foreground);
   --border: #b2c8ab;            /* thin border */
   --border-soft: #cfdec9;       /* lighter border */
   --surface-raised: #edf3e9;
@@ -29,11 +29,11 @@
   --font-weight-medium: 500;
   --font-weight-normal: 400;
   --ring: #1b6b42;
-  --chart-1: #1b6b42;
-  --chart-2: #3e8e63;
-  --chart-3: #6fae8a;
-  --chart-4: #516658;
-  --chart-5: #9a3b2f;
+  --chart-1: #2b6bff;
+  --chart-2: #5df94d;
+  --chart-3: #8a3ffc;
+  --chart-4: #ffd60a;
+  --chart-5: #ff3b3b;
   --radius: 0;                  /* 레트로 OS — 각진 모서리 (radius 0) */
 
   /* ── 타입 스케일 (모바일 기준, line-height 동반) ── */
@@ -45,22 +45,29 @@
   --text-title-lg: 24px;    --lh-title-lg: 1.25;
   --text-display: 32px;     --lh-display: 1.1;
 
-  /* ── 팝 포인트색 (Y2K · 뉴브루탈리즘 — 색=의미, 한 화면 최대 2색) ── */
-  --coral: #ff5c5c;   --coral-foreground: #ffffff;   /* 긴급 · 핫 CTA */
-  --sun: #ffe14d;     --sun-foreground: #163021;     /* 씨앗 · 보상 · 하이라이트 */
-  --lime: #7fff5b;    --lime-foreground: #163021;    /* 성장 · 좋은 · 진행 */
-  --sky: #4d7bff;     --sky-foreground: #ffffff;     /* 정보 · 링크 */
-  --pink: #ff90ff;    --pink-foreground: #163021;    /* 키치 포인트(가끔) */
+  /* ── 팝 포인트색 (하이퍼팝 · 강한 대비 — 색=의미) ──
+   * 강하게 채도 올린 7색. 잉크 2px 보더가 항상 색면을 묶어 멀티컬러 블로킹을 가능케 함
+   * (구 "한 화면 2색" → 잉크 보더 전제로 멀티컬러 허용). 정본 = .claude/skills/voxpop-design/tokens/colors.css */
+  --coral: #ff3b3b;   --coral-foreground: #ffffff;   /* 긴급 · 핫 CTA */
+  --sun:   #ffd60a;   --sun-foreground:   #161616;   /* 보상 · 포커스 · 하이라이트 */
+  --lime:  #5df94d;   --lime-foreground:  #0c2a0c;   /* 성장 · 좋음 · 진행 */
+  --sky:   #2b6bff;   --sky-foreground:   #ffffff;   /* 정보 · 링크 */
+  --pink:  #ff45c8;   --pink-foreground:  #2a0a22;   /* 키치 포인트 · 손님 */
+  --grape: #8a3ffc;   --grape-foreground: #ffffff;   /* 액션 · 플레이 · 카테고리 */
+  --aqua:  #00e0c6;   --aqua-foreground:  #06302b;   /* 보조 정보 · 신선 */
   --desktop: #36c46e;           /* 데스크탑 배경 (pop) */
   --desktop-deep: #123d28;      /* 차분 변형 */
-  --window-face: #cfdec9;       /* 레트로 창 면 (RetroWindow body) */
+  --window-face: #fbfdf8;       /* 레트로 창 면 — 밝은 크림(하이퍼팝 대비). 옛 칙칙 청록 #cfdec9 폐기 */
+  --window-face-sage: #cfdec9;  /* (구) 리얼-레트로 청록 면 — 필요시만 */
   --ink: #163021;               /* 보더 · 섀도 잉크 */
 
-  /* 의미색 alias */
+  /* 의미색 alias (코드에선 이걸 쓰세요) */
   --urgent: var(--coral);
   --reward: var(--sun);
   --growth: var(--lime);
-  --info: var(--sky);
+  --info:   var(--sky);
+  --play:   var(--grape);
+  --fresh:  var(--aqua);
 
   /* 뉴브루탈리즘 머티리얼 토큰 */
   --border-bold: 2px solid var(--ink);
@@ -148,14 +155,21 @@
   --color-sky-foreground: var(--sky-foreground);
   --color-pink: var(--pink);
   --color-pink-foreground: var(--pink-foreground);
+  --color-grape: var(--grape);
+  --color-grape-foreground: var(--grape-foreground);
+  --color-aqua: var(--aqua);
+  --color-aqua-foreground: var(--aqua-foreground);
   --color-desktop: var(--desktop);
   --color-desktop-deep: var(--desktop-deep);
   --color-window-face: var(--window-face);
+  --color-window-face-sage: var(--window-face-sage);
   --color-ink: var(--ink);
   --color-urgent: var(--urgent);
   --color-reward: var(--reward);
   --color-growth: var(--growth);
   --color-info: var(--info);
+  --color-play: var(--play);
+  --color-fresh: var(--fresh);
   --font-sans: var(--font-sans);
   --font-mono: var(--font-mono);
   --color-input: var(--input);

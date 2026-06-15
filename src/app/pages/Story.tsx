@@ -1,25 +1,97 @@
+import type { ReactNode } from "react";
 import { Link } from "react-router";
 import { MonoLabel } from "../components/terminal/MonoLabel";
+import { PixelCat } from "../components/mascots/PixelCat";
+
+/** 살짝 기울인 스티커 — 키치/팝 포인트 라벨. */
+function Sticker({
+  children,
+  tone = "ink",
+  rotate = "l",
+  className = "",
+}: {
+  children: ReactNode;
+  tone?: "ink" | "sun" | "coral" | "lime" | "sky" | "pink" | "grape" | "card";
+  rotate?: "l" | "r";
+  className?: string;
+}) {
+  const tones: Record<string, string> = {
+    ink: "bg-ink text-card",
+    sun: "bg-sun text-sun-foreground",
+    coral: "bg-coral text-coral-foreground",
+    lime: "bg-lime text-lime-foreground",
+    sky: "bg-sky text-sky-foreground",
+    pink: "bg-pink text-pink-foreground",
+    grape: "bg-grape text-grape-foreground",
+    card: "bg-card text-foreground",
+  };
+  return (
+    <span
+      className={`inline-flex items-center gap-1.5 border-2 border-ink px-2.5 py-1 font-mono text-[11px] font-bold shadow-hard-sm ${
+        rotate === "l" ? "vox-sticker" : "vox-sticker--r"
+      } ${tones[tone]} ${className}`}
+    >
+      {children}
+    </span>
+  );
+}
 
 export function Story() {
   return (
     <main className="mx-auto max-w-[860px] px-4 py-10 sm:px-6">
       {/* 히어로 */}
-      <section className="text-center">
-        <p className="font-mono text-[13px] leading-relaxed text-primary" style={{ fontWeight: 700 }}>
-          AI는 거대 자본만이 아니라 골목 사장님도 공평하게 누려야 할 기술입니다
-        </p>
-        <h1 className="mt-4 text-foreground" style={{ fontSize: "clamp(1.9rem, 5vw, 3rem)", fontWeight: 800, lineHeight: 1.2 }}>
-          막막한 AI, 어렵지 않게.
-          <br />
-          가장 쉬운 첫걸음부터.
+      <section className="relative text-center">
+        <span className="vox-sparkle absolute left-2 top-0 text-[20px] text-sun" aria-hidden>
+          ✦
+        </span>
+        <span
+          className="vox-sparkle absolute right-2 top-6 text-[18px] text-pink"
+          style={{ animationDelay: "0.5s" }}
+          aria-hidden
+        >
+          ✧
+        </span>
+        <div className="flex justify-center">
+          <Sticker tone="coral" rotate="l">
+            AI는 골목 사장님도 공평하게
+          </Sticker>
+        </div>
+        <h1 className="mt-5 text-foreground" style={{ fontSize: "clamp(1.9rem, 5vw, 3rem)", fontWeight: 800, lineHeight: 1.2 }}>
+          <span className="text-display-mono block">
+            <span className="text-primary">&gt;_ </span>막막한 AI, 어렵지 않게.
+            <span className="vox-cursor ml-0.5 text-coral">█</span>
+          </span>
+          <span className="mt-1 block">가장 쉬운 첫걸음부터.</span>
         </h1>
         <p className="mx-auto mt-5 max-w-2xl text-[16px] leading-relaxed text-muted-foreground">
           동네 사장님이 AI를 사업에 어떻게 써야 할지 막막한 것, 그걸 풀어주는 게 voxpop이 있는 이유입니다. 그 첫걸음이
           손님의 솔직한 한마디를 무기명으로 받아 AI가 “오늘 할 일” 한 줄로 바꿔주는 것입니다. 사장님이 가장 부담 없이
           만나는 첫 AI 경험에서 시작해, 거기서부터 가게 운영 전반으로 넓혀가려 합니다.
         </p>
+        <div className="mt-6 flex flex-wrap justify-center gap-2">
+          <Sticker tone="lime" rotate="r">🔒 무기명 100%</Sticker>
+          <Sticker tone="sky" rotate="l">device=null</Sticker>
+          <Sticker tone="sun" rotate="r">오늘 할 일 한 줄</Sticker>
+        </div>
       </section>
+
+      {/* MISSION MARQUEE */}
+      <div className="vox-marquee mt-8 border-y-2 border-ink bg-ink py-2">
+        <div className="vox-marquee__track">
+          {[0, 1].map((rep) => (
+            <span key={rep} className="font-mono text-[12px] font-bold tracking-[0.04em]">
+              <span className="text-sun">★ 공개 리뷰의 반대편</span>
+              <span className="text-card"> ▚ </span>
+              <span className="text-coral">솔직한 한마디</span>
+              <span className="text-card"> ▚ </span>
+              <span className="text-lime">상처 대신 할 일</span>
+              <span className="text-card"> ▚ </span>
+              <span className="text-sky">익명은 잇는 다리</span>
+              <span className="text-card"> ▚ </span>
+            </span>
+          ))}
+        </div>
+      </div>
 
       <Block cmd="// 우리가 푸는 문제" title="막막함이 핵심 페인입니다">
         <p>
@@ -43,13 +115,13 @@ export function Story() {
         </p>
         <div className="mt-5 grid grid-cols-1 gap-3 sm:grid-cols-3">
           {[
-            { label: "손님", body: "QR 하나로 익명 접속. 별점과 솔직한 한마디를 남깁니다. 이름도, 로그인도, 보복 걱정도 없습니다." },
-            { label: "시스템", body: "위험 표현은 가리고, 감정 강도와 긴급도 신호는 보존. 맛·응대·청결 등 갈래로 분류합니다." },
-            { label: "사장", body: "날 선 문장이 아니라 ‘오늘 해볼 행동’ 한 줄로 받습니다. 상처 없이 할 일을 얻습니다." },
+            { label: "손님", body: "QR 하나로 익명 접속. 별점과 솔직한 한마디를 남깁니다. 이름도, 로그인도, 보복 걱정도 없습니다.", cls: "sticky-card--info", fg: "text-sky-foreground" },
+            { label: "시스템", body: "위험 표현은 가리고, 감정 강도와 긴급도 신호는 보존. 맛·응대·청결 등 갈래로 분류합니다.", cls: "sticky-card--pink", fg: "text-pink-foreground" },
+            { label: "사장", body: "날 선 문장이 아니라 ‘오늘 해볼 행동’ 한 줄로 받습니다. 상처 없이 할 일을 얻습니다.", cls: "sticky-card--good", fg: "text-lime-foreground" },
           ].map((c) => (
-            <div key={c.label} className="border-bold bg-card p-4 shadow-hard-sm">
-              <p className="font-mono text-[11px] uppercase tracking-[0.1em] text-primary">{c.label}</p>
-              <p className="mt-2 text-[14px] leading-relaxed text-foreground">{c.body}</p>
+            <div key={c.label} className={`sticky-card p-4 transition-transform hover:-translate-y-1 ${c.cls}`}>
+              <p className={`font-mono text-[11px] font-bold uppercase tracking-[0.1em] ${c.fg}`}>{c.label}</p>
+              <p className={`mt-2 text-[14px] leading-relaxed ${c.fg}`}>{c.body}</p>
             </div>
           ))}
         </div>
@@ -83,26 +155,37 @@ export function Story() {
         <p className="mb-1">전략은 단계를 잇는 사다리입니다. 한 단을 실제로 증명해야 다음 단으로 나아갑니다.</p>
         <div className="mt-4 grid grid-cols-1 gap-3 sm:grid-cols-3">
           {[
-            { when: "지금", body: "카페·소형 외식 매장에서 무기명 피드백 채널을 베타로 검증합니다. 손님이 진짜 한마디를 남기는지, 사장이 그 가치에 돈을 낼 만큼 아파하는지 직접 확인합니다." },
-            { when: "다음", body: "첫 단계가 자리잡으면 같은 사장님에게 두 번째 운영 가치를 더하거나, 같은 무기명 가림·분류 엔진을 옆 시장(공공 민원·조직 내부 건의·시설 이용자·환자 경험)으로 넓힙니다." },
-            { when: "지향", body: "소상공인과 작은 조직이 처음 만나는 AI 운영 전환(AX)의 입구가 되려 합니다. AI 시대의 혜택이 거대 자본만이 아니라 동네 골목까지 닿을 때까지." },
+            { when: "지금", body: "카페·소형 외식 매장에서 무기명 피드백 채널을 베타로 검증합니다. 손님이 진짜 한마디를 남기는지, 사장이 그 가치에 돈을 낼 만큼 아파하는지 직접 확인합니다.", badge: "bg-coral text-coral-foreground" },
+            { when: "다음", body: "첫 단계가 자리잡으면 같은 사장님에게 두 번째 운영 가치를 더하거나, 같은 무기명 가림·분류 엔진을 옆 시장(공공 민원·조직 내부 건의·시설 이용자·환자 경험)으로 넓힙니다.", badge: "bg-sun text-sun-foreground" },
+            { when: "지향", body: "소상공인과 작은 조직이 처음 만나는 AI 운영 전환(AX)의 입구가 되려 합니다. AI 시대의 혜택이 거대 자본만이 아니라 동네 골목까지 닿을 때까지.", badge: "bg-lime text-lime-foreground" },
           ].map((s) => (
-            <div key={s.when} className="border-bold bg-card p-4 shadow-hard-sm">
-              <p className="font-mono text-[12px] text-primary" style={{ fontWeight: 700 }}>{s.when}</p>
-              <p className="mt-2 text-[14px] leading-relaxed text-foreground">{s.body}</p>
+            <div key={s.when} className="border-bold bg-card p-4 shadow-hard-sm transition-transform hover:-translate-y-1">
+              <span className={`inline-flex border-2 border-ink px-2.5 py-0.5 font-mono text-[12px] font-bold shadow-hard-sm ${s.badge}`}>{s.when}</span>
+              <p className="mt-3 text-[14px] leading-relaxed text-foreground">{s.body}</p>
             </div>
           ))}
         </div>
       </Block>
 
-      <section className="mt-10 border-bold bg-card px-5 py-8 text-center shadow-hard">
-        <h2 className="text-foreground" style={{ fontWeight: 800, fontSize: "clamp(1.4rem,3vw,2rem)" }}>직접 보시겠어요?</h2>
+      <section className="relative mt-12 border-bold bg-card px-5 py-9 text-center shadow-hard">
+        <span className="vox-sparkle absolute left-6 top-6 text-[20px] text-sun" aria-hidden>
+          ✶
+        </span>
+        <div className="mx-auto mb-4 w-20">
+          <PixelCat expression="wave" anim="hop" />
+        </div>
+        <h2 className="text-foreground">
+          <span className="text-display-mono">
+            <span className="text-primary">&gt;_ </span>직접 보시겠어요?
+            <span className="vox-cursor ml-0.5 text-coral">█</span>
+          </span>
+        </h2>
         <p className="mx-auto mt-3 max-w-xl text-[15px] leading-relaxed text-muted-foreground">
           손님 입장으로 익명 한마디를 남기고, 사장 대시보드에서 “오늘 할 일”이 어떻게 나오는지 확인해 보세요.
         </p>
-        <div className="mt-5 flex flex-wrap justify-center gap-3">
-          <a href="/s?store=u61zh7b2" className="retro-btn retro-btn--primary px-4 py-2 font-mono text-[13px]">[ 손님 화면 체험 → ]</a>
-          <Link to="/owner" className="retro-btn px-4 py-2 font-mono text-[13px] text-foreground">[ 사장 대시보드 ]</Link>
+        <div className="mt-6 flex flex-wrap justify-center gap-3">
+          <a href="/s?store=u61zh7b2" className="pop-btn border-bold bg-coral px-5 py-2.5 font-mono text-[13px] font-bold text-coral-foreground shadow-hard">[ 손님 화면 체험 → ]</a>
+          <Link to="/owner" className="pop-btn pop-btn--sm border-bold bg-card px-5 py-2.5 font-mono text-[13px] text-foreground shadow-hard-sm">[ 사장 대시보드 ]</Link>
         </div>
       </section>
 
@@ -111,11 +194,14 @@ export function Story() {
   );
 }
 
-function Block({ cmd, title, children }: { cmd: string; title: string; children: React.ReactNode }) {
+function Block({ cmd, title, children }: { cmd: string; title: string; children: ReactNode }) {
   return (
-    <section className="mt-12 border-t border-border pt-8">
+    <section className="mt-12 border-t-2 border-ink pt-8">
       <MonoLabel>{cmd}</MonoLabel>
-      <h2 className="mt-3 text-foreground" style={{ fontSize: "clamp(1.3rem, 3vw, 1.9rem)", fontWeight: 800 }}>{title}</h2>
+      <h2 className="mt-3 flex items-start gap-3 text-foreground" style={{ fontSize: "clamp(1.3rem, 3vw, 1.9rem)", fontWeight: 800 }}>
+        <span aria-hidden className="mt-1.5 inline-block h-5 w-2.5 shrink-0 border-2 border-ink bg-sun shadow-hard-sm" />
+        <span>{title}</span>
+      </h2>
       <div className="mt-4 space-y-4 text-[15px] leading-relaxed text-muted-foreground">{children}</div>
     </section>
   );

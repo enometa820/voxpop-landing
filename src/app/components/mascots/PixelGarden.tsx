@@ -8,7 +8,7 @@ import { footOffsetPx } from "../../lib/stageLayout";
  * 배치 기본 = B(존재감): 고양이를 크게 나무 곁에 바짝. 매직 넘버 없이 측정된 앵커로 정렬.
  * 무기명 절대선: 손님 화면은 level만 전달(health·mood 미전달 → 시듦 비표시).
  */
-const CAT_DEFAULT_POSE = "2,2"; // 앉음 정면
+const CAT_DEFAULT_EXPR = "default"; // 앉음 정면
 const STAGE_H = 188;            // 무대 높이(px)
 const GROUND_H = 18;            // 땅 띠 높이(px)
 const TREE_H = 168;             // 나무 렌더 높이(px)
@@ -30,8 +30,7 @@ export function PixelGarden({
   className?: string;
 }) {
   void cell; // 폭은 무대 기준(에셋이라 px 그리드 무관)
-  const catExpr = mood === "happy" || level >= 4 ? "0,2" /*윙크*/ : CAT_DEFAULT_POSE;
-  const [col, row] = catExpr.split(",").map(Number);
+  const catExpr = mood === "happy" || level >= 4 ? "happy" : CAT_DEFAULT_EXPR;
 
   const treeBottom = GROUND_H - footOffsetPx(TREE_FOOT_INSET[level] ?? 0, TREE_H);
   const catBottom = GROUND_H - footOffsetPx(CAT_FOOT_INSET[catExpr] ?? 0, CAT_H);
@@ -66,9 +65,9 @@ export function PixelGarden({
           }}
         />
         {/* 고양이 — 발 밑선이 같은 땅에 (배치 B: 나무 곁에 바짝) + 숨쉬기 애니메이션 */}
-        <div
-          role="img"
-          aria-label={`손님 고양이`}
+        <img
+          src={`/mascot/cats/cat-${catExpr}.png`}
+          alt="손님 고양이"
           className="absolute mascot-breathe"
           style={{
             bottom: catBottom,
@@ -77,10 +76,6 @@ export function PixelGarden({
             height: CAT_H,
             zIndex: 2,
             imageRendering: "pixelated",
-            backgroundImage: "url(/mascot/cat-sheet.png)",
-            backgroundSize: "300% 300%",
-            backgroundRepeat: "no-repeat",
-            backgroundPosition: `${col * 50}% ${row * 50}%`,
           }}
         />
       </div>

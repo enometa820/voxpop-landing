@@ -336,43 +336,70 @@ export function OwnerDashboard() {
   return (
     <main className="mx-auto max-w-[1100px] px-4 py-6">
       {demo && (
-        <div className="mb-4 flex flex-wrap items-center gap-2 border-bold shadow-hard-sm bg-sun px-4 py-2.5 text-sun-foreground">
+        <div className="vox-sticker--r mb-4 flex flex-wrap items-center gap-2 border-bold shadow-hard bg-sun px-4 py-2.5 text-sun-foreground">
           <span className="border-2 border-ink bg-card px-1.5 py-0.5 font-mono text-caption font-bold">체험 모드</span>
           <span className="font-mono text-body">데모 매장이에요 — 실제 손님 한마디가 아니고, 바꿔도 저장되지 않아요. 실제 서비스 모습만 둘러보세요.</span>
         </div>
       )}
-      {/* 헤더 */}
-      <div className="mb-5 flex flex-wrap items-center justify-between gap-3 border-b border-border pb-4">
-        <div className="flex items-center gap-2">
-          <span className="text-primary">●</span>
-          <span className="font-mono text-foreground">voxpop@{selectedStore?.display_name || "내가게"}</span>
-          <span className="font-mono text-caption text-muted-foreground">— 사장 대시보드</span>
+
+      {/* 콘솔 헤더 — 잉크 타이틀바 + 코드아트 */}
+      <div className="relative mb-4 border-bold shadow-hard">
+        <span className="vox-sparkle absolute -right-2 -top-2 z-10 text-sun" style={{ ["--spin" as any]: "16deg" }} aria-hidden="true">✦</span>
+        <div className="retro-titlebar retro-titlebar--ink flex flex-wrap items-center justify-between gap-2">
+          <span className="flex items-center gap-2 font-mono text-caption font-bold tracking-wide">
+            <span className="text-lime">●</span>
+            voxpop.exe — OWNER_CONSOLE
+            <span className="hidden text-card/70 sm:inline">[v1.0.4]</span>
+          </span>
+          <span className="flex items-center gap-1">
+            <span className="inline-block h-2.5 w-2.5 border border-card" aria-hidden="true" />
+            <span className="inline-block h-2.5 w-2.5 border border-card" aria-hidden="true" />
+            <span className="inline-block h-2.5 w-2.5 border border-card bg-card" aria-hidden="true" />
+          </span>
         </div>
-        <div className="flex items-center gap-3">
-          {stores.length >= 2 && (
-            <select
-              value={selectedStoreId || ""}
-              onChange={(e) => setSelectedStoreId(e.target.value || null)}
-              className="rounded-md border border-border bg-card px-2 py-1 font-mono text-body text-foreground"
-            >
-              {stores.map((s) => (
-                <option key={s.id} value={s.id}>{s.display_name}</option>
-              ))}
-            </select>
-          )}
-          <span className="hidden font-mono text-caption text-muted-foreground sm:inline">{userEmail}</span>
-          <button onClick={handleSignout} className="font-mono text-body text-muted-foreground underline-offset-4 hover:underline">
-            로그아웃
-          </button>
-          <Link to="/" className="font-mono text-body text-muted-foreground underline-offset-4 hover:underline">← 소개</Link>
+        <div className="flex flex-wrap items-center justify-between gap-3 bg-card px-4 py-3">
+          <div className="flex items-baseline gap-2">
+            <span className="text-display-mono text-title-lg leading-none text-foreground" style={{ fontSize: "var(--text-title-lg)" }}>
+              voxpop@{selectedStore?.display_name || "내가게"}
+              <span className="vox-cursor ml-1 text-lime">█</span>
+            </span>
+            <span className="font-mono text-caption text-muted-foreground">사장 대시보드</span>
+          </div>
+          <div className="flex items-center gap-3">
+            {stores.length >= 2 && (
+              <select
+                value={selectedStoreId || ""}
+                onChange={(e) => setSelectedStoreId(e.target.value || null)}
+                className="retro-field font-mono text-body text-foreground"
+              >
+                {stores.map((s) => (
+                  <option key={s.id} value={s.id}>{s.display_name}</option>
+                ))}
+              </select>
+            )}
+            <span className="hidden font-mono text-caption text-muted-foreground sm:inline">{userEmail}</span>
+            <button onClick={handleSignout} className="font-mono text-body text-muted-foreground underline-offset-4 hover:underline">
+              로그아웃
+            </button>
+            <Link to="/" className="font-mono text-body text-muted-foreground underline-offset-4 hover:underline">← 소개</Link>
+          </div>
         </div>
       </div>
 
-      {/* 긴급 배너 — 코랄 스티커 알림 (한 화면 포인트 1색 = 코랄) */}
+      {/* 시스템 상태 마퀴 배너 */}
+      <div className="vox-marquee mb-5 border-bold bg-ink text-card shadow-hard-sm">
+        <div className="vox-marquee__track py-1.5 font-mono text-caption font-bold tracking-wide">
+          <span>▚ LIVE ▚ 무기명 보호 ON ▚ 원본 영구 차단 ▚ 손님 신원 끝까지 비공개 ▚ AI는 가린 한마디만 본다 ▚&nbsp;&nbsp;</span>
+          <span>▚ LIVE ▚ 무기명 보호 ON ▚ 원본 영구 차단 ▚ 손님 신원 끝까지 비공개 ▚ AI는 가린 한마디만 본다 ▚&nbsp;&nbsp;</span>
+        </div>
+      </div>
+
+      {/* 긴급 배너 — 코랄 스티커 알림 */}
       {urgentList.length > 0 && (
-        <div className="mb-5 flex items-center gap-3 border-bold shadow-hard-sm bg-coral px-4 py-3 text-coral-foreground">
-          <span className="whitespace-nowrap border-2 border-ink bg-card px-1.5 py-0.5 font-mono text-caption text-coral">[긴급 {urgentList.length}]</span>
-          <p className="font-mono text-body text-coral-foreground">
+        <div className="relative mb-5 flex items-center gap-3 border-bold shadow-hard bg-coral px-4 py-3 text-coral-foreground">
+          <span className="vox-sparkle absolute -left-2 -top-2 text-sun" style={{ ["--spin" as any]: "-12deg" }} aria-hidden="true">✶</span>
+          <span className="vox-sticker whitespace-nowrap border-2 border-ink bg-card px-1.5 py-0.5 font-mono text-caption font-bold text-coral shadow-hard-sm">[긴급 {urgentList.length}]</span>
+          <p className="font-mono text-body font-bold text-coral-foreground">
             아직 확인하지 않은 긴급 한마디가 있어요. 안전·위생 신호일 수 있으니 먼저 확인해주세요.
           </p>
         </div>
@@ -380,7 +407,8 @@ export function OwnerDashboard() {
 
       {/* 온보딩 (첫 한마디 없음) */}
       {noFeedback && (
-        <div className="mb-5 border-bold shadow-hard-sm bg-card px-5 py-6">
+        <div className="relative mb-5 border-bold shadow-hard bg-card px-5 py-6">
+          <span className="vox-sparkle absolute -right-2 -top-2 text-sun" style={{ ["--spin" as any]: "12deg" }} aria-hidden="true">✧</span>
           <MonoLabel className="text-primary">// 첫 한마디를 기다리는 중</MonoLabel>
           <p className="mt-2 text-body-lg text-muted-foreground">
             QR 포스터를 붙여 손님의 첫 목소리를 받아보세요.
@@ -390,7 +418,7 @@ export function OwnerDashboard() {
               href={`/s?store=${encodeURIComponent(selectedStore.slug)}`}
               target="_blank"
               rel="noreferrer"
-              className="mt-3 inline-block border-2 border-ink bg-primary px-3 py-1.5 font-mono text-body text-primary-foreground shadow-hard-sm"
+              className="pop-btn pop-btn--sm mt-3 inline-block border-2 border-ink bg-primary px-3 py-1.5 font-mono text-body font-bold text-primary-foreground shadow-hard-sm"
             >
               [ 직접 폼 열어보기 → ]
             </a>
@@ -401,25 +429,32 @@ export function OwnerDashboard() {
       <div className="grid grid-cols-1 gap-5 lg:grid-cols-3">
         {/* 왼쪽: 매장 나무 + 신호 */}
         <div className="space-y-5 lg:col-span-1">
-          {/* 매장 나무 */}
-          <div className="overflow-hidden border-bold shadow-hard-sm bg-card">
-            <div className="border-b-2 border-ink px-4 py-2.5"><MonoLabel>// 매장 나무</MonoLabel></div>
+          {/* 매장 나무 — 성장/보상 = 선옐로 포인트 */}
+          <div className="relative overflow-hidden border-bold shadow-hard-sm bg-card">
+            <span className="vox-sparkle absolute -left-2 -top-2 z-10 text-lime" style={{ ["--spin" as any]: "-14deg" }} aria-hidden="true">✦</span>
+            <div className="retro-titlebar retro-titlebar--ink flex items-center justify-between px-4 py-2">
+              <span className="font-mono text-caption font-bold tracking-wide">// 매장 나무</span>
+              <span aria-hidden="true" className="flex gap-1">
+                <span className="inline-block h-2.5 w-2.5 border border-card" />
+                <span className="inline-block h-2.5 w-2.5 border border-card bg-card" />
+              </span>
+            </div>
             <div className="flex flex-col items-center gap-3 px-4 py-6">
               <div className="w-32">
                 <PixelGarden level={treeLevel} health={unresolvedRisk > 0 ? "wilting" : "healthy"} mood={slimeState?.mood} cell={8} />
               </div>
               {/* 성장 단계 = 씨앗/보상 신호 → 선옐로(reward) 배지 */}
-              <span className="inline-block border-2 border-ink bg-reward px-2 py-0.5 font-mono text-caption text-sun-foreground shadow-hard-sm">
-                ★ {TREE_LABELS[treeLevel]}
+              <span className="vox-sticker--r inline-block border-2 border-ink bg-reward px-2.5 py-1 font-mono text-caption font-bold text-sun-foreground shadow-hard-sm">
+                ★ LV.{treeLevel} {TREE_LABELS[treeLevel]}
               </span>
               <AsciiProgress value={Math.round((slimeState?.growthProgress ?? 0) * 10)} max={10} label={TREE_LABELS[treeLevel]} className="[&_.text-primary]:text-lime" />
-              <p className="rounded-md border border-border-soft bg-surface-raised px-3 py-2 text-center font-mono text-body text-foreground">
+              <p className="border-2 border-ink bg-surface-raised px-3 py-2 text-center font-mono text-body text-foreground shadow-hard-sm">
                 {bubble}
               </p>
-              <div className="flex gap-3 font-mono text-caption text-muted-foreground">
-                <span>기분 {moodLabel(slimeState?.mood)}</span>
-                <span>건강 {slimeState?.health ?? "-"}점</span>
-                {unresolvedRisk > 0 && <span className="text-destructive">미조치 위험 {unresolvedRisk}</span>}
+              <div className="flex flex-wrap justify-center gap-2 font-mono text-caption">
+                <span className="border border-border bg-card px-1.5 py-0.5 text-muted-foreground">기분 {moodLabel(slimeState?.mood)}</span>
+                <span className="border border-border bg-card px-1.5 py-0.5 text-muted-foreground">건강 {slimeState?.health ?? "-"}점</span>
+                {unresolvedRisk > 0 && <span className="border-2 border-ink bg-coral px-1.5 py-0.5 font-bold text-coral-foreground">미조치 위험 {unresolvedRisk}</span>}
               </div>
               <p className="font-mono text-caption text-muted-foreground/70">
                 건강은 사장님만 봅니다 · 손님에겐 성장만
@@ -427,16 +462,16 @@ export function OwnerDashboard() {
             </div>
           </div>
 
-          {/* 신호 (카테고리) */}
+          {/* 신호 (카테고리) — 긴급=코랄, 성장=라임 멀티컬러 블로킹 */}
           <div className="overflow-hidden border-bold shadow-hard-sm bg-card">
-            <div className="flex items-center justify-between border-b-2 border-ink px-4 py-2.5">
-              <MonoLabel>// 신호 (카테고리)</MonoLabel>
+            <div className="retro-titlebar retro-titlebar--ink flex items-center justify-between px-4 py-2">
+              <span className="font-mono text-caption font-bold tracking-wide">// 신호 (카테고리)</span>
               <div className="flex gap-1 font-mono text-caption">
                 {(["7d", "24h"] as const).map((w) => (
                   <button
                     key={w}
                     onClick={() => setTrendWindow(w)}
-                    className={`rounded px-1.5 py-0.5 ${trendWindow === w ? "bg-primary text-primary-foreground" : "text-muted-foreground hover:bg-surface-raised"}`}
+                    className={`pop-btn pop-btn--sm border px-1.5 py-0.5 ${trendWindow === w ? "border-card bg-card text-ink" : "border-card/40 text-card/70 hover:bg-card/10"}`}
                   >
                     {w === "7d" ? "7일" : "24시간"}
                   </button>
@@ -449,15 +484,17 @@ export function OwnerDashboard() {
               ) : (
                 trend.categories.map((c: { category: string; count: number; urgentCount: number }) => {
                   const max = trend.categories[0].count || 1;
+                  const urgent = c.urgentCount > 0;
                   return (
                     <div key={c.category} className="flex items-center gap-3">
-                      <span className="w-10 shrink-0 font-mono text-body text-muted-foreground">{c.category}</span>
+                      <span className={`w-10 shrink-0 border-2 border-ink px-1 py-0.5 text-center font-mono text-caption font-bold shadow-hard-sm ${urgent ? "bg-coral text-coral-foreground" : "bg-lime text-lime-foreground"}`}>{c.category}</span>
                       <AsciiProgress
                         value={c.count}
                         max={max}
                         segments={10}
-                        tone={c.urgentCount > 0 ? "destructive" : "primary"}
+                        tone={urgent ? "destructive" : "primary"}
                         label={`${c.count}${c.urgentCount ? ` · 긴급 ${c.urgentCount}` : ""}`}
+                        className={urgent ? "" : "[&_.text-primary]:text-lime"}
                       />
                     </div>
                   );
@@ -468,7 +505,9 @@ export function OwnerDashboard() {
 
           {/* 반복 신호 */}
           <div className="overflow-hidden border-bold shadow-hard-sm bg-card">
-            <div className="border-b-2 border-ink px-4 py-2.5"><MonoLabel>// 반복 신호</MonoLabel></div>
+            <div className="retro-titlebar retro-titlebar--ink flex items-center justify-between px-4 py-2">
+              <span className="font-mono text-caption font-bold tracking-wide">// 반복 신호</span>
+            </div>
             <div className="space-y-2 px-4 py-4">
               {repeats.length === 0 ? (
                 <p className="font-mono text-body text-muted-foreground">아직 반복 신호는 없어요.</p>
@@ -476,14 +515,14 @@ export function OwnerDashboard() {
                 repeats.map((s) => {
                   const strong = !s.hidden && (s.count >= 3 || s.lowCount >= 2);
                   return (
-                    <div key={s.category} className="rounded-md border border-border-soft px-3 py-2">
+                    <div key={s.category} className={`border-2 px-3 py-2 ${strong ? "border-ink bg-coral/10 shadow-hard-sm" : "border-border-soft"}`}>
                       <p className="font-mono text-body text-foreground">
                         <b>{s.category}</b>{" "}
-                        <span className={strong ? "text-destructive" : "text-muted-foreground"}>
+                        <span className={`ml-1 border px-1.5 py-0.5 text-caption font-bold ${strong ? "border-ink bg-coral text-coral-foreground" : "border-border bg-card text-muted-foreground"}`}>
                           {s.hidden ? "소수 신호" : strong ? "강한 반복" : "반복"}
                         </span>
                       </p>
-                      <p className="mt-0.5 font-mono text-caption text-muted-foreground">
+                      <p className="mt-1 font-mono text-caption text-muted-foreground">
                         {s.hidden
                           ? "아직 소수라 정확한 수치는 가립니다(소표본 보호)."
                           : `같은 주제 ${s.count}건${s.lowCount ? ` · 낮은 신호 ${s.lowCount}건` : ""}.`}
@@ -498,9 +537,12 @@ export function OwnerDashboard() {
 
         {/* 오른쪽: 오늘 볼 것 + 한마디 섹션 */}
         <div className="space-y-5 lg:col-span-2">
-          <div className={`overflow-hidden border-bold shadow-hard-sm bg-card ${todayAction.kind === "urgent" ? "border-coral" : ""}`}>
-            <div className={`border-b-2 px-4 py-2.5 ${todayAction.kind === "urgent" ? "border-coral bg-coral text-coral-foreground" : "border-ink"}`}>
-              <MonoLabel className={todayAction.kind === "urgent" ? "text-coral-foreground" : "text-primary"}>[ 오늘 볼 것 ]</MonoLabel>
+          {/* 오늘 볼 것 — 가장 중요. 코랄/선 팝색 헤더 + 두꺼운 잉크 보더 + 하드섀도 */}
+          <div className="relative overflow-hidden border-bold shadow-hard bg-card">
+            <span className="vox-sparkle absolute -right-2 -top-2 z-10 text-sun" style={{ ["--spin" as any]: "10deg" }} aria-hidden="true">◆</span>
+            <div className={`flex items-center gap-2 border-b-2 border-ink px-4 py-2.5 ${todayAction.kind === "urgent" ? "bg-coral text-coral-foreground" : "bg-sun text-sun-foreground"}`}>
+              <span className="text-display-mono text-foreground" style={{ fontSize: "var(--text-title)", color: "currentColor" }}>{">_"}</span>
+              <MonoLabel className={todayAction.kind === "urgent" ? "text-coral-foreground" : "text-sun-foreground"}>[ 오늘 볼 것 ]</MonoLabel>
             </div>
             <div className="space-y-1.5 px-4 py-4 text-body-lg leading-relaxed">
               <p className="text-foreground"><b className={`mr-1 font-mono text-body ${todayAction.kind === "urgent" ? "text-coral" : "text-primary"}`}>오늘</b>{todayAction.title}</p>
@@ -534,35 +576,43 @@ function FeedbackSection({
   onResolve: (item: Feedback) => void;
   onReply: (item: Feedback, body: string) => void;
 }) {
+  // 섹션 헤더 포인트색 (멀티컬러 블로킹: 긴급=코랄·좋은=라임·기본=잉크)
+  const headTone = title === "긴급" ? "text-coral" : title === "좋은 한마디" ? "text-lime" : "text-card";
   return (
     <div className="overflow-hidden border-bold shadow-hard-sm bg-card">
-      <div className="flex items-center justify-between border-b-2 border-ink px-4 py-2.5">
-        <MonoLabel>// {title} {count ? `(${count})` : ""}</MonoLabel>
+      <div className="retro-titlebar retro-titlebar--ink flex items-center justify-between px-4 py-2">
+        <span className="font-mono text-caption font-bold tracking-wide">
+          // {title} {count ? <span className={headTone}>({count})</span> : ""}
+        </span>
+        <span aria-hidden="true" className="flex gap-1">
+          <span className="inline-block h-2.5 w-2.5 border border-card" />
+          <span className="inline-block h-2.5 w-2.5 border border-card bg-card" />
+        </span>
       </div>
       <ul>
         {items.length === 0 ? (
           <li className="px-4 py-4 font-mono text-body text-muted-foreground">{empty}</li>
         ) : (
           items.map((item, i) => {
-            // 감정별 스티커 카드 — 카드 1장에 포인트 1색 (긴급=코랄·좋은=라임·일반=기본)
-            // 감정색은 상단 띠로만 (본문은 card 면에 두어 고대비 유지)
+            // 감정별 스티커 카드 — sticky-card 변형으로 색면 블로킹 (긴급=urgent·좋은=good·일반=기본)
             const urgentOpen = isUrgentFeedback(item) && isOpenFeedback(item);
-            const stripCls = urgentOpen
-              ? "bg-coral"
+            const cardVariant = urgentOpen
+              ? "sticky-card--urgent"
               : isPositiveFeedback(item)
-                ? "bg-lime"
-                : "bg-border-soft";
+                ? "sticky-card--good"
+                : "";
             const stripLabel = urgentOpen ? "긴급" : isPositiveFeedback(item) ? "좋은" : "";
             const stripText = urgentOpen ? "text-coral-foreground" : "text-lime-foreground";
             return (
               <li key={item.id} className={`px-4 py-4 ${i < items.length - 1 ? "border-b border-border-soft" : ""}`}>
-                <div className="sticky-card overflow-hidden">
+                <div className={`sticky-card ${cardVariant} overflow-hidden`}>
                   {stripLabel && (
-                    <div className={`flex items-center gap-2 border-b-2 border-ink px-3 py-1 ${stripCls} ${stripText}`}>
+                    <div className={`flex items-center gap-2 border-b-2 border-ink px-3 py-1 ${stripText}`}>
                       <span className="font-mono text-caption font-bold tracking-wide">● {stripLabel}</span>
                     </div>
                   )}
-                  <div className="px-3.5 py-3">
+                  {/* 본문은 card 면에 두어 고대비 유지 */}
+                  <div className="bg-card px-3.5 py-3">
                     <FeedbackCard item={item} responses={responses[item.id] || []} selectedStoreId={selectedStoreId} onStatus={onStatus} onResolve={onResolve} onReply={onReply} />
                   </div>
                 </div>
@@ -598,14 +648,16 @@ function FeedbackCard({
     high: "text-destructive", mid: "text-[#9c6a2e]", low: "text-muted-foreground",
     pos: "text-primary", neg: "text-destructive", neu: "text-muted-foreground",
   };
+  // 카테고리 칩 멀티컬러 순환 (잉크 보더가 색면을 묶음)
+  const catPalette = ["bg-grape text-grape-foreground", "bg-sky text-sky-foreground", "bg-aqua text-aqua-foreground", "bg-pink text-pink-foreground"];
 
   return (
     <div>
       <div className="flex flex-wrap items-center gap-2">
-        <span className={`font-mono text-caption ${toneCls[ub.tone]}`}>[{ub.label}]</span>
-        <span className={`font-mono text-caption ${toneCls[sb.tone]}`}>{sb.label}</span>
-        {cats.map((c) => (
-          <span key={c} className="border border-border px-1.5 py-0.5 font-mono text-caption text-muted-foreground">{c}</span>
+        <span className={`border-2 border-ink px-1.5 py-0.5 font-mono text-caption font-bold shadow-hard-sm ${ub.tone === "high" ? "bg-coral text-coral-foreground" : "bg-card " + toneCls[ub.tone]}`}>[{ub.label}]</span>
+        <span className={`font-mono text-caption font-bold ${toneCls[sb.tone]}`}>{sb.label}</span>
+        {cats.map((c, ci) => (
+          <span key={c} className={`border-2 border-ink px-1.5 py-0.5 font-mono text-caption font-bold ${catPalette[ci % catPalette.length]}`}>{c}</span>
         ))}
         <span className="ml-auto font-mono text-caption text-muted-foreground/70">{formatTime(item.created_at)}</span>
       </div>
@@ -641,8 +693,8 @@ function FeedbackCard({
             key={key}
             type="button"
             onClick={() => onStatus(item.id, key)}
-            className={`rounded-md border px-2 py-1 font-mono text-caption transition-colors ${
-              status === key ? "border-primary bg-primary text-primary-foreground" : "border-border bg-card text-muted-foreground hover:bg-surface-raised"
+            className={`pop-btn pop-btn--sm border-2 px-2 py-1 font-mono text-caption font-bold ${
+              status === key ? "border-ink bg-primary text-primary-foreground shadow-hard-sm" : "border-border bg-card text-muted-foreground hover:bg-surface-raised"
             }`}
           >
             {OWNER_STATUSES[key]}
@@ -650,16 +702,16 @@ function FeedbackCard({
         ))}
       </div>
 
-      {/* 조치 버튼 */}
+      {/* 조치 버튼 — 성장/보상 = 라임 CTA */}
       {showResolve && (
         <div className="mt-2 flex items-center gap-2">
           <button
             type="button"
             disabled={alreadyResolved}
             onClick={() => onResolve(item)}
-            className="rounded-md border border-primary bg-card px-2.5 py-1 font-mono text-caption text-primary transition-colors hover:bg-surface-raised disabled:opacity-50"
+            className="pop-btn pop-btn--sm border-2 border-ink bg-lime px-2.5 py-1 font-mono text-caption font-bold text-lime-foreground shadow-hard-sm disabled:opacity-50 disabled:shadow-none"
           >
-            {alreadyResolved ? "조치 완료" : "조치함 (성장)"}
+            {alreadyResolved ? "★ 조치 완료" : "★ 조치함 (성장)"}
           </button>
           <span className="font-mono text-caption text-muted-foreground">
             {alreadyResolved ? "나무 성장에 반영됐어요." : "다뤘다면 눌러주세요. 가게가 건강하면 나무가 자랍니다."}
@@ -714,9 +766,9 @@ function FeedbackCard({
             <button
               type="button"
               onClick={() => { onReply(item, draft); setDraft(""); setReplyOpen(false); }}
-              className="rounded-md border border-primary bg-primary px-3 py-1.5 font-mono text-caption text-primary-foreground"
+              className="pop-btn pop-btn--sm border-2 border-ink bg-primary px-3 py-1.5 font-mono text-caption font-bold text-primary-foreground shadow-hard-sm"
             >
-              손님에게 답 보내기
+              손님에게 답 보내기 →
             </button>
           </div>
         )}
