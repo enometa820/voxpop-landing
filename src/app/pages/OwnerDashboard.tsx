@@ -270,7 +270,7 @@ export function OwnerDashboard() {
     try {
       const saved = await insertOwnerResponse(item.id, storeId, text, "comment");
       setResponses((prev) => ({ ...prev, [item.id]: [...(prev[item.id] || []), saved as OwnerResponse] }));
-      toast.success("답을 보냈어요. 손님은 영수증 링크로 확인합니다.", {
+      toast.success("답을 보냈어요. 손님은 스레드 링크로 확인합니다.", {
         description: "사장님은 누가 썼는지 끝까지 모릅니다.",
       });
     } catch {

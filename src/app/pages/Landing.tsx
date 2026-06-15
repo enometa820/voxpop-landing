@@ -219,7 +219,7 @@ export function Landing() {
             { n: "01", t: "QR 스캔", d: "손님이 테이블 QR을 찍고 익명 폼에 들어옵니다. 이름·번호·위치는 받지 않아요." },
             { n: "02", t: "솔직한 한마디", d: "공개 리뷰엔 못 쓰는 진짜 속마음을 무기명으로 남깁니다. 욕설·개인정보·위험 표현은 한국어 엔진이 자동으로 가립니다." },
             { n: "03", t: "오늘 할 일", d: "쌓인 한마디가 사장님에겐 오늘 바로 고칠 한 줄 액션으로 정리됩니다. 매출 과장 대신 실행만." },
-            { n: "04", t: "자라고, 닿고", d: "사장이 조치하면 매장 나무가 자라고, 영수증 링크로 손님은 사장의 답을 받습니다 — 누가 썼는지는 끝까지 비공개." },
+            { n: "04", t: "자라고, 닿고", d: "사장이 조치하면 매장 나무가 자라고, 스레드 링크로 손님은 사장의 답을 받습니다 — 누가 썼는지는 끝까지 비공개." },
           ].map((s) => (
             <div key={s.n} className="sticky-card flex flex-col px-5 py-6">
               <span className="flex h-8 w-9 items-center justify-center border-2 border-ink bg-sun font-mono text-[12px] font-bold text-sun-foreground shadow-hard-sm">

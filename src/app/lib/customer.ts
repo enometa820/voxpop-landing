@@ -10,7 +10,7 @@ type EngineResult = {
   insight?: { reviewRiskLevel?: string; sentimentScore?: number };
 };
 
-// 영수증 토큰 — 불투명 난수 16바이트 hex(클라 생성). anon insert가 서버 default를
+// 스레드 토큰 — 불투명 난수 16바이트 hex(클라 생성). anon insert가 서버 default를
 // 못 돌려주므로 payload에 직접 넣고 그대로 돌려받는다.
 export function genClaimToken(): string {
   const a = new Uint8Array(16);
@@ -58,7 +58,7 @@ export function resolveSlimeStage(slimeRow: { growth_points?: number; stage?: nu
   return growthFromPoints(slimeRow.growth_points ?? 0, slimeRow.stage ?? 0);
 }
 
-// ── 영수증 재방문 (localStorage, 서버 비저장) ───────────────────
+// ── 스레드 재방문 (localStorage, 서버 비저장) ───────────────────
 export function saveReceipt(slug: string, token: string) {
   try {
     localStorage.setItem(

@@ -54,7 +54,7 @@ export async function fetchStoreBySlug(slug) {
 
 // 응답 익명 제출 (anon). submit_feedback RPC가 feedback(가림본)+feedback_raw(원본)를
 // 원자적으로 INSERT한다. content_raw는 feedback_raw에만 들어가 운영자 전용으로 격리된다.
-// 영수증 토큰(claim_token)은 호출자가 payload에 넣어(불투명 난수) 그대로 돌려받는다.
+// 스레드 토큰(claim_token)은 호출자가 payload에 넣어(불투명 난수) 그대로 돌려받는다.
 export async function insertFeedback(payload) {
   const supabase = getSupabase();
   const { data, error } = await supabase.rpc('submit_feedback', {
@@ -268,7 +268,7 @@ export async function markResponseSeen(responseId) {
   if (error) throw error;
 }
 
-// 무인증 손님: 영수증 토큰으로 본인 한마디 + 사장 답 열람(+ 미확인 답 seen 처리).
+// 무인증 손님: 스레드 토큰으로 본인 한마디 + 사장 답 열람(+ 미확인 답 seen 처리).
 // 반환: { feedback: { content_clean, created_at }, responses: [{ id, kind, body, created_at }] }
 export async function fetchThreadByToken(token) {
   const supabase = getSupabase();

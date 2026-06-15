@@ -85,7 +85,7 @@ export function CustomerEntry() {
         setMode("invalid");
         return;
       }
-      // 스레드 모드 (영수증 토큰)
+      // 스레드 모드 (스레드 토큰)
       if (token) {
         let s: Store | null = null;
         try { s = await fetchStoreBySlug(slug); } catch { /* 이름만 — 실패 무시 */ }
@@ -239,7 +239,7 @@ export function CustomerEntry() {
       <main className="mx-auto max-w-[560px] px-4 py-8">
         <RetroWindow
           title={`voxpop.exe — ${store?.display_name || "우리가게"} 내 한마디`}
-          status={["영수증 링크 전용 · 무기명", threadFailed ? "조회 실패" : `사장님 답 ${replyCount}개`]}
+          status={["스레드 링크 전용 · 무기명", threadFailed ? "조회 실패" : `사장님 답 ${replyCount}개`]}
         >
           {threadFailed ? (
             <div className="space-y-4 py-1 text-body-lg leading-relaxed text-muted-foreground">
@@ -290,7 +290,7 @@ export function CustomerEntry() {
                 </p>
               )}
               <p className="font-mono text-caption leading-relaxed text-muted-foreground">
-                › 이 대화는 영수증 링크로만 열려요. 사장님은 누가 썼는지 끝까지 모릅니다.
+                › 이 대화는 스레드 링크로만 열려요. 사장님은 누가 썼는지 끝까지 모릅니다.
                 <span className="vox-cursor ml-1 text-primary">█</span>
               </p>
             </div>
@@ -342,7 +342,7 @@ export function CustomerEntry() {
               <PixelTree level={treeLevel} cell={7} />
             </div>
 
-            {/* 영수증 링크 */}
+            {/* 스레드 링크 */}
             {receiptUrl && (
               <div className="sticky-card w-full p-3 text-left">
                 <p className="font-mono text-caption text-muted-foreground">
