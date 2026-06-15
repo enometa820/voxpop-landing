@@ -449,7 +449,7 @@ export function Landing() {
           ))}
         </div>
         <p className="border-t-2 border-ink bg-primary px-4 py-3 text-center font-mono text-[12px] text-primary-foreground">
-          한마디가 쌓일수록 — 새싹에서 금전수까지.
+          한마디가 쌓일수록 — 새싹에서 열매까지.
         </p>
       </section>
 

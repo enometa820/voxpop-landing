@@ -9,7 +9,7 @@ test("나무 6단계 앵커, 모두 0~0.5 범위", () => {
   }
 });
 
-test("고양이 9포즈 앵커 존재", () => {
-  expect(Object.keys(CAT_FOOT_INSET)).toHaveLength(9);
-  expect(CAT_FOOT_INSET["2,2"]).toBeGreaterThanOrEqual(0); // 앉음 정면(기본)
+test("고양이 15포즈 앵커 존재", () => {
+  expect(Object.keys(CAT_FOOT_INSET)).toHaveLength(15);
+  expect(CAT_FOOT_INSET["default"]).toBeGreaterThanOrEqual(0); // 앉음 정면(기본)
 });
