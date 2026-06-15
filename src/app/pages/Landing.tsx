@@ -206,8 +206,8 @@ export function Landing() {
           높게 평가했습니다.
         </p>
         <p className="mt-3 font-mono text-[11px] text-muted-foreground">
-          source=한국소비자원 2024 · voxpop은 매출 과장 대신 ‘오늘 고칠 한 줄’만
-          약속합니다.
+          출처 · 한국소비자원 2024(1,000명 설문) · voxpop은 매출 과장 대신 ‘오늘
+          고칠 한 줄’만 약속합니다.
         </p>
       </section>
 
